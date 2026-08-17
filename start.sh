@@ -50,8 +50,10 @@ need_build=0
 need_extract=0
 [ ! -f "$BANK" ] && need_build=1
 [ "$FORCE" = "1" ] && need_build=1 && need_extract=1
-# 任一数据源比题库新 → 重建
-for src in "$PDF" "$SOL" "$SOLZH" scripts/build_bank.py; do
+# 任一数据源比题库新 → 重建。
+# manual_fixes.json 必须在列：改完手工修正不重建就完全不生效，而且一声不吭。
+# i18n_zh.jsonl 故意不在列 —— app.py 会热加载译文，重建只是把它固化进 questions.json。
+for src in "$PDF" "$SOL" "$SOLZH" data/manual_fixes.json scripts/build_bank.py; do
   [ -f "$src" ] && [ -f "$BANK" ] && [ "$src" -nt "$BANK" ] && need_build=1
 done
 # PDF 变了必须重跑阶段一。阶段二只读 questions_en.json，光跑它对 PDF 改动是空转：
