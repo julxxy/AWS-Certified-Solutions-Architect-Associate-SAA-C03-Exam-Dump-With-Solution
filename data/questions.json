@@ -15957,22 +15957,22 @@
    {
     "letter": "A",
     "text_en": "Configure three Network Load Balancers (NLBs) in the three AWS Regions to address the on-premises endpoints. Create an accelerator by using AWS Global Accelerator, and register the NLBs as its endpoints. Provide access to the application by using a CNAME that points to the accelerator DNS.",
-    "text_zh": null
+    "text_zh": "在这三个 AWS 区域各配置一个 Network Load Balancer (NLB) 来对接本地端点。用 AWS Global Accelerator 创建一个加速器，把这些 NLB 注册为它的端点。通过一条指向该加速器 DNS 的 CNAME 提供应用访问。"
    },
    {
     "letter": "B",
     "text_en": "Configure three Application Load Balancers (ALBs) in the three AWS Regions to address the on-premises endpoints. Create an accelerator by using AWS Global Accelerator, and register the ALBs as its endpoints. Provide access to the application by using a CNAME that points to the accelerator DNS.",
-    "text_zh": null
+    "text_zh": "在这三个 AWS 区域各配置一个 Application Load Balancer (ALB) 来对接本地端点。用 AWS Global Accelerator 创建一个加速器，把这些 ALB 注册为它的端点。通过一条指向该加速器 DNS 的 CNAME 提供应用访问。"
    },
    {
     "letter": "C",
     "text_en": "Configure three Network Load Balancers (NLBs) in the three AWS Regions to address the on-premises endpoints. In Route 53, create a latency-based record that points to the three NLBs, and use it as an origin for an Amazon CloudFront distribution. Provide access to the application by using a CNAME that points to the CloudFront DNS.",
-    "text_zh": null
+    "text_zh": "在这三个 AWS 区域各配置一个 Network Load Balancer (NLB) 来对接本地端点。在 Route 53 中创建一条指向这三个 NLB 的基于延迟的记录，并把它用作某个 Amazon CloudFront 分配的源站。通过一条指向 CloudFront DNS 的 CNAME 提供应用访问。"
    },
    {
     "letter": "D",
     "text_en": "Configure three Application Load Balancers (ALBs) in the three AWS Regions to address the on-premises endpoints. In Route 53, create a latency-based record that points to the three ALBs, and use it as an origin for an Amazon CloudFront distribution. Provide access to the application by using a CNAME that points to the CloudFront DNS.",
-    "text_zh": null
+    "text_zh": "在这三个 AWS 区域各配置一个 Application Load Balancer (ALB) 来对接本地端点。在 Route 53 中创建一条指向这三个 ALB 的基于延迟的记录，并把它用作某个 Amazon CloudFront 分配的源站。通过一条指向 CloudFront DNS 的 CNAME 提供应用访问。"
    }
   ],
   "pdf_page": 132,
@@ -16000,22 +16000,22 @@
    {
     "letter": "A",
     "text_en": "Set an overall password policy for the entire AWS account.",
-    "text_zh": null
+    "text_zh": "为整个 AWS 账户设置一条统一的密码策略。"
    },
    {
     "letter": "B",
     "text_en": "Set a password policy for each IAM user in the AWS account.",
-    "text_zh": null
+    "text_zh": "为该 AWS 账户中的每个 IAM 用户分别设置密码策略。"
    },
    {
     "letter": "C",
     "text_en": "Use third-party vendor software to set password requirements.",
-    "text_zh": null
+    "text_zh": "使用第三方厂商软件来设定密码要求。"
    },
    {
     "letter": "D",
     "text_en": "Attach an Amazon CloudWatch rule to the Create_newuser event to set the password with the appropriate requirements.",
-    "text_zh": null
+    "text_zh": "为 Create_newuser 事件挂一条 Amazon CloudWatch 规则，按相应要求设置密码。"
    }
   ],
   "pdf_page": 133,
@@ -16043,22 +16043,22 @@
    {
     "letter": "A",
     "text_en": "Use AWS Batch to run the tasks as jobs. Schedule the jobs by using Amazon EventBridge (Amazon CloudWatch Events).",
-    "text_zh": null
+    "text_zh": "用 AWS Batch 把这些任务作为作业运行。用 Amazon EventBridge (Amazon CloudWatch Events) 来调度这些作业。"
    },
    {
     "letter": "B",
     "text_en": "Convert the EC2 instance to a container. Use AWS App Runner to create the container on demand to run the tasks as jobs.",
-    "text_zh": null
+    "text_zh": "把该 EC2 实例改造成容器。用 AWS App Runner 按需创建容器，把这些任务作为作业运行。"
    },
    {
     "letter": "C",
     "text_en": "Copy the tasks into AWS Lambda functions. Schedule the Lambda functions by using Amazon EventBridge (Amazon CloudWatch Events).",
-    "text_zh": null
+    "text_zh": "把这些任务改写进 AWS Lambda 函数。用 Amazon EventBridge (Amazon CloudWatch Events) 来调度这些 Lambda 函数。"
    },
    {
     "letter": "D",
     "text_en": "Create an Amazon Machine Image (AMI) of the EC2 instance that runs the tasks. Create an Auto Scaling group with the AMI to run multiple copies of the instance.",
-    "text_zh": null
+    "text_zh": "为运行这些任务的 EC2 实例创建一个 Amazon Machine Image (AMI)。用该 AMI 创建一个 Auto Scaling 组，运行该实例的多个副本。"
    }
   ],
   "pdf_page": 133,
@@ -16086,22 +16086,22 @@
    {
     "letter": "A",
     "text_en": "Provision a NAT instance in a public subnet. Modify each private subnet's route table with a default route that points to the NAT instance.",
-    "text_zh": null
+    "text_zh": "在一个公有子网中预置一台 NAT 实例。修改每个私有子网的路由表，把默认路由指向该 NAT 实例。"
    },
    {
     "letter": "B",
     "text_en": "Provision a NAT instance in a private subnet. Modify each private subnet's route table with a default route that points to the NAT instance.",
-    "text_zh": null
+    "text_zh": "在一个私有子网中预置一台 NAT 实例。修改每个私有子网的路由表，把默认路由指向该 NAT 实例。"
    },
    {
     "letter": "C",
     "text_en": "Provision a NAT gateway in a public subnet. Modify each private subnet's route table with a default route that points to the NAT gateway.",
-    "text_zh": null
+    "text_zh": "在一个公有子网中预置一个 NAT 网关。修改每个私有子网的路由表，把默认路由指向该 NAT 网关。"
    },
    {
     "letter": "D",
     "text_en": "Provision a NAT gateway in a private subnet. Modify each private subnet's route table with a default route that points to the NAT gateway.",
-    "text_zh": null
+    "text_zh": "在一个私有子网中预置一个 NAT 网关。修改每个私有子网的路由表，把默认路由指向该 NAT 网关。"
    }
   ],
   "pdf_page": 133,
@@ -16129,27 +16129,27 @@
    {
     "letter": "A",
     "text_en": "Use a Kubernetes plugin that uses the customer managed key to perform data encryption.",
-    "text_zh": null
+    "text_zh": "使用一个 Kubernetes 插件，用该客户托管密钥来执行数据加密。"
    },
    {
     "letter": "B",
     "text_en": "After creation of the EKS cluster, locate the EBS volumes. Enable encryption by using the customer managed key.",
-    "text_zh": null
+    "text_zh": "EKS 集群创建完成后，找到相应的 EBS 卷，用该客户托管密钥启用加密。"
    },
    {
     "letter": "C",
     "text_en": "Enable EBS encryption by default in the AWS Region where the EKS cluster will be created. Select the customer managed key as the default key.",
-    "text_zh": null
+    "text_zh": "在将要创建 EKS 集群的那个 AWS 区域中默认启用 EBS 加密。把该客户托管密钥选为默认密钥。"
    },
    {
     "letter": "D",
     "text_en": "Create the EKS cluster. Create an IAM role that has a policy that grants permission to the customer managed key. Associate the role with the EKS cluster.",
-    "text_zh": null
+    "text_zh": "创建该 EKS 集群。创建一个 IAM 角色，其策略授予对该客户托管密钥的权限。把该角色与该 EKS 集群关联。"
    },
    {
     "letter": "E",
     "text_en": "Store the customer managed key as a Kubernetes secret in the EKS cluster. Use the customer managed key to encrypt the EBS volumes.",
-    "text_zh": null
+    "text_zh": "把该客户托管密钥作为 Kubernetes secret 存放在该 EKS 集群中。用该客户托管密钥加密这些 EBS 卷。"
    }
   ],
   "pdf_page": 134,
@@ -16178,22 +16178,22 @@
    {
     "letter": "A",
     "text_en": "Store the images and geographic codes in a database table. Use Oracle running on an Amazon RDS Multi-AZ DB instance.",
-    "text_zh": null
+    "text_zh": "把图片和地理编码都存放在一张数据库表中。使用运行在多可用区 Amazon RDS 数据库实例上的 Oracle。"
    },
    {
     "letter": "B",
     "text_en": "Store the images in Amazon S3 buckets. Use Amazon DynamoDB with the geographic code as the key and the image S3 URL as the value.",
-    "text_zh": null
+    "text_zh": "把图片存放在 Amazon S3 存储桶中。使用 Amazon DynamoDB，以地理编码为键、图片的 S3 URL 为值。"
    },
    {
     "letter": "C",
     "text_en": "Store the images and geographic codes in an Amazon DynamoDB table. Configure DynamoDB Accelerator (DAX) during times of high load.",
-    "text_zh": null
+    "text_zh": "把图片和地理编码都存放在一张 Amazon DynamoDB 表中。在高负载时段配置 DynamoDB Accelerator (DAX)。"
    },
    {
     "letter": "D",
     "text_en": "Store the images in Amazon S3 buckets. Store geographic codes and image S3 URLs in a database table. Use Oracle running on an Amazon RDS Multi-AZ DB instance.",
-    "text_zh": null
+    "text_zh": "把图片存放在 Amazon S3 存储桶中。把地理编码和图片的 S3 URL 存放在一张数据库表中。使用运行在多可用区 Amazon RDS 数据库实例上的 Oracle。"
    }
   ],
   "pdf_page": 134,
@@ -16221,22 +16221,22 @@
    {
     "letter": "A",
     "text_en": "Use the S3 Intelligent-Tiering storage class. Create an S3 Lifecycle policy to transition objects to S3 Glacier Deep Archive after 1 year.",
-    "text_zh": null
+    "text_zh": "使用 S3 Intelligent-Tiering 存储类。创建一条 S3 生命周期策略，1 年后把对象转换到 S3 Glacier Deep Archive。"
    },
    {
     "letter": "B",
     "text_en": "Use the S3 Intelligent-Tiering storage class. Configure S3 Intelligent-Tiering to automatically move objects to S3 Glacier Deep Archive after 1 year.",
-    "text_zh": null
+    "text_zh": "使用 S3 Intelligent-Tiering 存储类。配置 S3 Intelligent-Tiering 在 1 年后自动把对象转移到 S3 Glacier Deep Archive。"
    },
    {
     "letter": "C",
     "text_en": "Use the S3 Standard-Infrequent Access (S3 Standard-IA) storage class. Create an S3 Lifecycle policy to transition objects to S3 Glacier Deep Archive after 1 year.",
-    "text_zh": null
+    "text_zh": "使用 S3 Standard-Infrequent Access (S3 Standard-IA) 存储类。创建一条 S3 生命周期策略，1 年后把对象转换到 S3 Glacier Deep Archive。"
    },
    {
     "letter": "D",
     "text_en": "Use the S3 Standard storage class. Create an S3 Lifecycle policy to transition objects to S3 Standard-Infrequent Access (S3 Standard-IA) after 30 days, and then to S3 Glacier Deep Archive after 1 year.",
-    "text_zh": null
+    "text_zh": "使用 S3 Standard 存储类。创建一条 S3 生命周期策略，30 天后把对象转换到 S3 Standard-Infrequent Access (S3 Standard-IA)，1 年后再转换到 S3 Glacier Deep Archive。"
    }
   ],
   "pdf_page": 135,
@@ -16264,22 +16264,22 @@
    {
     "letter": "A",
     "text_en": "Configure three AWS Site-to-Site VPN connections from the data center to AWS. Establish connectivity by configuring one VPN connection for each VPC.",
-    "text_zh": null
+    "text_zh": "从数据中心到 AWS 配置三条 AWS Site-to-Site VPN 连接。为每个 VPC 各配一条 VPN 连接来建立连通性。"
    },
    {
     "letter": "B",
     "text_en": "Launch a third-party virtual network appliance in each VPC. Establish an IPsec VPN tunnel between the data center and each virtual appliance.",
-    "text_zh": null
+    "text_zh": "在每个 VPC 中启动一个第三方虚拟网络设备。在数据中心与每个虚拟设备之间建立 IPsec VPN 隧道。"
    },
    {
     "letter": "C",
     "text_en": "Set up three AWS Direct Connect connections from the data center to a Direct Connect gateway in us-east-1. Establish connectivity by configuring each VPC to use one of the Direct Connect connections.",
-    "text_zh": null
+    "text_zh": "从数据中心到 us-east-1 的一个 Direct Connect 网关建立三条 AWS Direct Connect 连接。配置每个 VPC 各使用其中一条 Direct Connect 连接来建立连通性。"
    },
    {
     "letter": "D",
     "text_en": "Set up one AWS Direct Connect connection from the data center to AWS. Create a transit gateway, and attach each VPC to the transit gateway. Establish connectivity between the Direct Connect connection and the transit gateway.",
-    "text_zh": null
+    "text_zh": "从数据中心到 AWS 建立一条 AWS Direct Connect 连接。创建一个中转网关，把每个 VPC 都挂接到该中转网关上。在该 Direct Connect 连接与中转网关之间建立连通性。"
    }
   ],
   "pdf_page": 135,
@@ -16307,22 +16307,22 @@
    {
     "letter": "A",
     "text_en": "Use AWS Step Functions to build the application.",
-    "text_zh": null
+    "text_zh": "用 AWS Step Functions 来构建该应用。"
    },
    {
     "letter": "B",
     "text_en": "Integrate all the application components in an AWS Glue job.",
-    "text_zh": null
+    "text_zh": "把所有应用组件整合进一个 AWS Glue 作业。"
    },
    {
     "letter": "C",
     "text_en": "Use Amazon Simple Queue Service (Amazon SQS) to build the application.",
-    "text_zh": null
+    "text_zh": "用 Amazon Simple Queue Service (Amazon SQS) 来构建该应用。"
    },
    {
     "letter": "D",
     "text_en": "Use AWS Lambda functions and Amazon EventBridge events to build the application.",
-    "text_zh": null
+    "text_zh": "用 AWS Lambda 函数和 Amazon EventBridge 事件来构建该应用。"
    }
   ],
   "pdf_page": 136,
@@ -16350,22 +16350,22 @@
    {
     "letter": "A",
     "text_en": "Create a proxy in RDS Proxy. Configure the users’ applications to use the DB instance through RDS Proxy.",
-    "text_zh": null
+    "text_zh": "在 RDS Proxy 中创建一个代理。配置用户的应用经由 RDS Proxy 访问该数据库实例。"
    },
    {
     "letter": "B",
     "text_en": "Deploy Amazon ElastiCache for Memcached between the users’ applications and the DB instance.",
-    "text_zh": null
+    "text_zh": "在用户的应用与该数据库实例之间部署 Amazon ElastiCache for Memcached。"
    },
    {
     "letter": "C",
     "text_en": "Migrate the DB instance to a different instance class that has higher I/O capacity. Configure the users’ applications to use the new DB instance.",
-    "text_zh": null
+    "text_zh": "把该数据库实例迁移到 I/O 能力更强的实例类型。配置用户的应用改用新的数据库实例。"
    },
    {
     "letter": "D",
     "text_en": "Configure Multi-AZ for the DB instance. Configure the users’ applications to switch between the DB instances.",
-    "text_zh": null
+    "text_zh": "为该数据库实例配置多可用区。配置用户的应用在各数据库实例之间切换。"
    }
   ],
   "pdf_page": 136,
@@ -16393,22 +16393,22 @@
    {
     "letter": "A",
     "text_en": "Use a scheduled AWS Lambda function and run a script remotely on all EC2 instances to send data to the audit system.",
-    "text_zh": null
+    "text_zh": "用一个定时触发的 AWS Lambda 函数，远程在所有 EC2 实例上运行脚本，把数据发送到审计系统。"
    },
    {
     "letter": "B",
     "text_en": "Use EC2 Auto Scaling lifecycle hooks to run a custom script to send data to the audit system when instances are launched and terminated.",
-    "text_zh": null
+    "text_zh": "使用 EC2 Auto Scaling 生命周期挂钩，在实例启动和终止时运行自定义脚本，把数据发送到审计系统。"
    },
    {
     "letter": "C",
     "text_en": "Use an EC2 Auto Scaling launch configuration to run a custom script through user data to send data to the audit system when instances are launched and terminated.",
-    "text_zh": null
+    "text_zh": "使用 EC2 Auto Scaling 启动配置，通过用户数据运行自定义脚本，在实例启动和终止时把数据发送到审计系统。"
    },
    {
     "letter": "D",
     "text_en": "Run a custom script on the instance operating system to send data to the audit system. Configure the script to be invoked by the EC2 Auto Scaling group when the instance starts and is terminated.",
-    "text_zh": null
+    "text_zh": "在实例操作系统上运行自定义脚本把数据发送到审计系统。配置该脚本在实例启动和终止时由 EC2 Auto Scaling 组触发。"
    }
   ],
   "pdf_page": 136,
@@ -16436,22 +16436,22 @@
    {
     "letter": "A",
     "text_en": "Use Amazon Route 53 for traffic distribution and Amazon Aurora Serverless for data storage.",
-    "text_zh": null
+    "text_zh": "用 Amazon Route 53 做流量分发，用 Amazon Aurora Serverless 做数据存储。"
    },
    {
     "letter": "B",
     "text_en": "Use a Network Load Balancer for traffic distribution and Amazon DynamoDB on-demand for data storage.",
-    "text_zh": null
+    "text_zh": "用 Network Load Balancer 做流量分发，用按需模式的 Amazon DynamoDB 做数据存储。"
    },
    {
     "letter": "C",
     "text_en": "Use a Network Load Balancer for traffic distribution and Amazon Aurora Global Database for data storage.",
-    "text_zh": null
+    "text_zh": "用 Network Load Balancer 做流量分发，用 Amazon Aurora 全局数据库做数据存储。"
    },
    {
     "letter": "D",
     "text_en": "Use an Application Load Balancer for traffic distribution and Amazon DynamoDB global tables for data storage.",
-    "text_zh": null
+    "text_zh": "用 Application Load Balancer 做流量分发，用 Amazon DynamoDB 全局表做数据存储。"
    }
   ],
   "pdf_page": 137,
@@ -16479,22 +16479,22 @@
    {
     "letter": "A",
     "text_en": "Establish a connection between the frontend application and the database to make queries faster by bypassing the API.",
-    "text_zh": null
+    "text_zh": "在前端应用与数据库之间直接建立连接，绕过 API 以加快查询。"
    },
    {
     "letter": "B",
     "text_en": "Configure provisioned concurrency for the Lambda function that handles the requests.",
-    "text_zh": null
+    "text_zh": "为处理这些请求的 Lambda 函数配置预置并发。"
    },
    {
     "letter": "C",
     "text_en": "Cache the results of the queries in Amazon S3 for faster retrieval of similar datasets.",
-    "text_zh": null
+    "text_zh": "把查询结果缓存到 Amazon S3，以便更快地获取相似的数据集。"
    },
    {
     "letter": "D",
     "text_en": "Increase the size of the database to increase the number of connections Lambda can establish at one time.",
-    "text_zh": null
+    "text_zh": "扩大数据库规格，以增加 Lambda 一次能建立的连接数。"
    }
   ],
   "pdf_page": 137,
@@ -16522,22 +16522,22 @@
    {
     "letter": "A",
     "text_en": "Scale the EC2 instances by using elastic resize. Scale the DB instances to zero outside of business hours.",
-    "text_zh": null
+    "text_zh": "用弹性调整 (elastic resize) 来伸缩这些 EC2 实例。在非工作时间把数据库实例缩到零。"
    },
    {
     "letter": "B",
     "text_en": "Explore AWS Marketplace for partner solutions that will automatically start and stop the EC2 instances and DB instances on a schedule.",
-    "text_zh": null
+    "text_zh": "在 AWS Marketplace 上寻找能按计划自动启停 EC2 实例和数据库实例的合作伙伴方案。"
    },
    {
     "letter": "C",
     "text_en": "Launch another EC2 instance. Configure a crontab schedule to run shell scripts that will start and stop the existing EC2 instances and DB instances on a schedule.",
-    "text_zh": null
+    "text_zh": "再启动一台 EC2 实例。配置 crontab 计划运行 shell 脚本，按计划启停现有的 EC2 实例和数据库实例。"
    },
    {
     "letter": "D",
     "text_en": "Create an AWS Lambda function that will start and stop the EC2 instances and DB instances. Configure Amazon EventBridge to invoke the Lambda function on a schedule.",
-    "text_zh": null
+    "text_zh": "创建一个用于启停 EC2 实例和数据库实例的 AWS Lambda 函数。配置 Amazon EventBridge 按计划调用该 Lambda 函数。"
    }
   ],
   "pdf_page": 137,
@@ -16565,22 +16565,22 @@
    {
     "letter": "A",
     "text_en": "Set up a new Amazon DocumentDB (with MongoDB compatibility) cluster that includes a read replica. Scale the read replica to generate the reports.",
-    "text_zh": null
+    "text_zh": "新建一个包含只读副本的 Amazon DocumentDB（兼容 MongoDB）集群。通过扩展只读副本来生成报表。"
    },
    {
     "letter": "B",
     "text_en": "Set up a new Amazon Aurora PostgreSQL DB cluster that includes an Aurora Replica. Issue queries to the Aurora Replica to generate the reports.",
-    "text_zh": null
+    "text_zh": "新建一个包含 Aurora 副本的 Amazon Aurora PostgreSQL 数据库集群。把查询发到该 Aurora 副本上来生成报表。"
    },
    {
     "letter": "C",
     "text_en": "Set up a new Amazon RDS for PostgreSQL Multi-AZ DB instance. Configure the reporting module to query the secondary RDS node so that the reporting module does not affect the primary node.",
-    "text_zh": null
+    "text_zh": "新建一个多可用区的 Amazon RDS for PostgreSQL 数据库实例。配置报表模块查询 RDS 的备用节点，使报表模块不影响主节点。"
    },
    {
     "letter": "D",
     "text_en": "Set up a new Amazon DynamoDB table to store the documents. Use a fixed write capacity to support new document entries. Automatically scale the read capacity to support the reports.",
-    "text_zh": null
+    "text_zh": "新建一张 Amazon DynamoDB 表来存放这些文档。用固定的写入容量支撑新文档写入。自动伸缩读取容量以支撑报表。"
    }
   ],
   "pdf_page": 138,
@@ -16608,22 +16608,22 @@
    {
     "letter": "A",
     "text_en": "Configure a TLS listener. Deploy the server certificate on the NLB.",
-    "text_zh": null
+    "text_zh": "配置一个 TLS 侦听器。在该 NLB 上部署服务器证书。"
    },
    {
     "letter": "B",
     "text_en": "Configure AWS Shield Advanced. Enable AWS WAF on the NLB.",
-    "text_zh": null
+    "text_zh": "配置 AWS Shield Advanced。在该 NLB 上启用 AWS WAF。"
    },
    {
     "letter": "C",
     "text_en": "Change the load balancer to an Application Load Balancer (ALB). Enable AWS WAF on the ALB.",
-    "text_zh": null
+    "text_zh": "把负载均衡器换成 Application Load Balancer (ALB)。在该 ALB 上启用 AWS WAF。"
    },
    {
     "letter": "D",
     "text_en": "Encrypt the Amazon Elastic Block Store (Amazon EBS) volume on the EC2 instances by using AWS Key Management Service (AWS KMS).",
-    "text_zh": null
+    "text_zh": "用 AWS Key Management Service (AWS KMS) 加密这些 EC2 实例上的 Amazon Elastic Block Store (Amazon EBS) 卷。"
    }
   ],
   "pdf_page": 138,
@@ -16651,22 +16651,22 @@
    {
     "letter": "A",
     "text_en": "Dedicated Reserved Hosts",
-    "text_zh": null
+    "text_zh": "预留专用主机 (Dedicated Reserved Hosts)"
    },
    {
     "letter": "B",
     "text_en": "Dedicated On-Demand Hosts",
-    "text_zh": null
+    "text_zh": "按需专用主机 (Dedicated On-Demand Hosts)"
    },
    {
     "letter": "C",
     "text_en": "Dedicated Reserved Instances",
-    "text_zh": null
+    "text_zh": "预留专用实例 (Dedicated Reserved Instances)"
    },
    {
     "letter": "D",
     "text_en": "Dedicated On-Demand Instances",
-    "text_zh": null
+    "text_zh": "按需专用实例 (Dedicated On-Demand Instances)"
    }
   ],
   "pdf_page": 138,
@@ -16694,22 +16694,22 @@
    {
     "letter": "A",
     "text_en": "Use the Amazon S3 Standard storage class. Create an S3 Lifecycle policy to move infrequently accessed data to S3 Glacier.",
-    "text_zh": null
+    "text_zh": "使用 Amazon S3 Standard 存储类。创建一条 S3 生命周期策略，把不常访问的数据转移到 S3 Glacier。"
    },
    {
     "letter": "B",
     "text_en": "Use the Amazon S3 Standard storage class. Create an S3 Lifecycle policy to move infrequently accessed data to S3 Standard-Infrequent Access (S3 Standard-IA).",
-    "text_zh": null
+    "text_zh": "使用 Amazon S3 Standard 存储类。创建一条 S3 生命周期策略，把不常访问的数据转移到 S3 Standard-Infrequent Access (S3 Standard-IA)。"
    },
    {
     "letter": "C",
     "text_en": "Use the Amazon Elastic File System (Amazon EFS) Standard storage class. Create a lifecycle management policy to move infrequently accessed data to EFS Standard-Infrequent Access (EFS Standard-IA).",
-    "text_zh": null
+    "text_zh": "使用 Amazon Elastic File System (Amazon EFS) Standard 存储类。创建一条生命周期管理策略，把不常访问的数据转移到 EFS Standard-Infrequent Access (EFS Standard-IA)。"
    },
    {
     "letter": "D",
     "text_en": "Use the Amazon Elastic File System (Amazon EFS) One Zone storage class. Create a lifecycle management policy to move infrequently accessed data to EFS One Zone-Infrequent Access (EFS One Zone-IA).",
-    "text_zh": null
+    "text_zh": "使用 Amazon Elastic File System (Amazon EFS) One Zone 存储类。创建一条生命周期管理策略，把不常访问的数据转移到 EFS One Zone-Infrequent Access (EFS One Zone-IA)。"
    }
   ],
   "pdf_page": 139,
@@ -16737,22 +16737,22 @@
    {
     "letter": "A",
     "text_en": "Create a security group for the web servers and allow port 443 from 0.0.0.0/0. Create a security group for the MySQL servers and allow port 3306 from the web servers security group.",
-    "text_zh": null
+    "text_zh": "为 Web 服务器创建一个安全组，允许来自 0.0.0.0/0 的 443 端口流量。为 MySQL 服务器创建一个安全组，允许来自 Web 服务器安全组的 3306 端口流量。"
    },
    {
     "letter": "B",
     "text_en": "Create a network ACL for the web servers and allow port 443 from 0.0.0.0/0. Create a network ACL for the MySQL servers and allow port 3306 from the web servers security group.",
-    "text_zh": null
+    "text_zh": "为 Web 服务器创建一个网络 ACL，允许来自 0.0.0.0/0 的 443 端口流量。为 MySQL 服务器创建一个网络 ACL，允许来自 Web 服务器安全组的 3306 端口流量。"
    },
    {
     "letter": "C",
     "text_en": "Create a security group for the web servers and allow port 443 from the load balancer. Create a security group for the MySQL servers and allow port 3306 from the web servers security group.",
-    "text_zh": null
+    "text_zh": "为 Web 服务器创建一个安全组，允许来自负载均衡器的 443 端口流量。为 MySQL 服务器创建一个安全组，允许来自 Web 服务器安全组的 3306 端口流量。"
    },
    {
     "letter": "D",
     "text_en": "Create a network ACL for the web servers and allow port 443 from the load balancer. Create a network ACL for the MySQL servers and allow port 3306 from the web servers security group.",
-    "text_zh": null
+    "text_zh": "为 Web 服务器创建一个网络 ACL，允许来自负载均衡器的 443 端口流量。为 MySQL 服务器创建一个网络 ACL，允许来自 Web 服务器安全组的 3306 端口流量。"
    }
   ],
   "pdf_page": 139,
@@ -16780,22 +16780,22 @@
    {
     "letter": "A",
     "text_en": "Implement Amazon SNS to store the database calls.",
-    "text_zh": null
+    "text_zh": "用 Amazon SNS 来存储数据库调用。"
    },
    {
     "letter": "B",
     "text_en": "Implement Amazon ElastiCache to cache the large datasets.",
-    "text_zh": null
+    "text_zh": "用 Amazon ElastiCache 缓存这些大数据集。"
    },
    {
     "letter": "C",
     "text_en": "Implement an RDS for MySQL read replica to cache database calls.",
-    "text_zh": null
+    "text_zh": "用一个 RDS for MySQL 只读副本来缓存数据库调用。"
    },
    {
     "letter": "D",
     "text_en": "Implement Amazon Kinesis Data Firehose to stream the calls to the database.",
-    "text_zh": null
+    "text_zh": "用 Amazon Kinesis Data Firehose 把这些调用流式传输到数据库。"
    }
   ],
   "pdf_page": 139,
@@ -16823,27 +16823,27 @@
    {
     "letter": "A",
     "text_en": "Have the deployment engineer use AWS account root user credentials for performing AWS CloudFormation stack operations.",
-    "text_zh": null
+    "text_zh": "让这名部署工程师使用 AWS 账户根用户凭证来执行 AWS CloudFormation 堆栈操作。"
    },
    {
     "letter": "B",
     "text_en": "Create a new IAM user for the deployment engineer and add the IAM user to a group that has the PowerUsers IAM policy attached.",
-    "text_zh": null
+    "text_zh": "为该部署工程师新建一个 IAM 用户，并把该 IAM 用户加入一个附加了 PowerUsers IAM 策略的组。"
    },
    {
     "letter": "C",
     "text_en": "Create a new IAM user for the deployment engineer and add the IAM user to a group that has the AdministratorAccess IAM policy attached.",
-    "text_zh": null
+    "text_zh": "为该部署工程师新建一个 IAM 用户，并把该 IAM 用户加入一个附加了 AdministratorAccess IAM 策略的组。"
    },
    {
     "letter": "D",
     "text_en": "Create a new IAM user for the deployment engineer and add the IAM user to a group that has an IAM policy that allows AWS CloudFormation actions only.",
-    "text_zh": null
+    "text_zh": "为该部署工程师新建一个 IAM 用户，并把该 IAM 用户加入一个附加了仅允许 AWS CloudFormation 操作的 IAM 策略的组。"
    },
    {
     "letter": "E",
     "text_en": "Create an IAM role for the deployment engineer to explicitly define the permissions specific to the AWS CloudFormation stack and launch stacks using that IAM role.",
-    "text_zh": null
+    "text_zh": "为该部署工程师创建一个 IAM 角色，在其中明确定义该 AWS CloudFormation 堆栈所需的专有权限，并用该 IAM 角色来启动堆栈。"
    }
   ],
   "pdf_page": 140,
@@ -16872,22 +16872,22 @@
    {
     "letter": "A",
     "text_en": "Add an explicit rule to the private subnet’s network ACL to allow traffic from the web tier’s EC2 instances.",
-    "text_zh": null
+    "text_zh": "在该私有子网的网络 ACL 中添加一条显式规则，允许来自 Web 层 EC2 实例的流量。"
    },
    {
     "letter": "B",
     "text_en": "Add a route in the VPC route table to allow traffic between the web tier’s EC2 instances and the database tier.",
-    "text_zh": null
+    "text_zh": "在 VPC 路由表中添加一条路由，放通 Web 层 EC2 实例与数据库层之间的流量。"
    },
    {
     "letter": "C",
     "text_en": "Deploy the web tier's EC2 instances and the database tier’s RDS instance into two separate VPCs, and configure VPC peering.",
-    "text_zh": null
+    "text_zh": "把 Web 层的 EC2 实例和数据库层的 RDS 实例部署到两个独立的 VPC 中，并配置 VPC 对等连接。"
    },
    {
     "letter": "D",
     "text_en": "Add an inbound rule to the security group of the database tier’s RDS instance to allow traffic from the web tiers security group.",
-    "text_zh": null
+    "text_zh": "在数据库层 RDS 实例的安全组中添加一条入站规则，允许来自 Web 层安全组的流量。"
    }
   ],
   "pdf_page": 140,
@@ -16915,22 +16915,22 @@
    {
     "letter": "A",
     "text_en": "Deploy RDS read replicas to process the business reporting queries.",
-    "text_zh": null
+    "text_zh": "部署 RDS 只读副本来处理业务报表查询。"
    },
    {
     "letter": "B",
     "text_en": "Scale out the DB instance horizontally by placing it behind an Elastic Load Balancer.",
-    "text_zh": null
+    "text_zh": "把该数据库实例放到弹性负载均衡器之后做横向扩展。"
    },
    {
     "letter": "C",
     "text_en": "Scale up the DB instance to a larger instance type to handle write operations and queries.",
-    "text_zh": null
+    "text_zh": "把该数据库实例纵向升级到更大的实例类型，以同时承担写入操作和查询。"
    },
    {
     "letter": "D",
     "text_en": "Deploy the DB instance in multiple Availability Zones to process the business reporting queries.",
-    "text_zh": null
+    "text_zh": "把该数据库实例部署在多个可用区来处理业务报表查询。"
    }
   ],
   "pdf_page": 140,
@@ -16958,27 +16958,27 @@
    {
     "letter": "A",
     "text_en": "Turn on the sticky sessions feature (session affinity) on the ALB.",
-    "text_zh": null
+    "text_zh": "在该 ALB 上开启粘性会话（会话亲和性）功能。"
    },
    {
     "letter": "B",
     "text_en": "Use an Amazon DynamoDB table to store customer session information.",
-    "text_zh": null
+    "text_zh": "用一张 Amazon DynamoDB 表来存储客户会话信息。"
    },
    {
     "letter": "C",
     "text_en": "Deploy an Amazon Cognito user pool to manage user session information.",
-    "text_zh": null
+    "text_zh": "部署一个 Amazon Cognito 用户池来管理用户会话信息。"
    },
    {
     "letter": "D",
     "text_en": "Deploy an Amazon ElastiCache for Redis cluster to store customer session information.",
-    "text_zh": null
+    "text_zh": "部署一个 Amazon ElastiCache for Redis 集群来存储客户会话信息。"
    },
    {
     "letter": "E",
     "text_en": "Use AWS Systems Manager Application Manager in the application to manage user session information.",
-    "text_zh": null
+    "text_zh": "在应用中使用 AWS Systems Manager Application Manager 来管理用户会话信息。"
    }
   ],
   "pdf_page": 141,
@@ -17004,22 +17004,22 @@
    {
     "letter": "A",
     "text_en": "Take snapshots of Amazon Elastic Block Store (Amazon EBS) volumes of the EC2 instances and database every 2 hours to meet the RPO.",
-    "text_zh": null
+    "text_zh": "每 2 小时对 EC2 实例和数据库的 Amazon Elastic Block Store (Amazon EBS) 卷做一次快照，以满足 RPO。"
    },
    {
     "letter": "B",
     "text_en": "Configure a snapshot lifecycle policy to take Amazon Elastic Block Store (Amazon EBS) snapshots. Enable automated backups in Amazon RDS to meet the RPO.",
-    "text_zh": null
+    "text_zh": "配置一条快照生命周期策略来创建 Amazon Elastic Block Store (Amazon EBS) 快照。在 Amazon RDS 中启用自动备份以满足 RPO。"
    },
    {
     "letter": "C",
     "text_en": "Retain the latest Amazon Machine Images (AMIs) of the web and application tiers. Enable automated backups in Amazon RDS and use point-in-time recovery to meet the RPO.",
-    "text_zh": null
+    "text_zh": "保留 Web 层和应用层最新的 Amazon Machine Image (AMI)。在 Amazon RDS 中启用自动备份并使用时间点恢复来满足 RPO。"
    },
    {
     "letter": "D",
     "text_en": "Take snapshots of Amazon Elastic Block Store (Amazon EBS) volumes of the EC2 instances every 2 hours. Enable automated backups in Amazon RDS and use point-in-time recovery to meet the RPO.",
-    "text_zh": null
+    "text_zh": "每 2 小时对 EC2 实例的 Amazon Elastic Block Store (Amazon EBS) 卷做一次快照。在 Amazon RDS 中启用自动备份并使用时间点恢复来满足 RPO。"
    }
   ],
   "pdf_page": 141,
@@ -17047,22 +17047,22 @@
    {
     "letter": "A",
     "text_en": "Configure the security group for the web servers to allow inbound traffic on port 443 from 0.0.0.0/0. Configure the security group for the DB instance to allow inbound traffic on port 3306 from the security group of the web servers.",
-    "text_zh": null
+    "text_zh": "把 Web 服务器的安全组配置为允许来自 0.0.0.0/0 的 443 端口入站流量。把该数据库实例的安全组配置为允许来自 Web 服务器安全组的 3306 端口入站流量。"
    },
    {
     "letter": "B",
     "text_en": "Configure the security group for the web servers to allow inbound traffic on port 443 from the IP addresses of the customers. Configure the security group for the DB instance to allow inbound traffic on port 3306 from the security group of the web servers.",
-    "text_zh": null
+    "text_zh": "把 Web 服务器的安全组配置为允许来自客户 IP 地址的 443 端口入站流量。把该数据库实例的安全组配置为允许来自 Web 服务器安全组的 3306 端口入站流量。"
    },
    {
     "letter": "C",
     "text_en": "Configure the security group for the web servers to allow inbound traffic on port 443 from the IP addresses of the customers. Configure the security group for the DB instance to allow inbound traffic on port 3306 from the IP addresses of the customers.",
-    "text_zh": null
+    "text_zh": "把 Web 服务器的安全组配置为允许来自客户 IP 地址的 443 端口入站流量。把该数据库实例的安全组配置为允许来自客户 IP 地址的 3306 端口入站流量。"
    },
    {
     "letter": "D",
     "text_en": "Configure the security group for the web servers to allow inbound traffic on port 443 from 0.0.0.0/0. Configure the security group for the DB instance to allow inbound traffic on port 3306 from 0.0.0.0/0.",
-    "text_zh": null
+    "text_zh": "把 Web 服务器的安全组配置为允许来自 0.0.0.0/0 的 443 端口入站流量。把该数据库实例的安全组配置为允许来自 0.0.0.0/0 的 3306 端口入站流量。"
    }
   ],
   "pdf_page": 142,
@@ -17090,22 +17090,22 @@
    {
     "letter": "A",
     "text_en": "Process the audio files by using Amazon Kinesis Video Streams. Use an AWS Lambda function to scan for known PII patterns.",
-    "text_zh": null
+    "text_zh": "用 Amazon Kinesis Video Streams 处理这些音频文件。用一个 AWS Lambda 函数扫描已知的 PII 模式。"
    },
    {
     "letter": "B",
     "text_en": "When an audio file is uploaded to the S3 bucket, invoke an AWS Lambda function to start an Amazon Textract task to analyze the call recordings.",
-    "text_zh": null
+    "text_zh": "当有音频文件上传到该 S3 存储桶时，调用一个 AWS Lambda 函数启动 Amazon Textract 任务来分析这些通话录音。"
    },
    {
     "letter": "C",
     "text_en": "Configure an Amazon Transcribe transcription job with PII redaction turned on. When an audio file is uploaded to the S3 bucket, invoke an AWS Lambda function to start the transcription job. Store the output in a separate S3 bucket.",
-    "text_zh": null
+    "text_zh": "配置一个开启了 PII 脱敏的 Amazon Transcribe 转写作业。当有音频文件上传到该 S3 存储桶时，调用一个 AWS Lambda 函数启动该转写作业。把输出存放到另一个 S3 存储桶。"
    },
    {
     "letter": "D",
     "text_en": "Create an Amazon Connect contact flow that ingests the audio files with transcription turned on. Embed an AWS Lambda function to scan for known PII patterns. Use Amazon EventBridge to start the contact flow when an audio file is uploaded to the S3 bucket.",
-    "text_zh": null
+    "text_zh": "创建一个开启了转写功能、用于接入这些音频文件的 Amazon Connect 联络流。内嵌一个 AWS Lambda 函数来扫描已知的 PII 模式。用 Amazon EventBridge 在音频文件上传到该 S3 存储桶时启动该联络流。"
    }
   ],
   "pdf_page": 142,
@@ -17133,22 +17133,22 @@
    {
     "letter": "A",
     "text_en": "Replace the volume with a magnetic volume.",
-    "text_zh": null
+    "text_zh": "把该卷换成磁介质卷。"
    },
    {
     "letter": "B",
     "text_en": "Increase the number of IOPS on the gp3 volume.",
-    "text_zh": null
+    "text_zh": "提高该 gp3 卷的 IOPS 数。"
    },
    {
     "letter": "C",
     "text_en": "Replace the volume with a Provisioned IOPS SSD (io2) volume.",
-    "text_zh": null
+    "text_zh": "把该卷换成预置 IOPS SSD (io2) 卷。"
    },
    {
     "letter": "D",
     "text_en": "Replace the 2,000 GB gp3 volume with two 1,000 GB gp3 volumes.",
-    "text_zh": null
+    "text_zh": "把这个 2,000 GB 的 gp3 卷换成两个 1,000 GB 的 gp3 卷。"
    }
   ],
   "pdf_page": 143,
@@ -17176,22 +17176,22 @@
    {
     "letter": "A",
     "text_en": "Amazon GuardDuty",
-    "text_zh": null
+    "text_zh": "Amazon GuardDuty"
    },
    {
     "letter": "B",
     "text_en": "Amazon Inspector",
-    "text_zh": null
+    "text_zh": "Amazon Inspector"
    },
    {
     "letter": "C",
     "text_en": "AWS CloudTrail",
-    "text_zh": null
+    "text_zh": "AWS CloudTrail"
    },
    {
     "letter": "D",
     "text_en": "AWS Config",
-    "text_zh": null
+    "text_zh": "AWS Config"
    }
   ],
   "pdf_page": 143,
@@ -17219,22 +17219,22 @@
    {
     "letter": "A",
     "text_en": "Subscribe to AWS Shield Advanced. Add the accelerator as a resource to protect.",
-    "text_zh": null
+    "text_zh": "订阅 AWS Shield Advanced。把该加速器添加为受保护资源。"
    },
    {
     "letter": "B",
     "text_en": "Subscribe to AWS Shield Advanced. Add the EC2 instances as resources to protect.",
-    "text_zh": null
+    "text_zh": "订阅 AWS Shield Advanced。把这些 EC2 实例添加为受保护资源。"
    },
    {
     "letter": "C",
     "text_en": "Create an AWS WAF web ACL that includes a rate-based rule. Associate the web ACL with the accelerator.",
-    "text_zh": null
+    "text_zh": "创建一个含基于速率规则的 AWS WAF Web ACL。把该 Web ACL 关联到该加速器。"
    },
    {
     "letter": "D",
     "text_en": "Create an AWS WAF web ACL that includes a rate-based rule. Associate the web ACL with the EC2 instances.",
-    "text_zh": null
+    "text_zh": "创建一个含基于速率规则的 AWS WAF Web ACL。把该 Web ACL 关联到这些 EC2 实例。"
    }
   ],
   "pdf_page": 143,
@@ -17262,22 +17262,22 @@
    {
     "letter": "A",
     "text_en": "Create an AWS Lambda function that has an Amazon EventBridge notification. Schedule the EventBridge event to run once a day.",
-    "text_zh": null
+    "text_zh": "创建一个带 Amazon EventBridge 通知的 AWS Lambda 函数。把该 EventBridge 事件安排为每天运行一次。"
    },
    {
     "letter": "B",
     "text_en": "Create an AWS Lambda function. Create an Amazon API Gateway HTTP API, and integrate the API with the function. Create an Amazon EventBridge scheduled event that calls the API and invokes the function.",
-    "text_zh": null
+    "text_zh": "创建一个 AWS Lambda 函数。创建一个 Amazon API Gateway HTTP API，并把该 API 与该函数集成。创建一个 Amazon EventBridge 计划事件来调用该 API 并触发该函数。"
    },
    {
     "letter": "C",
     "text_en": "Create an Amazon Elastic Container Service (Amazon ECS) cluster with an AWS Fargate launch type. Create an Amazon EventBridge scheduled event that launches an ECS task on the cluster to run the job.",
-    "text_zh": null
+    "text_zh": "创建一个采用 AWS Fargate 启动类型的 Amazon Elastic Container Service (Amazon ECS) 集群。创建一个 Amazon EventBridge 计划事件，在该集群上启动一个 ECS 任务来运行该作业。"
    },
    {
     "letter": "D",
     "text_en": "Create an Amazon Elastic Container Service (Amazon ECS) cluster with an Amazon EC2 launch type and an Auto Scaling group with at least one EC2 instance. Create an Amazon EventBridge scheduled event that launches an ECS task on the cluster to run the job.",
-    "text_zh": null
+    "text_zh": "创建一个采用 Amazon EC2 启动类型的 Amazon Elastic Container Service (Amazon ECS) 集群，以及一个至少含一台 EC2 实例的 Auto Scaling 组。创建一个 Amazon EventBridge 计划事件，在该集群上启动一个 ECS 任务来运行该作业。"
    }
   ],
   "pdf_page": 144,
@@ -17305,22 +17305,22 @@
    {
     "letter": "A",
     "text_en": "Use Amazon S3 multi-part upload functionality to transfer the files over HTTPS.",
-    "text_zh": null
+    "text_zh": "使用 Amazon S3 分段上传功能通过 HTTPS 传输这些文件。"
    },
    {
     "letter": "B",
     "text_en": "Create a VPN connection between the on-premises NAS system and the nearest AWS Region. Transfer the data over the VPN connection.",
-    "text_zh": null
+    "text_zh": "在本地 NAS 系统与最近的 AWS 区域之间建立 VPN 连接。通过该 VPN 连接传输数据。"
    },
    {
     "letter": "C",
     "text_en": "Use the AWS Snow Family console to order several AWS Snowball Edge Storage Optimized devices. Use the devices to transfer the data to Amazon S3.",
-    "text_zh": null
+    "text_zh": "在 AWS Snow Family 控制台订购若干台 AWS Snowball Edge Storage Optimized 设备。用这些设备把数据传输到 Amazon S3。"
    },
    {
     "letter": "D",
     "text_en": "Set up a 10 Gbps AWS Direct Connect connection between the company location and the nearest AWS Region. Transfer the data over a VPN connection into the Region to store the data in Amazon S3.",
-    "text_zh": null
+    "text_zh": "在公司所在地与最近的 AWS 区域之间搭建一条 10 Gbps 的 AWS Direct Connect 连接。通过 VPN 连接把数据传入该区域，存放到 Amazon S3。"
    }
   ],
   "pdf_page": 144,
@@ -17348,22 +17348,22 @@
    {
     "letter": "A",
     "text_en": "Create an Amazon CloudFront distribution in front of the API Gateway Regional API endpoint with a maximum TTL of 24 hours.",
-    "text_zh": null
+    "text_zh": "在该 API Gateway 区域级 API 端点前面创建一个 Amazon CloudFront 分配，最大 TTL 设为 24 小时。"
    },
    {
     "letter": "B",
     "text_en": "Create a Regional AWS WAF web ACL with a rate-based rule. Associate the web ACL with the API Gateway stage.",
-    "text_zh": null
+    "text_zh": "创建一个含基于速率规则的区域级 AWS WAF Web ACL。把该 Web ACL 关联到该 API Gateway 阶段。"
    },
    {
     "letter": "C",
     "text_en": "Use Amazon CloudWatch metrics to monitor the Count metric and alert the security team when the predefined rate is reached.",
-    "text_zh": null
+    "text_zh": "用 Amazon CloudWatch 指标监控 Count 指标，在达到预设速率时告警安全团队。"
    },
    {
     "letter": "D",
     "text_en": "Create an Amazon CloudFront distribution with Lambda@Edge in front of the API Gateway Regional API endpoint. Create an AWS Lambda function to block requests from IP addresses that exceed the predefined rate.",
-    "text_zh": null
+    "text_zh": "在该 API Gateway 区域级 API 端点前面创建一个带 Lambda@Edge 的 Amazon CloudFront 分配。创建一个 AWS Lambda 函数，阻断请求速率超过预设值的 IP 地址。"
    }
   ],
   "pdf_page": 144,
@@ -17391,22 +17391,22 @@
    {
     "letter": "A",
     "text_en": "Use DynamoDB transactions to write new event data to the table. Configure the transactions to notify internal teams.",
-    "text_zh": null
+    "text_zh": "用 DynamoDB 事务把新的事件数据写入该表。配置这些事务去通知内部团队。"
    },
    {
     "letter": "B",
     "text_en": "Have the current application publish a message to four Amazon Simple Notification Service (Amazon SNS) topics. Have each team subscribe to one topic.",
-    "text_zh": null
+    "text_zh": "让现有应用向四个 Amazon Simple Notification Service (Amazon SNS) 主题发布消息。每个团队各订阅一个主题。"
    },
    {
     "letter": "C",
     "text_en": "Enable Amazon DynamoDB Streams on the table. Use triggers to write to a single Amazon Simple Notification Service (Amazon SNS) topic to which the teams can subscribe.",
-    "text_zh": null
+    "text_zh": "为该表启用 Amazon DynamoDB Streams。用触发器写入一个统一的 Amazon Simple Notification Service (Amazon SNS) 主题，供各团队订阅。"
    },
    {
     "letter": "D",
     "text_en": "Add a custom attribute to each record to flag new items. Write a cron job that scans the table every minute for items that are new and notifies an Amazon Simple Queue Service (Amazon SQS) queue to which the teams can subscribe.",
-    "text_zh": null
+    "text_zh": "给每条记录加一个自定义属性来标记新条目。写一个 cron 作业每分钟扫描该表找出新条目，并通知一个供各团队订阅的 Amazon Simple Queue Service (Amazon SQS) 队列。"
    }
   ],
   "pdf_page": 145,
@@ -17434,22 +17434,22 @@
    {
     "letter": "A",
     "text_en": "Deploy the application servers by using Amazon EC2 instances in an Auto Scaling group across multiple Availability Zones. Use an Amazon RDS DB instance in a Multi-AZ configuration.",
-    "text_zh": null
+    "text_zh": "用跨多个可用区的 Auto Scaling 组中的 Amazon EC2 实例部署应用服务器。使用多可用区配置的 Amazon RDS 数据库实例。"
    },
    {
     "letter": "B",
     "text_en": "Deploy the application servers by using Amazon EC2 instances in an Auto Scaling group in a single Availability Zone. Deploy the database on an EC2 instance. Enable EC2 Auto Recovery.",
-    "text_zh": null
+    "text_zh": "用单个可用区内 Auto Scaling 组中的 Amazon EC2 实例部署应用服务器。把数据库部署在一台 EC2 实例上。启用 EC2 自动恢复。"
    },
    {
     "letter": "C",
     "text_en": "Deploy the application servers by using Amazon EC2 instances in an Auto Scaling group across multiple Availability Zones. Use an Amazon RDS DB instance with a read replica in a single Availability Zone. Promote the read replica to replace the primary DB instance if the primary DB instance fails.",
-    "text_zh": null
+    "text_zh": "用跨多个可用区的 Auto Scaling 组中的 Amazon EC2 实例部署应用服务器。使用一个在单个可用区内带只读副本的 Amazon RDS 数据库实例。主数据库实例故障时把只读副本提升为主实例。"
    },
    {
     "letter": "D",
     "text_en": "Deploy the application servers by using Amazon EC2 instances in an Auto Scaling group across multiple Availability Zones. Deploy the primary and secondary database servers on EC2 instances across multiple Availability Zones. Use Amazon Elastic Block Store (Amazon EBS) Multi-Attach to create shared storage between the instances.",
-    "text_zh": null
+    "text_zh": "用跨多个可用区的 Auto Scaling 组中的 Amazon EC2 实例部署应用服务器。把主备数据库服务器部署在跨多个可用区的 EC2 实例上。用 Amazon Elastic Block Store (Amazon EBS) 多重挂载在这些实例间创建共享存储。"
    }
   ],
   "pdf_page": 145,
@@ -17477,22 +17477,22 @@
    {
     "letter": "A",
     "text_en": "Update the Kinesis Data Streams default settings by modifying the data retention period.",
-    "text_zh": null
+    "text_zh": "修改数据保留期，以更新 Kinesis Data Streams 的默认设置。"
    },
    {
     "letter": "B",
     "text_en": "Update the application to use the Kinesis Producer Library (KPL) to send the data to Kinesis Data Streams.",
-    "text_zh": null
+    "text_zh": "改造应用，改用 Kinesis Producer Library (KPL) 向 Kinesis Data Streams 发送数据。"
    },
    {
     "letter": "C",
     "text_en": "Update the number of Kinesis shards to handle the throughput of the data that is sent to Kinesis Data Streams.",
-    "text_zh": null
+    "text_zh": "调整 Kinesis 分片数量，以承载发送到 Kinesis Data Streams 的数据吞吐。"
    },
    {
     "letter": "D",
     "text_en": "Turn on S3 Versioning within the S3 bucket to preserve every version of every object that is ingested in the S3 bucket.",
-    "text_zh": null
+    "text_zh": "在该 S3 存储桶上开启 S3 版本控制，以保留写入该存储桶的每个对象的每个版本。"
    }
   ],
   "pdf_page": 146,
@@ -17518,22 +17518,22 @@
    {
     "letter": "A",
     "text_en": "Add required IAM permissions in the resource policy of the Lambda function.",
-    "text_zh": null
+    "text_zh": "在该 Lambda 函数的资源策略中添加所需的 IAM 权限。"
    },
    {
     "letter": "B",
     "text_en": "Create a signed request using the existing IAM credentials in the Lambda function.",
-    "text_zh": null
+    "text_zh": "用该 Lambda 函数中现有的 IAM 凭证创建一个签名请求。"
    },
    {
     "letter": "C",
     "text_en": "Create a new IAM user and use the existing IAM credentials in the Lambda function.",
-    "text_zh": null
+    "text_zh": "创建一个新的 IAM 用户，并在该 Lambda 函数中使用现有的 IAM 凭证。"
    },
    {
     "letter": "D",
     "text_en": "Create an IAM execution role with the required permissions and attach the IAM role to the Lambda function.",
-    "text_zh": null
+    "text_zh": "创建一个具备所需权限的 IAM 执行角色，并把该 IAM 角色附加到该 Lambda 函数。"
    }
   ],
   "pdf_page": 146,
@@ -17561,22 +17561,22 @@
    {
     "letter": "A",
     "text_en": "Set the Lambda function's runtime timeout value to 15 minutes.",
-    "text_zh": null
+    "text_zh": "把该 Lambda 函数的运行超时时间设为 15 分钟。"
    },
    {
     "letter": "B",
     "text_en": "Configure an S3 bucket replication policy. Stage the documents in the S3 bucket for later processing.",
-    "text_zh": null
+    "text_zh": "配置一条 S3 存储桶复制策略。把文档暂存在该 S3 存储桶中稍后处理。"
    },
    {
     "letter": "C",
     "text_en": "Deploy an additional Lambda function. Load balance the processing of the documents across the two Lambda functions.",
-    "text_zh": null
+    "text_zh": "再部署一个 Lambda 函数。把文档处理负载在这两个 Lambda 函数之间做负载均衡。"
    },
    {
     "letter": "D",
     "text_en": "Create an Amazon Simple Queue Service (Amazon SQS) queue. Send the requests to the queue. Configure the queue as an event source for Lambda.",
-    "text_zh": null
+    "text_zh": "创建一个 Amazon Simple Queue Service (Amazon SQS) 队列。把请求发送到该队列。把该队列配置为 Lambda 的事件源。"
    }
   ],
   "pdf_page": 146,
@@ -17604,27 +17604,27 @@
    {
     "letter": "A",
     "text_en": "Use AWS Auto Scaling to adjust the ALB capacity based on request rate.",
-    "text_zh": null
+    "text_zh": "用 AWS Auto Scaling 根据请求速率调整 ALB 的容量。"
    },
    {
     "letter": "B",
     "text_en": "Use AWS Auto Scaling to scale the capacity of the VPC internet gateway.",
-    "text_zh": null
+    "text_zh": "用 AWS Auto Scaling 伸缩 VPC 互联网网关的容量。"
    },
    {
     "letter": "C",
     "text_en": "Launch the EC2 instances in multiple AWS Regions to distribute the load across Regions.",
-    "text_zh": null
+    "text_zh": "把这些 EC2 实例启动到多个 AWS 区域，把负载分散到各区域。"
    },
    {
     "letter": "D",
     "text_en": "Use a target tracking scaling policy to scale the Auto Scaling group based on instance CPU utilization.",
-    "text_zh": null
+    "text_zh": "使用目标跟踪伸缩策略，按实例 CPU 利用率伸缩该 Auto Scaling 组。"
    },
    {
     "letter": "E",
     "text_en": "Use scheduled scaling to change the Auto Scaling group minimum, maximum, and desired capacity to zero for weekends. Revert to the default values at the start of the week.",
-    "text_zh": null
+    "text_zh": "使用计划伸缩，在周末把 Auto Scaling 组的最小容量、最大容量和期望容量都改为零，到下周开始时再恢复默认值。"
    }
   ],
   "pdf_page": 147,
@@ -17653,27 +17653,27 @@
    {
     "letter": "A",
     "text_en": "Create a network ACL for the public subnet. Add a rule to deny outbound traffic to 0.0.0.0/0 on port 3306.",
-    "text_zh": null
+    "text_zh": "为该公有子网创建一个网络 ACL。添加一条规则，拒绝到 0.0.0.0/0 的 3306 端口出站流量。"
    },
    {
     "letter": "B",
     "text_en": "Create a security group for the DB instance. Add a rule to allow traffic from the public subnet CIDR block on port 3306.",
-    "text_zh": null
+    "text_zh": "为该数据库实例创建一个安全组。添加一条规则，允许来自公有子网 CIDR 块的 3306 端口流量。"
    },
    {
     "letter": "C",
     "text_en": "Create a security group for the web servers in the public subnet. Add a rule to allow traffic from 0.0.0.0/0 on port 443.",
-    "text_zh": null
+    "text_zh": "为公有子网中的 Web 服务器创建一个安全组。添加一条规则，允许来自 0.0.0.0/0 的 443 端口流量。"
    },
    {
     "letter": "D",
     "text_en": "Create a security group for the DB instance. Add a rule to allow traffic from the web servers’ security group on port 3306.",
-    "text_zh": null
+    "text_zh": "为该数据库实例创建一个安全组。添加一条规则，允许来自 Web 服务器安全组的 3306 端口流量。"
    },
    {
     "letter": "E",
     "text_en": "Create a security group for the DB instance. Add a rule to deny all traffic except traffic from the web servers’ security group on port 3306.",
-    "text_zh": null
+    "text_zh": "为该数据库实例创建一个安全组。添加规则：除来自 Web 服务器安全组的 3306 端口流量外，拒绝所有流量。"
    }
   ],
   "pdf_page": 147,
@@ -17702,22 +17702,22 @@
    {
     "letter": "A",
     "text_en": "Create an AWS DataSync task that shares the data as a mountable file system. Mount the file system to the application server.",
-    "text_zh": null
+    "text_zh": "创建一个 AWS DataSync 任务，把数据以可挂载文件系统的形式共享出来。把该文件系统挂载到应用服务器上。"
    },
    {
     "letter": "B",
     "text_en": "Create an AWS Storage Gateway file gateway. Create a file share that uses the required client protocol. Connect the application server to the file share.",
-    "text_zh": null
+    "text_zh": "创建一个 AWS Storage Gateway 文件网关。创建一个使用所需客户端协议的文件共享。把应用服务器连接到该文件共享。"
    },
    {
     "letter": "C",
     "text_en": "Create an Amazon Elastic File System (Amazon EFS) file system, and configure it to support Lustre. Attach the file system to the origin server. Connect the application server to the file system.",
-    "text_zh": null
+    "text_zh": "创建一个 Amazon Elastic File System (Amazon EFS) 文件系统，并把它配置为支持 Lustre。把该文件系统挂载到源服务器上。把应用服务器连接到该文件系统。"
    },
    {
     "letter": "D",
     "text_en": "Create an Amazon FSx for Lustre file system. Attach the file system to the origin server. Connect the application server to the file system.",
-    "text_zh": null
+    "text_zh": "创建一个 Amazon FSx for Lustre 文件系统。把该文件系统挂载到源服务器上。把应用服务器连接到该文件系统。"
    }
   ],
   "pdf_page": 147,
@@ -17745,22 +17745,22 @@
    {
     "letter": "A",
     "text_en": "Configure an Amazon Route 53 failover routing policy. Create a Network Load Balancer (NLB) in each of the two Regions. Configure the NLB to invoke an AWS Lambda function to process the data.",
-    "text_zh": null
+    "text_zh": "配置一条 Amazon Route 53 故障转移路由策略。在这两个区域各创建一个 Network Load Balancer (NLB)。配置该 NLB 调用一个 AWS Lambda 函数来处理数据。"
    },
    {
     "letter": "B",
     "text_en": "Use AWS Global Accelerator. Create a Network Load Balancer (NLB) in each of the two Regions as an endpoint. Create an Amazon Elastic Container Service (Amazon ECS) cluster with the Fargate launch type. Create an ECS service on the cluster. Set the ECS service as the target for the NLProcess the data in Amazon ECS.",
-    "text_zh": null
+    "text_zh": "使用 AWS Global Accelerator。在这两个区域各创建一个 Network Load Balancer (NLB) 作为端点。创建一个采用 Fargate 启动类型的 Amazon Elastic Container Service (Amazon ECS) 集群。在该集群上创建一个 ECS 服务。把该 ECS 服务设为 NLB 的目标，在 Amazon ECS 中处理数据。"
    },
    {
     "letter": "C",
     "text_en": "Use AWS Global Accelerator. Create an Application Load Balancer (ALB) in each of the two Regions as an endpoint. Create an Amazon Elastic Container Service (Amazon ECS) cluster with the Fargate launch type. Create an ECS service on the cluster. Set the ECS service as the target for the ALB. Process the data in Amazon ECS.",
-    "text_zh": null
+    "text_zh": "使用 AWS Global Accelerator。在这两个区域各创建一个 Application Load Balancer (ALB) 作为端点。创建一个采用 Fargate 启动类型的 Amazon Elastic Container Service (Amazon ECS) 集群。在该集群上创建一个 ECS 服务。把该 ECS 服务设为该 ALB 的目标。在 Amazon ECS 中处理数据。"
    },
    {
     "letter": "D",
     "text_en": "Configure an Amazon Route 53 failover routing policy. Create an Application Load Balancer (ALB) in each of the two Regions. Create an Amazon Elastic Container Service (Amazon ECS) cluster with the Fargate launch type. Create an ECS service on the cluster. Set the ECS service as the target for the ALB. Process the data in Amazon ECS.",
-    "text_zh": null
+    "text_zh": "配置一条 Amazon Route 53 故障转移路由策略。在这两个区域各创建一个 Application Load Balancer (ALB)。创建一个采用 Fargate 启动类型的 Amazon Elastic Container Service (Amazon ECS) 集群。在该集群上创建一个 ECS 服务。把该 ECS 服务设为该 ALB 的目标。在 Amazon ECS 中处理数据。"
    }
   ],
   "pdf_page": 148,
@@ -17788,22 +17788,22 @@
    {
     "letter": "A",
     "text_en": "Migrate the file share to Amazon RDS.",
-    "text_zh": null
+    "text_zh": "把该文件共享迁移到 Amazon RDS。"
    },
    {
     "letter": "B",
     "text_en": "Migrate the file share to AWS Storage Gateway.",
-    "text_zh": null
+    "text_zh": "把该文件共享迁移到 AWS Storage Gateway。"
    },
    {
     "letter": "C",
     "text_en": "Migrate the file share to Amazon FSx for Windows File Server.",
-    "text_zh": null
+    "text_zh": "把该文件共享迁移到 Amazon FSx for Windows File Server。"
    },
    {
     "letter": "D",
     "text_en": "Migrate the file share to Amazon Elastic File System (Amazon EFS).",
-    "text_zh": null
+    "text_zh": "把该文件共享迁移到 Amazon Elastic File System (Amazon EFS)。"
    }
   ],
   "pdf_page": 148,
@@ -17831,22 +17831,22 @@
    {
     "letter": "A",
     "text_en": "Create an IAM role that specifies EBS encryption. Attach the role to the EC2 instances.",
-    "text_zh": null
+    "text_zh": "创建一个指定了 EBS 加密的 IAM 角色。把该角色附加到这些 EC2 实例上。"
    },
    {
     "letter": "B",
     "text_en": "Create the EBS volumes as encrypted volumes. Attach the EBS volumes to the EC2 instances.",
-    "text_zh": null
+    "text_zh": "把这些 EBS 卷创建为加密卷。再把它们挂载到这些 EC2 实例上。"
    },
    {
     "letter": "C",
     "text_en": "Create an EC2 instance tag that has a key of Encrypt and a value of True. Tag all instances that require encryption at the EBS level.",
-    "text_zh": null
+    "text_zh": "创建一个键为 Encrypt、值为 True 的 EC2 实例标签。给所有需要 EBS 级加密的实例打上该标签。"
    },
    {
     "letter": "D",
     "text_en": "Create an AWS Key Management Service (AWS KMS) key policy that enforces EBS encryption in the account. Ensure that the key policy is active.",
-    "text_zh": null
+    "text_zh": "创建一条在该账户内强制 EBS 加密的 AWS Key Management Service (AWS KMS) 密钥策略。确保该密钥策略处于生效状态。"
    }
   ],
   "pdf_page": 148,
@@ -17874,22 +17874,22 @@
    {
     "letter": "A",
     "text_en": "Amazon DynamoDB",
-    "text_zh": null
+    "text_zh": "Amazon DynamoDB"
    },
    {
     "letter": "B",
     "text_en": "Amazon RDS for MySQL",
-    "text_zh": null
+    "text_zh": "Amazon RDS for MySQL"
    },
    {
     "letter": "C",
     "text_en": "MySQL-compatible Amazon Aurora Serverless",
-    "text_zh": null
+    "text_zh": "兼容 MySQL 的 Amazon Aurora Serverless"
    },
    {
     "letter": "D",
     "text_en": "MySQL deployed on Amazon EC2 in an Auto Scaling group",
-    "text_zh": null
+    "text_zh": "部署在 Auto Scaling 组内 Amazon EC2 上的 MySQL"
    }
   ],
   "pdf_page": 149,
@@ -17917,22 +17917,22 @@
    {
     "letter": "A",
     "text_en": "Use Amazon GuardDuty to monitor S3 bucket policies. Create an automatic remediation action rule that uses an AWS Lambda function to remediate any change that makes the objects public.",
-    "text_zh": null
+    "text_zh": "用 Amazon GuardDuty 监控 S3 存储桶策略。创建一条自动修复动作规则，用一个 AWS Lambda 函数修复任何会让对象变成公开的改动。"
    },
    {
     "letter": "B",
     "text_en": "Use AWS Trusted Advisor to find publicly accessible S3 buckets. Configure email notifications in Trusted Advisor when a change is detected. Manually change the S3 bucket policy if it allows public access.",
-    "text_zh": null
+    "text_zh": "用 AWS Trusted Advisor 找出可公开访问的 S3 存储桶。在 Trusted Advisor 中配置检测到变更时的邮件通知。如果存储桶策略允许公开访问就手动改掉。"
    },
    {
     "letter": "C",
     "text_en": "Use AWS Resource Access Manager to find publicly accessible S3 buckets. Use Amazon Simple Notification Service (Amazon SNS) to invoke an AWS Lambda function when a change is detected. Deploy a Lambda function that programmatically remediates the change.",
-    "text_zh": null
+    "text_zh": "用 AWS Resource Access Manager 找出可公开访问的 S3 存储桶。检测到变更时用 Amazon Simple Notification Service (Amazon SNS) 调用一个 AWS Lambda 函数。部署一个以编程方式修复该变更的 Lambda 函数。"
    },
    {
     "letter": "D",
     "text_en": "Use the S3 Block Public Access feature on the account level. Use AWS Organizations to create a service control policy (SCP) that prevents IAM users from changing the setting. Apply the SCP to the account.",
-    "text_zh": null
+    "text_zh": "在账户级别启用 S3 阻止公有访问功能。用 AWS Organizations 创建一条服务控制策略 (SCP)，禁止 IAM 用户更改该设置。把该 SCP 应用到该账户。"
    }
   ],
   "pdf_page": 149,
@@ -17960,22 +17960,22 @@
    {
     "letter": "A",
     "text_en": "Create a separate application tier using EC2 instances dedicated to email processing.",
-    "text_zh": null
+    "text_zh": "用专门处理邮件的 EC2 实例创建一个独立的应用层。"
    },
    {
     "letter": "B",
     "text_en": "Configure the web instance to send email through Amazon Simple Email Service (Amazon SES).",
-    "text_zh": null
+    "text_zh": "配置该 Web 实例通过 Amazon Simple Email Service (Amazon SES) 发送邮件。"
    },
    {
     "letter": "C",
     "text_en": "Configure the web instance to send email through Amazon Simple Notification Service (Amazon SNS).",
-    "text_zh": null
+    "text_zh": "配置该 Web 实例通过 Amazon Simple Notification Service (Amazon SNS) 发送邮件。"
    },
    {
     "letter": "D",
     "text_en": "Create a separate application tier using EC2 instances dedicated to email processing. Place the instances in an Auto Scaling group.",
-    "text_zh": null
+    "text_zh": "用专门处理邮件的 EC2 实例创建一个独立的应用层，并把这些实例放入一个 Auto Scaling 组。"
    }
   ],
   "pdf_page": 149,
@@ -18003,22 +18003,22 @@
    {
     "letter": "A",
     "text_en": "Use AWS DataSync to transfer the files to Amazon S3. Create a scheduled task that runs at the end of each day.",
-    "text_zh": null
+    "text_zh": "用 AWS DataSync 把文件传输到 Amazon S3。创建一个每天结束时运行的计划任务。"
    },
    {
     "letter": "B",
     "text_en": "Create an Amazon S3 File Gateway. Update the business system to use a new network share from the S3 File Gateway.",
-    "text_zh": null
+    "text_zh": "创建一个 Amazon S3 File Gateway。更新业务系统，改用 S3 File Gateway 提供的新网络共享。"
    },
    {
     "letter": "C",
     "text_en": "Use AWS DataSync to transfer the files to Amazon S3. Create an application that uses the DataSync API in the automation workflow.",
-    "text_zh": null
+    "text_zh": "用 AWS DataSync 把文件传输到 Amazon S3。开发一个在自动化工作流中调用 DataSync API 的应用。"
    },
    {
     "letter": "D",
     "text_en": "Deploy an AWS Transfer for SFTP endpoint. Create a script that checks for new files on the network share and uploads the new files by using SFTP.",
-    "text_zh": null
+    "text_zh": "部署一个 AWS Transfer for SFTP 端点。编写脚本检查网络共享上的新文件，并用 SFTP 上传这些新文件。"
    }
   ],
   "pdf_page": 150,
@@ -18044,22 +18044,22 @@
    {
     "letter": "A",
     "text_en": "Create an S3 Lifecycle configuration with a rule to transition the objects in the S3 bucket to S3 Intelligent-Tiering.",
-    "text_zh": null
+    "text_zh": "创建一个 S3 生命周期配置，其规则把该 S3 存储桶中的对象转换到 S3 Intelligent-Tiering。"
    },
    {
     "letter": "B",
     "text_en": "Use the S3 storage class analysis tool to determine the correct tier for each object in the S3 bucket. Move each object to the identified storage tier.",
-    "text_zh": null
+    "text_zh": "用 S3 存储类分析工具确定该 S3 存储桶中每个对象合适的层级，然后把每个对象移到相应的存储层。"
    },
    {
     "letter": "C",
     "text_en": "Create an S3 Lifecycle configuration with a rule to transition the objects in the S3 bucket to S3 Glacier Instant Retrieval.",
-    "text_zh": null
+    "text_zh": "创建一个 S3 生命周期配置，其规则把该 S3 存储桶中的对象转换到 S3 Glacier Instant Retrieval。"
    },
    {
     "letter": "D",
     "text_en": "Create an S3 Lifecycle configuration with a rule to transition the objects in the S3 bucket to S3 One Zone-Infrequent Access (S3 One Zone- IA).",
-    "text_zh": null
+    "text_zh": "创建一个 S3 生命周期配置，其规则把该 S3 存储桶中的对象转换到 S3 One Zone-Infrequent Access (S3 One Zone-IA)。"
    }
   ],
   "pdf_page": 150,
@@ -18087,27 +18087,27 @@
    {
     "letter": "A",
     "text_en": "Configure an Amazon Redshift cluster.",
-    "text_zh": null
+    "text_zh": "配置一个 Amazon Redshift 集群。"
    },
    {
     "letter": "B",
     "text_en": "Set up an Amazon CloudFront distribution.",
-    "text_zh": null
+    "text_zh": "配置一个 Amazon CloudFront 分配。"
    },
    {
     "letter": "C",
     "text_en": "Host the dynamic web content in Amazon S3.",
-    "text_zh": null
+    "text_zh": "把动态 Web 内容托管在 Amazon S3 上。"
    },
    {
     "letter": "D",
     "text_en": "Create a read replica for the RDS DB instance.",
-    "text_zh": null
+    "text_zh": "为该 RDS 数据库实例创建一个只读副本。"
    },
    {
     "letter": "E",
     "text_en": "Configure a Multi-AZ deployment for the RDS DB instance.",
-    "text_zh": null
+    "text_zh": "为该 RDS 数据库实例配置多可用区部署。"
    }
   ],
   "pdf_page": 150,
@@ -18136,22 +18136,22 @@
    {
     "letter": "A",
     "text_en": "Purchase an EC2 Instance Savings Plan Optimize the Lambda functions’ duration and memory usage and the number of invocations. Connect the Lambda functions to the private subnet that contains the EC2 instances.",
-    "text_zh": null
+    "text_zh": "购买 EC2 实例类节省计划。优化这些 Lambda 函数的执行时长、内存用量和调用次数。把这些 Lambda 函数接入承载 EC2 实例的那个私有子网。"
    },
    {
     "letter": "B",
     "text_en": "Purchase an EC2 Instance Savings Plan Optimize the Lambda functions' duration and memory usage, the number of invocations, and the amount of data that is transferred. Connect the Lambda functions to a public subnet in the same VPC where the EC2 instances run.",
-    "text_zh": null
+    "text_zh": "购买 EC2 实例类节省计划。优化这些 Lambda 函数的执行时长、内存用量、调用次数和数据传输量。把这些 Lambda 函数接入 EC2 实例所在同一 VPC 中的一个公有子网。"
    },
    {
     "letter": "C",
     "text_en": "Purchase a Compute Savings Plan. Optimize the Lambda functions’ duration and memory usage, the number of invocations, and the amount of data that is transferred. Connect the Lambda functions to the private subnet that contains the EC2 instances.",
-    "text_zh": null
+    "text_zh": "购买计算类节省计划。优化这些 Lambda 函数的执行时长、内存用量、调用次数和数据传输量。把这些 Lambda 函数接入承载 EC2 实例的那个私有子网。"
    },
    {
     "letter": "D",
     "text_en": "Purchase a Compute Savings Plan. Optimize the Lambda functions’ duration and memory usage, the number of invocations, and the amount of data that is transferred. Keep the Lambda functions in the Lambda service VPC.",
-    "text_zh": null
+    "text_zh": "购买计算类节省计划。优化这些 Lambda 函数的执行时长、内存用量、调用次数和数据传输量。让这些 Lambda 函数继续留在 Lambda 服务的 VPC 中。"
    }
   ],
   "pdf_page": 151,
@@ -18177,22 +18177,22 @@
    {
     "letter": "A",
     "text_en": "Attach the Administrator Access policy to the development account users.",
-    "text_zh": null
+    "text_zh": "给开发账户的用户附加 AdministratorAccess 策略。"
    },
    {
     "letter": "B",
     "text_en": "Add the development account as a principal in the trust policy of the role in the production account.",
-    "text_zh": null
+    "text_zh": "把开发账户添加为生产账户中该角色信任策略里的主体。"
    },
    {
     "letter": "C",
     "text_en": "Turn off the S3 Block Public Access feature on the S3 bucket in the production account.",
-    "text_zh": null
+    "text_zh": "关闭生产账户中该 S3 存储桶的「阻止公有访问」功能。"
    },
    {
     "letter": "D",
     "text_en": "Create a user in the production account with unique credentials for each team member.",
-    "text_zh": null
+    "text_zh": "在生产账户中为每位团队成员各创建一个带独立凭证的用户。"
    }
   ],
   "pdf_page": 151,
@@ -18220,27 +18220,27 @@
    {
     "letter": "A",
     "text_en": "In the Amazon EC2 console, select the EBS encryption account attribute and define a default encryption key.",
-    "text_zh": null
+    "text_zh": "在 Amazon EC2 控制台中勾选 EBS 加密账户属性，并指定一个默认加密密钥。"
    },
    {
     "letter": "B",
     "text_en": "Create an IAM permission boundary. Attach the permission boundary to the root organizational unit (OU). Define the boundary to deny the ec2:CreateVolume action when the ec2:Encrypted condition equals false.",
-    "text_zh": null
+    "text_zh": "创建一个 IAM 权限边界，附加到根组织单位 (OU)。把该边界定义为：当 ec2:Encrypted 条件为 false 时拒绝 ec2:CreateVolume 操作。"
    },
    {
     "letter": "C",
     "text_en": "Create an SCP. Attach the SCP to the root organizational unit (OU). Define the SCP to deny the ec2:CreateVolume action whenthe ec2:Encrypted condition equals false.",
-    "text_zh": null
+    "text_zh": "创建一条 SCP，附加到根组织单位 (OU)。把该 SCP 定义为：当 ec2:Encrypted 条件为 false 时拒绝 ec2:CreateVolume 操作。"
    },
    {
     "letter": "D",
     "text_en": "Update the IAM policies for each account to deny the ec2:CreateVolume action when the ec2:Encrypted condition equals false.",
-    "text_zh": null
+    "text_zh": "更新每个账户的 IAM 策略：当 ec2:Encrypted 条件为 false 时拒绝 ec2:CreateVolume 操作。"
    },
    {
     "letter": "E",
     "text_en": "In the Organizations management account, specify the Default EBS volume encryption setting.",
-    "text_zh": null
+    "text_zh": "在 Organizations 管理账户中指定默认 EBS 卷加密设置。"
    }
   ],
   "pdf_page": 152,
@@ -18269,22 +18269,22 @@
    {
     "letter": "A",
     "text_en": "Use an Amazon RDS Multi-AZ DB instance deployment. Create one read replica and point the read workload to the read replica.",
-    "text_zh": null
+    "text_zh": "使用 Amazon RDS 多可用区数据库实例部署。创建一个只读副本，把读取负载指向该只读副本。"
    },
    {
     "letter": "B",
     "text_en": "Use an Amazon RDS Multi-AZ DB duster deployment Create two read replicas and point the read workload to the read replicas.",
-    "text_zh": null
+    "text_zh": "使用 Amazon RDS 多可用区数据库集群部署。创建两个只读副本，把读取负载指向这些只读副本。"
    },
    {
     "letter": "C",
     "text_en": "Use an Amazon RDS Multi-AZ DB instance deployment. Point the read workload to the secondary instances in the Multi-AZ pair.",
-    "text_zh": null
+    "text_zh": "使用 Amazon RDS 多可用区数据库实例部署。把读取负载指向多可用区配对中的备用实例。"
    },
    {
     "letter": "D",
     "text_en": "Use an Amazon RDS Multi-AZ DB cluster deployment Point the read workload to the reader endpoint.",
-    "text_zh": null
+    "text_zh": "使用 Amazon RDS 多可用区数据库集群部署。把读取负载指向读取器端点。"
    }
   ],
   "pdf_page": 152,
@@ -18312,22 +18312,22 @@
    {
     "letter": "A",
     "text_en": "Create an encrypted Amazon Elastic Block Store (Amazon EBS) volume. Create an AWS Transfer Family SFTP service with a public endpoint that allows only trusted IP addresses. Attach the EBS volume to the SFTP service endpoint. Grant users access to the SFTP service.",
-    "text_zh": null
+    "text_zh": "创建一个加密的 Amazon Elastic Block Store (Amazon EBS) 卷。创建一个 AWS Transfer Family SFTP 服务，采用只允许可信 IP 地址的公有端点。把该 EBS 卷挂到该 SFTP 服务端点上。授予用户访问该 SFTP 服务的权限。"
    },
    {
     "letter": "B",
     "text_en": "Create an encrypted Amazon Elastic File System (Amazon EFS) volume. Create an AWS Transfer Family SFTP service with elastic IP addresses and a VPC endpoint that has internet-facing access. Attach a security group to the endpoint that allows only trusted IP addresses. Attach the EFS volume to the SFTP service endpoint. Grant users access to the SFTP service.",
-    "text_zh": null
+    "text_zh": "创建一个加密的 Amazon Elastic File System (Amazon EFS) 卷。创建一个带弹性 IP 地址和面向公网 VPC 端点的 AWS Transfer Family SFTP 服务。给该端点挂一个只允许可信 IP 地址的安全组。把该 EFS 卷挂到该 SFTP 服务端点上。授予用户访问该 SFTP 服务的权限。"
    },
    {
     "letter": "C",
     "text_en": "Create an Amazon S3 bucket with default encryption enabled. Create an AWS Transfer Family SFTP service with a public endpoint that allows only trusted IP addresses. Attach the S3 bucket to the SFTP service endpoint. Grant users access to the SFTP service.",
-    "text_zh": null
+    "text_zh": "创建一个启用了默认加密的 Amazon S3 存储桶。创建一个 AWS Transfer Family SFTP 服务，采用只允许可信 IP 地址的公有端点。把该 S3 存储桶挂到该 SFTP 服务端点上。授予用户访问该 SFTP 服务的权限。"
    },
    {
     "letter": "D",
     "text_en": "Create an Amazon S3 bucket with default encryption enabled. Create an AWS Transfer Family SFTP service with a VPC endpoint that has internal access in a private subnet. Attach a security group that allows only trusted IP addresses. Attach the S3 bucket to the SFTP service endpoint. Grant users access to the SFTP service.",
-    "text_zh": null
+    "text_zh": "创建一个启用了默认加密的 Amazon S3 存储桶。创建一个 AWS Transfer Family SFTP 服务，其 VPC 端点位于私有子网中、仅供内部访问。挂上一个只允许可信 IP 地址的安全组。把该 S3 存储桶挂到该 SFTP 服务端点上。授予用户访问该 SFTP 服务的权限。"
    }
   ],
   "pdf_page": 153,
@@ -18355,22 +18355,22 @@
    {
     "letter": "A",
     "text_en": "Direct the requests from the API to a Network Load Balancer (NLB). Deploy the models as AWS Lambda functions that are invoked by the NLB.",
-    "text_zh": null
+    "text_zh": "把 API 的请求导向一个 Network Load Balancer (NLB)。把这些模型部署为由该 NLB 调用的 AWS Lambda 函数。"
    },
    {
     "letter": "B",
     "text_en": "Direct the requests from the API to an Application Load Balancer (ALB). Deploy the models as Amazon Elastic Container Service (Amazon ECS) services that read from an Amazon Simple Queue Service (Amazon SQS) queue. Use AWS App Mesh to scale the instances of the ECS cluster based on the SQS queue size.",
-    "text_zh": null
+    "text_zh": "把 API 的请求导向一个 Application Load Balancer (ALB)。把这些模型部署为从 Amazon Simple Queue Service (Amazon SQS) 队列读取消息的 Amazon Elastic Container Service (Amazon ECS) 服务。用 AWS App Mesh 根据 SQS 队列长度伸缩 ECS 集群的实例数。"
    },
    {
     "letter": "C",
     "text_en": "Direct the requests from the API into an Amazon Simple Queue Service (Amazon SQS) queue. Deploy the models as AWS Lambda functions that are invoked by SQS events. Use AWS Auto Scaling to increase the number of vCPUs for the Lambda functions based on the SQS queue size.",
-    "text_zh": null
+    "text_zh": "把 API 的请求导入一个 Amazon Simple Queue Service (Amazon SQS) 队列。把这些模型部署为由 SQS 事件触发的 AWS Lambda 函数。用 AWS Auto Scaling 根据 SQS 队列长度增加这些 Lambda 函数的 vCPU 数量。"
    },
    {
     "letter": "D",
     "text_en": "Direct the requests from the API into an Amazon Simple Queue Service (Amazon SQS) queue. Deploy the models as Amazon Elastic Container Service (Amazon ECS) services that read from the queue. Enable AWS Auto Scaling on Amazon ECS for both the cluster and copies of the service based on the queue size.",
-    "text_zh": null
+    "text_zh": "把 API 的请求导入一个 Amazon Simple Queue Service (Amazon SQS) 队列。把这些模型部署为从该队列读取消息的 Amazon Elastic Container Service (Amazon ECS) 服务。在 Amazon ECS 上为集群和服务副本数都启用基于队列长度的 AWS Auto Scaling。"
    }
   ],
   "pdf_page": 153,
@@ -18398,27 +18398,27 @@
    {
     "letter": "A",
     "text_en": "Role",
-    "text_zh": null
+    "text_zh": "角色 (Role)"
    },
    {
     "letter": "B",
     "text_en": "Group",
-    "text_zh": null
+    "text_zh": "组 (Group)"
    },
    {
     "letter": "C",
     "text_en": "Organization",
-    "text_zh": null
+    "text_zh": "组织 (Organization)"
    },
    {
     "letter": "D",
     "text_en": "Amazon Elastic Container Service (Amazon ECS) resource",
-    "text_zh": null
+    "text_zh": "Amazon Elastic Container Service (Amazon ECS) 资源"
    },
    {
     "letter": "E",
     "text_en": "Amazon EC2 resource",
-    "text_zh": null
+    "text_zh": "Amazon EC2 资源"
    }
   ],
   "pdf_page": 154,
@@ -18427,8 +18427,8 @@
   "answer_confidence": 0.0,
   "explanation_en": null,
   "explanation_zh": null,
-  "stem_zh": null,
-  "stem_zh_source": null,
+  "stem_zh": "解决方案架构师想把下面这段 JSON 文本用作基于身份的策略来授予特定权限：该架构师可以把这条策略附加到哪些 IAM 主体上？（选择两项。）",
+  "stem_zh_source": "pdf_translation",
   "domain": null,
   "needs_review": true,
   "review_reason": "答案未确定",
@@ -18444,22 +18444,22 @@
    {
     "letter": "A",
     "text_en": "Use Reserved Instances for the frontend nodes. Use AWS Fargate for the backend nodes.",
-    "text_zh": null
+    "text_zh": "前端节点使用预留实例，后端节点使用 AWS Fargate。"
    },
    {
     "letter": "B",
     "text_en": "Use Reserved Instances for the frontend nodes. Use Spot Instances for the backend nodes.",
-    "text_zh": null
+    "text_zh": "前端节点使用预留实例，后端节点使用 Spot 实例。"
    },
    {
     "letter": "C",
     "text_en": "Use Spot Instances for the frontend nodes. Use Reserved Instances for the backend nodes.",
-    "text_zh": null
+    "text_zh": "前端节点使用 Spot 实例，后端节点使用预留实例。"
    },
    {
     "letter": "D",
     "text_en": "Use Spot Instances for the frontend nodes. Use AWS Fargate for the backend nodes.",
-    "text_zh": null
+    "text_zh": "前端节点使用 Spot 实例，后端节点使用 AWS Fargate。"
    }
   ],
   "pdf_page": 154,
@@ -18487,22 +18487,22 @@
    {
     "letter": "A",
     "text_en": "GP2 volume type",
-    "text_zh": null
+    "text_zh": "gp2 卷类型"
    },
    {
     "letter": "B",
     "text_en": "io2 volume type",
-    "text_zh": null
+    "text_zh": "io2 卷类型"
    },
    {
     "letter": "C",
     "text_en": "GP3 volume type",
-    "text_zh": null
+    "text_zh": "gp3 卷类型"
    },
    {
     "letter": "D",
     "text_en": "io1 volume type",
-    "text_zh": null
+    "text_zh": "io1 卷类型"
    }
   ],
   "pdf_page": 155,
@@ -18530,22 +18530,22 @@
    {
     "letter": "A",
     "text_en": "Use AWS DataSync to move the existing data to Amazon S3. Use AWS CloudTrail to log data events.",
-    "text_zh": null
+    "text_zh": "用 AWS DataSync 把现有数据搬到 Amazon S3。用 AWS CloudTrail 记录数据事件。"
    },
    {
     "letter": "B",
     "text_en": "Use AWS Snowcone to move the existing data to Amazon S3. Use AWS CloudTrail to log management events.",
-    "text_zh": null
+    "text_zh": "用 AWS Snowcone 把现有数据搬到 Amazon S3。用 AWS CloudTrail 记录管理事件。"
    },
    {
     "letter": "C",
     "text_en": "Use Amazon S3 Transfer Acceleration to move the existing data to Amazon S3. Use AWS CloudTrail to log data events.",
-    "text_zh": null
+    "text_zh": "用 Amazon S3 Transfer Acceleration 把现有数据搬到 Amazon S3。用 AWS CloudTrail 记录数据事件。"
    },
    {
     "letter": "D",
     "text_en": "Use AWS Storage Gateway to move the existing data to Amazon S3. Use AWS CloudTrail to log management events.",
-    "text_zh": null
+    "text_zh": "用 AWS Storage Gateway 把现有数据搬到 Amazon S3。用 AWS CloudTrail 记录管理事件。"
    }
   ],
   "pdf_page": 155,
@@ -18573,22 +18573,22 @@
    {
     "letter": "A",
     "text_en": "Deploy the application in AWS Lambda. Configure an Amazon API Gateway API to connect with the Lambda functions.",
-    "text_zh": null
+    "text_zh": "把该应用部署到 AWS Lambda。配置一个 Amazon API Gateway API 与这些 Lambda 函数对接。"
    },
    {
     "letter": "B",
     "text_en": "Deploy the application by using AWS Elastic Beanstalk. Configure a load-balanced environment and a rolling deployment policy.",
-    "text_zh": null
+    "text_zh": "用 AWS Elastic Beanstalk 部署该应用。配置一个带负载均衡的环境和滚动部署策略。"
    },
    {
     "letter": "C",
     "text_en": "Migrate the database to Amazon ElastiCache. Configure the ElastiCache security group to allow access from the application.",
-    "text_zh": null
+    "text_zh": "把数据库迁移到 Amazon ElastiCache。配置 ElastiCache 安全组允许该应用访问。"
    },
    {
     "letter": "D",
     "text_en": "Launch an Amazon EC2 instance. Install a MySQL server on the EC2 instance. Configure the application on the server. Create an AMI. Use the AMI to create a launch template with an Auto Scaling group.",
-    "text_zh": null
+    "text_zh": "启动一台 Amazon EC2 实例。在该 EC2 实例上安装 MySQL 服务器。在该服务器上配置好应用。创建一个 AMI。用该 AMI 创建带 Auto Scaling 组的启动模板。"
    }
   ],
   "pdf_page": 155,
@@ -18616,22 +18616,22 @@
    {
     "letter": "A",
     "text_en": "Create an IAM user with programmatic access to the Lambda function. Attach a policy to the user that allows read and write access to the DynamoDB table. Store the access_key_id and secret_access_key parameters as part of the Lambda environment variables. Ensure that other AWS users do not have read and write access to the Lambda function configuration.",
-    "text_zh": null
+    "text_zh": "创建一个对该 Lambda 函数有编程访问权限的 IAM 用户。给该用户附加一条允许读写该 DynamoDB 表的策略。把 access_key_id 和 secret_access_key 参数作为 Lambda 环境变量的一部分存放。确保其他 AWS 用户没有读写该 Lambda 函数配置的权限。"
    },
    {
     "letter": "B",
     "text_en": "Create an IAM role that includes Lambda as a trusted service. Attach a policy to the role that allows read and write access to the DynamoDB table. Update the configuration of the Lambda function to use the new role as the execution role.",
-    "text_zh": null
+    "text_zh": "创建一个把 Lambda 列为受信任服务的 IAM 角色。给该角色附加一条允许读写该 DynamoDB 表的策略。更新该 Lambda 函数的配置，把这个新角色用作执行角色。"
    },
    {
     "letter": "C",
     "text_en": "Create an IAM user with programmatic access to the Lambda function. Attach a policy to the user that allows read and write access to the DynamoDB table. Store the access_key_id and secret_access_key parameters in AWS Systems Manager Parameter Store as secure string parameters. Update the Lambda function code to retrieve the secure string parameters before connecting to the DynamoDB table.",
-    "text_zh": null
+    "text_zh": "创建一个对该 Lambda 函数有编程访问权限的 IAM 用户。给该用户附加一条允许读写该 DynamoDB 表的策略。把 access_key_id 和 secret_access_key 作为安全字符串参数存放在 AWS Systems Manager Parameter Store 中。修改该 Lambda 函数代码，在连接 DynamoDB 表之前先取出这些安全字符串参数。"
    },
    {
     "letter": "D",
     "text_en": "Create an IAM role that includes DynamoDB as a trusted service. Attach a policy to the role that allows read and write access from the Lambda function. Update the code of the Lambda function to attach to the new role as an execution role.",
-    "text_zh": null
+    "text_zh": "创建一个把 DynamoDB 列为受信任服务的 IAM 角色。给该角色附加一条允许该 Lambda 函数读写的策略。修改该 Lambda 函数代码，把这个新角色作为执行角色挂上去。"
    }
   ],
   "pdf_page": 156,
@@ -18659,22 +18659,22 @@
    {
     "letter": "A",
     "text_en": "Group members are permitted any Amazon EC2 action within the us-east-1 Region. Statements after the Allow permission are not applied.",
-    "text_zh": null
+    "text_zh": "组成员在 us-east-1 区域内可以执行任何 Amazon EC2 操作。Allow 权限之后的语句不生效。"
    },
    {
     "letter": "B",
     "text_en": "Group members are denied any Amazon EC2 permissions in the us-east-1 Region unless they are logged in with multi-factor authentication (MFA).",
-    "text_zh": null
+    "text_zh": "除非组成员使用多重身份验证 (MFA) 登录，否则他们在 us-east-1 区域没有任何 Amazon EC2 权限。"
    },
    {
     "letter": "C",
     "text_en": "Group members are allowed the ec2:StopInstances and ec2:TerminateInstances permissions for all Regions when logged in with multi- factor authentication (MFA). Group members are permitted any other Amazon EC2 action.",
-    "text_zh": null
+    "text_zh": "组成员在使用多重身份验证 (MFA) 登录时，可以在所有区域执行 ec2:StopInstances 和 ec2:TerminateInstances 操作。其他任何 Amazon EC2 操作组成员都可以执行。"
    },
    {
     "letter": "D",
     "text_en": "Group members are allowed the ec2:StopInstances and ec2:TerminateInstances permissions for the us-east-1 Region only when logged in with multi-factor authentication (MFA). Group members are permitted any other Amazon EC2 action within the us-east-1 Region.",
-    "text_zh": null
+    "text_zh": "组成员仅在使用多重身份验证 (MFA) 登录时，才能在 us-east-1 区域执行 ec2:StopInstances 和 ec2:TerminateInstances 操作。在 us-east-1 区域内，其他任何 Amazon EC2 操作组成员都可以执行。"
    }
   ],
   "pdf_page": 157,
@@ -18683,8 +18683,8 @@
   "answer_confidence": 0.0,
   "explanation_en": null,
   "explanation_zh": null,
-  "stem_zh": null,
-  "stem_zh_source": null,
+  "stem_zh": "下面这条 IAM 策略被附加到一个 IAM 组上，并且是该组唯一生效的策略。对组成员而言，这条策略的实际 IAM 权限是什么？",
+  "stem_zh_source": "pdf_translation",
   "domain": "secure",
   "needs_review": true,
   "review_reason": "答案未确定",
@@ -18700,27 +18700,27 @@
    {
     "letter": "A",
     "text_en": "Launch an Amazon EC2 Spot Instance that downloads the .csv files every hour, generates the image files, and uploads the images to the S3 bucket.",
-    "text_zh": null
+    "text_zh": "启动一台 Amazon EC2 Spot 实例，每小时下载这些 .csv 文件、生成图片文件，并把图片上传到该 S3 存储桶。"
    },
    {
     "letter": "B",
     "text_en": "Design an AWS Lambda function that converts the .csv files into images and stores the images in the S3 bucket. Invoke the Lambda function when a .csv file is uploaded.",
-    "text_zh": null
+    "text_zh": "设计一个把 .csv 文件转换成图片并把图片存入该 S3 存储桶的 AWS Lambda 函数。在有 .csv 文件上传时调用该 Lambda 函数。"
    },
    {
     "letter": "C",
     "text_en": "Create S3 Lifecycle rules for .csv files and image files in the S3 bucket. Transition the .csv files from S3 Standard to S3 Glacier 1 day after they are uploaded. Expire the image files after 30 days.",
-    "text_zh": null
+    "text_zh": "为该 S3 存储桶中的 .csv 文件和图片文件创建 S3 生命周期规则。.csv 文件上传 1 天后从 S3 Standard 转换到 S3 Glacier。图片文件 30 天后过期。"
    },
    {
     "letter": "D",
     "text_en": "Create S3 Lifecycle rules for .csv files and image files in the S3 bucket. Transition the .csv files from S3 Standard to S3 One Zone-Infrequent Access (S3 One Zone-IA) 1 day after they are uploaded. Expire the image files after 30 days.",
-    "text_zh": null
+    "text_zh": "为该 S3 存储桶中的 .csv 文件和图片文件创建 S3 生命周期规则。.csv 文件上传 1 天后从 S3 Standard 转换到 S3 One Zone-Infrequent Access (S3 One Zone-IA)。图片文件 30 天后过期。"
    },
    {
     "letter": "E",
     "text_en": "Create S3 Lifecycle rules for .csv files and image files in the S3 bucket. Transition the .csv files from S3 Standard to S3 Standard-Infrequent Access (S3 Standard-IA) 1 day after they are uploaded. Keep the image files in Reduced Redundancy Storage (RRS).",
-    "text_zh": null
+    "text_zh": "为该 S3 存储桶中的 .csv 文件和图片文件创建 S3 生命周期规则。.csv 文件上传 1 天后从 S3 Standard 转换到 S3 Standard-Infrequent Access (S3 Standard-IA)。图片文件保留在低冗余存储 (RRS) 中。"
    }
   ],
   "pdf_page": 158,
@@ -18749,22 +18749,22 @@
    {
     "letter": "A",
     "text_en": "Set up an Amazon ElastiCache for Memcached cluster to cache the scores for the web application to display.",
-    "text_zh": null
+    "text_zh": "搭建一个 Amazon ElastiCache for Memcached 集群，缓存分数供该 Web 应用展示。"
    },
    {
     "letter": "B",
     "text_en": "Set up an Amazon ElastiCache for Redis cluster to compute and cache the scores for the web application to display.",
-    "text_zh": null
+    "text_zh": "搭建一个 Amazon ElastiCache for Redis 集群，计算并缓存分数供该 Web 应用展示。"
    },
    {
     "letter": "C",
     "text_en": "Place an Amazon CloudFront distribution in front of the web application to cache the scoreboard in a section of the application.",
-    "text_zh": null
+    "text_zh": "在该 Web 应用前面放一个 Amazon CloudFront 分配，把排行榜缓存在应用的某个板块中。"
    },
    {
     "letter": "D",
     "text_en": "Create a read replica on Amazon RDS for MySQL to run queries to compute the scoreboard and serve the read traffic to the web application.",
-    "text_zh": null
+    "text_zh": "在 Amazon RDS for MySQL 上创建一个只读副本，用它运行计算排行榜的查询并承担该 Web 应用的读取流量。"
    }
   ],
   "pdf_page": 158,
@@ -18792,22 +18792,22 @@
    {
     "letter": "A",
     "text_en": "Use AWS Glue to create an ML transform to build and train models. Use Amazon OpenSearch Service to visualize the data.",
-    "text_zh": null
+    "text_zh": "用 AWS Glue 创建 ML 转换来构建和训练模型。用 Amazon OpenSearch Service 做数据可视化。"
    },
    {
     "letter": "B",
     "text_en": "Use Amazon SageMaker to build and train models. Use Amazon QuickSight to visualize the data.",
-    "text_zh": null
+    "text_zh": "用 Amazon SageMaker 构建和训练模型。用 Amazon QuickSight 做数据可视化。"
    },
    {
     "letter": "C",
     "text_en": "Use a pre-built ML Amazon Machine Image (AMI) from the AWS Marketplace to build and train models. Use Amazon OpenSearch Service to visualize the data.",
-    "text_zh": null
+    "text_zh": "使用 AWS Marketplace 上预构建的 ML Amazon Machine Image (AMI) 来构建和训练模型。用 Amazon OpenSearch Service 做数据可视化。"
    },
    {
     "letter": "D",
     "text_en": "Use Amazon QuickSight to build and train models by using calculated fields. Use Amazon QuickSight to visualize the data.",
-    "text_zh": null
+    "text_zh": "用 Amazon QuickSight 的计算字段来构建和训练模型。用 Amazon QuickSight 做数据可视化。"
    }
   ],
   "pdf_page": 158,
@@ -18835,22 +18835,22 @@
    {
     "letter": "A",
     "text_en": "Create a custom AWS Config rule to prevent tag modification except by authorized principals.",
-    "text_zh": null
+    "text_zh": "创建一条自定义 AWS Config 规则，阻止未经授权的主体修改标签。"
    },
    {
     "letter": "B",
     "text_en": "Create a custom trail in AWS CloudTrail to prevent tag modification.",
-    "text_zh": null
+    "text_zh": "在 AWS CloudTrail 中创建一条自定义跟踪来阻止标签修改。"
    },
    {
     "letter": "C",
     "text_en": "Create a service control policy (SCP) to prevent tag modification except by authorized principals.",
-    "text_zh": null
+    "text_zh": "创建一条服务控制策略 (SCP)，阻止未经授权的主体修改标签。"
    },
    {
     "letter": "D",
     "text_en": "Create custom Amazon CloudWatch logs to prevent tag modification.",
-    "text_zh": null
+    "text_zh": "创建自定义 Amazon CloudWatch 日志来阻止标签修改。"
    }
   ],
   "pdf_page": 159,
@@ -18878,22 +18878,22 @@
    {
     "letter": "A",
     "text_en": "Create an Auto Scaling group and a load balancer in the disaster recovery Region. Configure the DynamoDB table as a global table. Configure DNS failover to point to the new disaster recovery Region's load balancer.",
-    "text_zh": null
+    "text_zh": "在灾备区域创建一个 Auto Scaling 组和一个负载均衡器。把该 DynamoDB 表配置为全局表。配置 DNS 故障转移指向新灾备区域的负载均衡器。"
    },
    {
     "letter": "B",
     "text_en": "Create an AWS CloudFormation template to create EC2 instances, load balancers, and DynamoDB tables to be launched when needed Configure DNS failover to point to the new disaster recovery Region's load balancer.",
-    "text_zh": null
+    "text_zh": "创建一个 AWS CloudFormation 模板，用于在需要时创建 EC2 实例、负载均衡器和 DynamoDB 表。配置 DNS 故障转移指向新灾备区域的负载均衡器。"
    },
    {
     "letter": "C",
     "text_en": "Create an AWS CloudFormation template to create EC2 instances and a load balancer to be launched when needed. Configure the DynamoDB table as a global table. Configure DNS failover to point to the new disaster recovery Region's load balancer.",
-    "text_zh": null
+    "text_zh": "创建一个 AWS CloudFormation 模板，用于在需要时创建 EC2 实例和负载均衡器。把该 DynamoDB 表配置为全局表。配置 DNS 故障转移指向新灾备区域的负载均衡器。"
    },
    {
     "letter": "D",
     "text_en": "Create an Auto Scaling group and load balancer in the disaster recovery Region. Configure the DynamoDB table as a global table. Create an Amazon CloudWatch alarm to trigger an AWS Lambda function that updates Amazon Route 53 pointing to the disaster recovery load balancer.",
-    "text_zh": null
+    "text_zh": "在灾备区域创建一个 Auto Scaling 组和一个负载均衡器。把该 DynamoDB 表配置为全局表。创建一个 Amazon CloudWatch 告警来触发一个 AWS Lambda 函数，更新 Amazon Route 53 指向灾备负载均衡器。"
    }
   ],
   "pdf_page": 159,
@@ -18919,22 +18919,22 @@
    {
     "letter": "A",
     "text_en": "Order an AWS Snowball Edge Storage Optimized device. Use AWS Database Migration Service (AWS DMS) with AWS Schema Conversion Tool (AWS SCT) to migrate the database with replication of ongoing changes. Send the Snowball Edge device to AWS to finish the migration and continue the ongoing replication.",
-    "text_zh": null
+    "text_zh": "订购一台 AWS Snowball Edge Storage Optimized 设备。用 AWS Database Migration Service (AWS DMS) 配合 AWS Schema Conversion Tool (AWS SCT) 迁移数据库并复制持续变更。把 Snowball Edge 设备寄回 AWS 完成迁移，并继续持续复制。"
    },
    {
     "letter": "B",
     "text_en": "Order an AWS Snowmobile vehicle. Use AWS Database Migration Service (AWS DMS) with AWS Schema Conversion Tool (AWS SCT) to migrate the database with ongoing changes. Send the Snowmobile vehicle back to AWS to finish the migration and continue the ongoing replication.",
-    "text_zh": null
+    "text_zh": "订购一辆 AWS Snowmobile 卡车。用 AWS Database Migration Service (AWS DMS) 配合 AWS Schema Conversion Tool (AWS SCT) 迁移数据库并同步持续变更。把 Snowmobile 开回 AWS 完成迁移，并继续持续复制。"
    },
    {
     "letter": "C",
     "text_en": "Order an AWS Snowball Edge Compute Optimized with GPU device. Use AWS Database Migration Service (AWS DMS) with AWS Schema Conversion Tool (AWS SCT) to migrate the database with ongoing changes. Send the Snowball device to AWS to finish the migration and continue the ongoing replication",
-    "text_zh": null
+    "text_zh": "订购一台带 GPU 的 AWS Snowball Edge Compute Optimized 设备。用 AWS Database Migration Service (AWS DMS) 配合 AWS Schema Conversion Tool (AWS SCT) 迁移数据库并同步持续变更。把该 Snowball 设备寄回 AWS 完成迁移，并继续持续复制。"
    },
    {
     "letter": "D",
     "text_en": "Order a 1 GB dedicated AWS Direct Connect connection to establish a connection with the data center. Use AWS Database Migration Service (AWS DMS) with AWS Schema Conversion Tool (AWS SCT) to migrate the database with replication of ongoing changes.",
-    "text_zh": null
+    "text_zh": "订购一条 1 GB 的专用 AWS Direct Connect 连接与数据中心互联。用 AWS Database Migration Service (AWS DMS) 配合 AWS Schema Conversion Tool (AWS SCT) 迁移数据库并复制持续变更。"
    }
   ],
   "pdf_page": 159,
@@ -18962,22 +18962,22 @@
    {
     "letter": "A",
     "text_en": "Buy reserved DB instances for the total workload. Make the Amazon RDS for PostgreSQL DB instance larger.",
-    "text_zh": null
+    "text_zh": "为整体负载购买预留数据库实例。把该 Amazon RDS for PostgreSQL 数据库实例规格调大。"
    },
    {
     "letter": "B",
     "text_en": "Make the Amazon RDS for PostgreSQL DB instance a Multi-AZ DB instance.",
-    "text_zh": null
+    "text_zh": "把该 Amazon RDS for PostgreSQL 数据库实例改为多可用区数据库实例。"
    },
    {
     "letter": "C",
     "text_en": "Buy reserved DB instances for the total workload. Add another Amazon RDS for PostgreSQL DB instance.",
-    "text_zh": null
+    "text_zh": "为整体负载购买预留数据库实例。再增加一个 Amazon RDS for PostgreSQL 数据库实例。"
    },
    {
     "letter": "D",
     "text_en": "Make the Amazon RDS for PostgreSQL DB instance an on-demand DB instance.",
-    "text_zh": null
+    "text_zh": "把该 Amazon RDS for PostgreSQL 数据库实例改为按需数据库实例。"
    }
   ],
   "pdf_page": 160,
@@ -19005,22 +19005,22 @@
    {
     "letter": "A",
     "text_en": "Deploy Amazon Inspector and associate it with the ALB.",
-    "text_zh": null
+    "text_zh": "部署 Amazon Inspector 并把它与该 ALB 关联。"
    },
    {
     "letter": "B",
     "text_en": "Deploy AWS WAF, associate it with the ALB, and configure a rate-limiting rule.",
-    "text_zh": null
+    "text_zh": "部署 AWS WAF，把它与该 ALB 关联，并配置一条限速规则。"
    },
    {
     "letter": "C",
     "text_en": "Deploy rules to the network ACLs associated with the ALB to block the incomingtraffic.",
-    "text_zh": null
+    "text_zh": "在与该 ALB 关联的网络 ACL 上部署规则来阻断这些传入流量。"
    },
    {
     "letter": "D",
     "text_en": "Deploy Amazon GuardDuty and enable rate-limiting protection when configuring GuardDuty.",
-    "text_zh": null
+    "text_zh": "部署 Amazon GuardDuty，并在配置 GuardDuty 时启用限速防护。"
    }
   ],
   "pdf_page": 160,
@@ -19048,22 +19048,22 @@
    {
     "letter": "A",
     "text_en": "Create a read replica of the database. Configure IAM standard database authentication to grant the auditor access.",
-    "text_zh": null
+    "text_zh": "创建该数据库的只读副本。配置 IAM 标准数据库身份验证来授予审计员访问权限。"
    },
    {
     "letter": "B",
     "text_en": "Export the database contents to text files. Store the files in an Amazon S3 bucket. Create a new IAM user for the auditor. Grant the user access to the S3 bucket.",
-    "text_zh": null
+    "text_zh": "把数据库内容导出为文本文件。把文件存放在一个 Amazon S3 存储桶中。为审计员新建一个 IAM 用户，授予该用户访问该 S3 存储桶的权限。"
    },
    {
     "letter": "C",
     "text_en": "Copy a snapshot of the database to an Amazon S3 bucket. Create an IAM user. Share the user's keys with the auditor to grant access to the object in the S3 bucket.",
-    "text_zh": null
+    "text_zh": "把数据库的快照复制到一个 Amazon S3 存储桶。创建一个 IAM 用户。把该用户的密钥交给审计员，让其访问该 S3 存储桶中的对象。"
    },
    {
     "letter": "D",
     "text_en": "Create an encrypted snapshot of the database. Share the snapshot with the auditor. Allow access to the AWS Key Management Service (AWS KMS) encryption key.",
-    "text_zh": null
+    "text_zh": "创建该数据库的加密快照。把该快照共享给审计员。允许其访问相应的 AWS Key Management Service (AWS KMS) 加密密钥。"
    }
   ],
   "pdf_page": 160,
@@ -19091,22 +19091,22 @@
    {
     "letter": "A",
     "text_en": "Add an additional IPv4 CIDR block to increase the number of IP addresses and create additional subnets in the VPC. Create new resources in the new subnets by using the new CIDR.",
-    "text_zh": null
+    "text_zh": "追加一个 IPv4 CIDR 块来增加可用 IP 地址数量，并在该 VPC 中用新 CIDR 创建额外的子网。在这些新子网中创建新资源。"
    },
    {
     "letter": "B",
     "text_en": "Create a second VPC with additional subnets. Use a peering connection to connect the second VPC with the first VPC Update the routes and create new resources in the subnets of the second VPC.",
-    "text_zh": null
+    "text_zh": "创建第二个带额外子网的 VPC。用对等连接把第二个 VPC 与第一个 VPC 连起来。更新路由，并在第二个 VPC 的子网中创建新资源。"
    },
    {
     "letter": "C",
     "text_en": "Use AWS Transit Gateway to add a transit gateway and connect a second VPC with the first VPUpdate the routes of the transit gateway and VPCs. Create new resources in the subnets of the second VPC.",
-    "text_zh": null
+    "text_zh": "用 AWS Transit Gateway 添加一个中转网关，把第二个 VPC 与第一个 VPC 连起来。更新中转网关和各 VPC 的路由。在第二个 VPC 的子网中创建新资源。"
    },
    {
     "letter": "D",
     "text_en": "Create a second VPC. Create a Site-to-Site VPN connection between the first VPC and the second VPC by using a VPN-hosted solution on Amazon EC2 and a virtual private gateway. Update the route between VPCs to the traffic through the VPN. Create new resources in the subnets of the second VPC.",
-    "text_zh": null
+    "text_zh": "创建第二个 VPC。用运行在 Amazon EC2 上的 VPN 自建方案和一个虚拟专用网关，在第一个 VPC 与第二个 VPC 之间建立 Site-to-Site VPN 连接。更新 VPC 之间的路由，让流量走该 VPN。在第二个 VPC 的子网中创建新资源。"
    }
   ],
   "pdf_page": 161,
@@ -19134,27 +19134,27 @@
    {
     "letter": "A",
     "text_en": "Import the RDS snapshot directly into Aurora.",
-    "text_zh": null
+    "text_zh": "把该 RDS 快照直接导入 Aurora。"
    },
    {
     "letter": "B",
     "text_en": "Upload the RDS snapshot to Amazon S3. Then import the RDS snapshot into Aurora.",
-    "text_zh": null
+    "text_zh": "把该 RDS 快照上传到 Amazon S3，然后把它导入 Aurora。"
    },
    {
     "letter": "C",
     "text_en": "Upload the database dump to Amazon S3. Then import the database dump into Aurora.",
-    "text_zh": null
+    "text_zh": "把数据库转储文件上传到 Amazon S3，然后把该转储文件导入 Aurora。"
    },
    {
     "letter": "D",
     "text_en": "Use AWS Database Migration Service (AWS DMS) to import the RDS snapshot into Aurora.",
-    "text_zh": null
+    "text_zh": "用 AWS Database Migration Service (AWS DMS) 把该 RDS 快照导入 Aurora。"
    },
    {
     "letter": "E",
     "text_en": "Upload the database dump to Amazon S3. Then use AWS Database Migration Service (AWS DMS) to import the database dump into Aurora.",
-    "text_zh": null
+    "text_zh": "把数据库转储文件上传到 Amazon S3，然后用 AWS Database Migration Service (AWS DMS) 把该转储文件导入 Aurora。"
    }
   ],
   "pdf_page": 161,
@@ -19183,22 +19183,22 @@
    {
     "letter": "A",
     "text_en": "Update the Auto Scaling group to use Reserved Instances instead of On-Demand Instances.",
-    "text_zh": null
+    "text_zh": "更新该 Auto Scaling 组，用预留实例替代按需实例。"
    },
    {
     "letter": "B",
     "text_en": "Update the Auto Scaling group to scale by launching Spot Instances instead of On-Demand Instances.",
-    "text_zh": null
+    "text_zh": "更新该 Auto Scaling 组，扩容时启动 Spot 实例而不是按需实例。"
    },
    {
     "letter": "C",
     "text_en": "Create an Amazon CloudFront distribution to host the static web contents from an Amazon S3 bucket.",
-    "text_zh": null
+    "text_zh": "创建一个 Amazon CloudFront 分配，从一个 Amazon S3 存储桶承载静态 Web 内容。"
    },
    {
     "letter": "D",
     "text_en": "Create an AWS Lambda function behind an Amazon API Gateway API to host the static website contents.",
-    "text_zh": null
+    "text_zh": "在一个 Amazon API Gateway API 之后创建一个 AWS Lambda 函数来承载静态网站内容。"
    }
   ],
   "pdf_page": 161,
@@ -19226,22 +19226,22 @@
    {
     "letter": "A",
     "text_en": "Copy the required data to a common account. Create an IAM access role in that account. Grant access by specifying a permission policy that includes users from the engineering team accounts as trusted entities.",
-    "text_zh": null
+    "text_zh": "把所需数据复制到一个公共账户。在该账户中创建一个 IAM 访问角色。通过指定一条把各工程团队账户的用户列为受信任实体的权限策略来授予访问权限。"
    },
    {
     "letter": "B",
     "text_en": "Use the Lake Formation permissions Grant command in each account where the data is stored to allow the required engineering team users to access the data.",
-    "text_zh": null
+    "text_zh": "在每个存放数据的账户中使用 Lake Formation 的权限 Grant 命令，允许所需的工程团队用户访问数据。"
    },
    {
     "letter": "C",
     "text_en": "Use AWS Data Exchange to privately publish the required data to the required engineering team accounts.",
-    "text_zh": null
+    "text_zh": "用 AWS Data Exchange 把所需数据私密发布给相应的工程团队账户。"
    },
    {
     "letter": "D",
     "text_en": "Use Lake Formation tag-based access control to authorize and grant cross-account permissions for the required data to the engineering team accounts.",
-    "text_zh": null
+    "text_zh": "使用 Lake Formation 基于标签的访问控制，为工程团队账户授权并授予对所需数据的跨账户权限。"
    }
   ],
   "pdf_page": 162,
@@ -19269,22 +19269,22 @@
    {
     "letter": "A",
     "text_en": "Use Amazon S3 with Transfer Acceleration to host the application.",
-    "text_zh": null
+    "text_zh": "使用带 Transfer Acceleration 的 Amazon S3 来托管该应用。"
    },
    {
     "letter": "B",
     "text_en": "Use Amazon S3 with CacheControl headers to host the application.",
-    "text_zh": null
+    "text_zh": "使用带 CacheControl 响应头的 Amazon S3 来托管该应用。"
    },
    {
     "letter": "C",
     "text_en": "Use Amazon EC2 with Auto Scaling and Amazon CloudFront to host the application.",
-    "text_zh": null
+    "text_zh": "使用带 Auto Scaling 的 Amazon EC2 配合 Amazon CloudFront 来托管该应用。"
    },
    {
     "letter": "D",
     "text_en": "Use Amazon EC2 with Auto Scaling and Amazon ElastiCache to host the application.",
-    "text_zh": null
+    "text_zh": "使用带 Auto Scaling 的 Amazon EC2 配合 Amazon ElastiCache 来托管该应用。"
    }
   ],
   "pdf_page": 162,
@@ -19312,22 +19312,22 @@
    {
     "letter": "A",
     "text_en": "Delete one EC2 instance and enable termination protection on the other EC2 instance. Update the DB instance to be Multi-AZ, and enable deletion protection.",
-    "text_zh": null
+    "text_zh": "删掉其中一台 EC2 实例，并为另一台开启终止保护。把该数据库实例改为多可用区，并启用删除保护。"
    },
    {
     "letter": "B",
     "text_en": "Update the DB instance to be Multi-AZ, and enable deletion protection. Place the EC2 instances behind an Application Load Balancer, and run them in an EC2 Auto Scaling group across multiple Availability Zones.",
-    "text_zh": null
+    "text_zh": "把该数据库实例改为多可用区，并启用删除保护。把这些 EC2 实例放到一个 Application Load Balancer 之后，并让它们运行在跨多个可用区的 EC2 Auto Scaling 组中。"
    },
    {
     "letter": "C",
     "text_en": "Create an additional DB instance along with an Amazon API Gateway and an AWS Lambda function. Configure the application to invoke the Lambda function through API Gateway. Have the Lambda function write the data to the two DB instances.",
-    "text_zh": null
+    "text_zh": "再创建一个数据库实例，并配上一个 Amazon API Gateway 和一个 AWS Lambda 函数。配置应用经由 API Gateway 调用该 Lambda 函数。让该 Lambda 函数把数据写入这两个数据库实例。"
    },
    {
     "letter": "D",
     "text_en": "Place the EC2 instances in an EC2 Auto Scaling group that has multiple subnets located in multiple Availability Zones. Use Spot Instances instead of On-Demand Instances. Set up Amazon CloudWatch alarms to monitor the health of the instances Update the DB instance to be Multi-AZ, and enable deletion protection.",
-    "text_zh": null
+    "text_zh": "把这些 EC2 实例放入一个跨多个可用区、含多个子网的 EC2 Auto Scaling 组。用 Spot 实例替代按需实例。设置 Amazon CloudWatch 告警监控实例健康状况。把该数据库实例改为多可用区，并启用删除保护。"
    }
   ],
   "pdf_page": 162,
@@ -19355,22 +19355,22 @@
    {
     "letter": "A",
     "text_en": "Create an AWS DataSync agent in the corporate data center. Create a data transfer task Start the transfer to an Amazon S3 bucket.",
-    "text_zh": null
+    "text_zh": "在公司数据中心创建一个 AWS DataSync 代理。创建一个数据传输任务，启动向某个 Amazon S3 存储桶的传输。"
    },
    {
     "letter": "B",
     "text_en": "Back up the data to AWS Snowball Edge Storage Optimized devices. Ship the devices to an AWS data center. Mount a target Amazon S3 bucket on the on-premises file system.",
-    "text_zh": null
+    "text_zh": "把数据备份到 AWS Snowball Edge Storage Optimized 设备上。把设备寄到 AWS 数据中心。在本地文件系统上挂载目标 Amazon S3 存储桶。"
    },
    {
     "letter": "C",
     "text_en": "Use rsync to copy the data directly from local storage to a designated Amazon S3 bucket over the Direct Connect connection.",
-    "text_zh": null
+    "text_zh": "用 rsync 通过该 Direct Connect 连接把数据从本地存储直接复制到指定的 Amazon S3 存储桶。"
    },
    {
     "letter": "D",
     "text_en": "Back up the data on tapes. Ship the tapes to an AWS data center. Mount a target Amazon S3 bucket on the on-premises file system.",
-    "text_zh": null
+    "text_zh": "把数据备份到磁带上。把磁带寄到 AWS 数据中心。在本地文件系统上挂载目标 Amazon S3 存储桶。"
    }
   ],
   "pdf_page": 163,
@@ -19398,22 +19398,22 @@
    {
     "letter": "A",
     "text_en": "Turn on the S3 Versioning feature for the S3 bucket. Configure S3 Lifecycle to delete the data after 7 years. Configure multi-factor authentication (MFA) delete for all S3 objects.",
-    "text_zh": null
+    "text_zh": "为该 S3 存储桶开启 S3 版本控制功能。配置 S3 生命周期在 7 年后删除数据。为所有 S3 对象配置多重身份验证 (MFA) 删除。"
    },
    {
     "letter": "B",
     "text_en": "Turn on S3 Object Lock with governance retention mode for the S3 bucket. Set the retention period to expire after 7 years. Recopy all existing objects to bring the existing data into compliance.",
-    "text_zh": null
+    "text_zh": "为该 S3 存储桶开启治理模式 (governance mode) 的 S3 对象锁定。把保留期设为 7 年后到期。重新复制所有现有对象，使既有数据也纳入合规。"
    },
    {
     "letter": "C",
     "text_en": "Turn on S3 Object Lock with compliance retention mode for the S3 bucket. Set the retention period to expire after 7 years. Recopy all existing objects to bring the existing data into compliance.",
-    "text_zh": null
+    "text_zh": "为该 S3 存储桶开启合规模式 (compliance mode) 的 S3 对象锁定。把保留期设为 7 年后到期。重新复制所有现有对象，使既有数据也纳入合规。"
    },
    {
     "letter": "D",
     "text_en": "Turn on S3 Object Lock with compliance retention mode for the S3 bucket. Set the retention period to expire after 7 years. Use S3 Batch Operations to bring the existing data into compliance.",
-    "text_zh": null
+    "text_zh": "为该 S3 存储桶开启合规模式 (compliance mode) 的 S3 对象锁定。把保留期设为 7 年后到期。用 S3 批量操作让既有数据纳入合规。"
    }
   ],
   "pdf_page": 163,
@@ -19441,22 +19441,22 @@
    {
     "letter": "A",
     "text_en": "Create Amazon Route 53 health checks for each Region. Use an active-active failover configuration.",
-    "text_zh": null
+    "text_zh": "为每个区域创建 Amazon Route 53 运行状况检查。采用主动-主动故障转移配置。"
    },
    {
     "letter": "B",
     "text_en": "Create an Amazon CloudFront distribution with an origin for each Region. Use CloudFront health checks to route traffic.",
-    "text_zh": null
+    "text_zh": "创建一个 Amazon CloudFront 分配，为每个区域各配一个源站。用 CloudFront 运行状况检查来路由流量。"
    },
    {
     "letter": "C",
     "text_en": "Create a transit gateway. Attach the transit gateway to the API Gateway endpoint in each Region. Configure the transit gateway to route requests.",
-    "text_zh": null
+    "text_zh": "创建一个中转网关。把该中转网关挂接到每个区域的 API Gateway 端点上。配置该中转网关来路由请求。"
    },
    {
     "letter": "D",
     "text_en": "Create an Application Load Balancer in the primary Region. Set the target group to point to the API Gateway endpoint hostnames in each Region.",
-    "text_zh": null
+    "text_zh": "在主区域创建一个 Application Load Balancer。把目标组设为指向各区域的 API Gateway 端点主机名。"
    }
   ],
   "pdf_page": 163,
@@ -19484,22 +19484,22 @@
    {
     "letter": "A",
     "text_en": "Add a set of VPNs between the Management and Production VPCs.",
-    "text_zh": null
+    "text_zh": "在 Management VPC 与 Production VPC 之间再加一组 VPN。"
    },
    {
     "letter": "B",
     "text_en": "Add a second virtual private gateway and attach it to the Management VPC.",
-    "text_zh": null
+    "text_zh": "再加一个虚拟专用网关，挂接到 Management VPC 上。"
    },
    {
     "letter": "C",
     "text_en": "Add a second set of VPNs to the Management VPC from a second customer gateway device.",
-    "text_zh": null
+    "text_zh": "从第二台客户网关设备再拉一组 VPN 到 Management VPC。"
    },
    {
     "letter": "D",
     "text_en": "Add a second VPC peering connection between the Management VPC and the Production VPC.",
-    "text_zh": null
+    "text_zh": "在 Management VPC 与 Production VPC 之间再加一条 VPC 对等连接。"
    }
   ],
   "pdf_page": 164,
@@ -19527,22 +19527,22 @@
    {
     "letter": "A",
     "text_en": "Migrate the database to Amazon RDS for Oracle. Replace third-party features with cloud services.",
-    "text_zh": null
+    "text_zh": "把数据库迁移到 Amazon RDS for Oracle。用云服务替换那些第三方功能。"
    },
    {
     "letter": "B",
     "text_en": "Migrate the database to Amazon RDS Custom for Oracle. Customize the database settings to support third-party features.",
-    "text_zh": null
+    "text_zh": "把数据库迁移到 Amazon RDS Custom for Oracle。定制数据库设置以支持这些第三方功能。"
    },
    {
     "letter": "C",
     "text_en": "Migrate the database to an Amazon EC2 Amazon Machine Image (AMI) for Oracle. Customize the database settings to support third-party features.",
-    "text_zh": null
+    "text_zh": "把数据库迁移到 Oracle 的 Amazon EC2 Amazon Machine Image (AMI) 上。定制数据库设置以支持这些第三方功能。"
    },
    {
     "letter": "D",
     "text_en": "Migrate the database to Amazon RDS for PostgreSQL by rewriting the application code to remove dependency on Oracle APEX.",
-    "text_zh": null
+    "text_zh": "重写应用代码去掉对 Oracle APEX 的依赖，把数据库迁移到 Amazon RDS for PostgreSQL。"
    }
   ],
   "pdf_page": 164,
@@ -19570,32 +19570,32 @@
    {
     "letter": "A",
     "text_en": "Create a VPC across two Availability Zones with the application's existing architecture. Host the application with existing architecture on an Amazon EC2 instance in a private subnet in each Availability Zone with EC2 Auto Scaling groups. Secure the EC2 instance with security groups and network access control lists (network ACLs).",
-    "text_zh": null
+    "text_zh": "创建一个跨两个可用区的 VPC，沿用该应用现有架构。在每个可用区的私有子网中用 EC2 Auto Scaling 组的 Amazon EC2 实例承载现有架构的应用。用安全组和网络访问控制列表（网络 ACL）保护这些 EC2 实例。"
    },
    {
     "letter": "B",
     "text_en": "Set up security groups and network access control lists (network ACLs) to control access to the database layer. Set up a single Amazon RDS database in a private subnet.",
-    "text_zh": null
+    "text_zh": "设置安全组和网络访问控制列表（网络 ACL）来控制对数据库层的访问。在私有子网中部署一个单节点 Amazon RDS 数据库。"
    },
    {
     "letter": "C",
     "text_en": "Create a VPC across two Availability Zones. Refactor the application to host the web tier, application tier, and database tier. Host each tier on its own private subnet with Auto Scaling groups for the web tier and application tier.",
-    "text_zh": null
+    "text_zh": "创建一个跨两个可用区的 VPC。重构该应用，分出 Web 层、应用层和数据库层。每层各放在自己的私有子网中，Web 层和应用层配 Auto Scaling 组。"
    },
    {
     "letter": "D",
     "text_en": "Use a single Amazon RDS database. Allow database access only from the application tier security group.",
-    "text_zh": null
+    "text_zh": "使用单个 Amazon RDS 数据库。只允许来自应用层安全组的数据库访问。"
    },
    {
     "letter": "E",
     "text_en": "Use Elastic Load Balancers in front of the web tier. Control access by using security groups containing references to each layer's security groups.",
-    "text_zh": null
+    "text_zh": "在 Web 层前面使用弹性负载均衡器。通过引用各层安全组的安全组来控制访问。"
    },
    {
     "letter": "F",
     "text_en": "Use an Amazon RDS database Multi-AZ cluster deployment in private subnets. Allow database access only from application tier security groups.",
-    "text_zh": null
+    "text_zh": "在私有子网中使用 Amazon RDS 多可用区数据库集群部署。只允许来自应用层安全组的数据库访问。"
    }
   ],
   "pdf_page": 164,
@@ -19625,32 +19625,32 @@
    {
     "letter": "A",
     "text_en": "Management of the Amazon RDS infrastructure layer, operating system, and platforms",
-    "text_zh": null
+    "text_zh": "管理 Amazon RDS 的基础设施层、操作系统和平台"
    },
    {
     "letter": "B",
     "text_en": "Creation of an Amazon RDS DB instance and configuring the scheduled maintenance window",
-    "text_zh": null
+    "text_zh": "创建 Amazon RDS 数据库实例并配置计划维护窗口"
    },
    {
     "letter": "C",
     "text_en": "Configuration of additional software components on Amazon ECS for monitoring, patch management, log management, and host intrusion detection",
-    "text_zh": null
+    "text_zh": "在 Amazon ECS 上配置用于监控、补丁管理、日志管理和主机入侵检测的附加软件组件"
    },
    {
     "letter": "D",
     "text_en": "Installation of patches for all minor and major database versions for Amazon RDS",
-    "text_zh": null
+    "text_zh": "为 Amazon RDS 的所有小版本和大版本数据库安装补丁"
    },
    {
     "letter": "E",
     "text_en": "Ensure the physical security of the Amazon RDS infrastructure in the data center",
-    "text_zh": null
+    "text_zh": "确保数据中心内 Amazon RDS 基础设施的物理安全"
    },
    {
     "letter": "F",
     "text_en": "Encryption of the data that moves in transit through Direct Connect",
-    "text_zh": null
+    "text_zh": "对经由 Direct Connect 传输中的数据进行加密"
    }
   ],
   "pdf_page": 165,
@@ -19680,22 +19680,22 @@
    {
     "letter": "A",
     "text_en": "Use AWS App2Container (A2C) to containerize the job. Run the job as an Amazon Elastic Container Service (Amazon ECS) task on AWS Fargate with 0.5 virtual CPU (vCPU) and 1 GB of memory.",
-    "text_zh": null
+    "text_zh": "用 AWS App2Container (A2C) 把该作业容器化。以 0.5 个虚拟 CPU (vCPU) 和 1 GB 内存，在 AWS Fargate 上把该作业作为 Amazon Elastic Container Service (Amazon ECS) 任务运行。"
    },
    {
     "letter": "B",
     "text_en": "Copy the code into an AWS Lambda function that has 1 GB of memory. Create an Amazon EventBridge scheduled rule to run the code each hour.",
-    "text_zh": null
+    "text_zh": "把代码搬进一个 1 GB 内存的 AWS Lambda 函数。创建一条 Amazon EventBridge 计划规则，每小时运行一次该代码。"
    },
    {
     "letter": "C",
     "text_en": "Use AWS App2Container (A2C) to containerize the job. Install the container in the existing Amazon Machine Image (AMI). Ensure that the schedule stops the container when the task finishes.",
-    "text_zh": null
+    "text_zh": "用 AWS App2Container (A2C) 把该作业容器化。把容器装进现有的 Amazon Machine Image (AMI)。确保计划任务在作业结束时停止该容器。"
    },
    {
     "letter": "D",
     "text_en": "Configure the existing schedule to stop the EC2 instance at the completion of the job and restart the EC2 instance when the next job starts.",
-    "text_zh": null
+    "text_zh": "调整现有计划任务，在作业完成时停止该 EC2 实例，并在下一次作业开始时重新启动它。"
    }
   ],
   "pdf_page": 165,
@@ -19723,22 +19723,22 @@
    {
     "letter": "A",
     "text_en": "Use AWS Backup to create a backup vault that has a vault lock in governance mode. Create the required backup plan.",
-    "text_zh": null
+    "text_zh": "用 AWS Backup 创建一个开启了治理模式 (governance mode) 保管库锁定的备份保管库。创建所需的备份计划。"
    },
    {
     "letter": "B",
     "text_en": "Use Amazon Data Lifecycle Manager to create the required automated snapshot policy.",
-    "text_zh": null
+    "text_zh": "用 Amazon Data Lifecycle Manager 创建所需的自动快照策略。"
    },
    {
     "letter": "C",
     "text_en": "Use Amazon S3 File Gateway to create the backup. Configure the appropriate S3 Lifecycle management.",
-    "text_zh": null
+    "text_zh": "用 Amazon S3 File Gateway 创建备份。配置相应的 S3 生命周期管理。"
    },
    {
     "letter": "D",
     "text_en": "Use AWS Backup to create a backup vault that has a vault lock in compliance mode. Create the required backup plan.",
-    "text_zh": null
+    "text_zh": "用 AWS Backup 创建一个开启了合规模式 (compliance mode) 保管库锁定的备份保管库。创建所需的备份计划。"
    }
   ],
   "pdf_page": 165,
@@ -19766,22 +19766,22 @@
    {
     "letter": "A",
     "text_en": "Use AWS Systems Manager Inventory to generate a map view from the detailed view report.",
-    "text_zh": null
+    "text_zh": "用 AWS Systems Manager Inventory 从详细视图报告生成地图视图。"
    },
    {
     "letter": "B",
     "text_en": "Use AWS Step Functions to collect workload details. Build architecture diagrams of the workloads manually.",
-    "text_zh": null
+    "text_zh": "用 AWS Step Functions 收集工作负载详情，再手工绘制这些工作负载的架构图。"
    },
    {
     "letter": "C",
     "text_en": "Use Workload Discovery on AWS to generate architecture diagrams of the workloads.",
-    "text_zh": null
+    "text_zh": "使用 Workload Discovery on AWS 生成这些工作负载的架构图。"
    },
    {
     "letter": "D",
     "text_en": "Use AWS X-Ray to view the workload details. Build architecture diagrams with relationships.",
-    "text_zh": null
+    "text_zh": "用 AWS X-Ray 查看工作负载详情，据此绘制带依赖关系的架构图。"
    }
   ],
   "pdf_page": 166,
@@ -19809,32 +19809,32 @@
    {
     "letter": "A",
     "text_en": "Use AWS Budgets to create a budget. Set the budget amount under the Cost and Usage Reports section of the required AWS accounts.",
-    "text_zh": null
+    "text_zh": "用 AWS Budgets 创建预算。在所需 AWS 账户的「成本与使用情况报告」板块中设置预算金额。"
    },
    {
     "letter": "B",
     "text_en": "Use AWS Budgets to create a budget. Set the budget amount under the Billing dashboards of the required AWS accounts.",
-    "text_zh": null
+    "text_zh": "用 AWS Budgets 创建预算。在所需 AWS 账户的账单控制面板中设置预算金额。"
    },
    {
     "letter": "C",
     "text_en": "Create an IAM user for AWS Budgets to run budget actions with the required permissions.",
-    "text_zh": null
+    "text_zh": "为 AWS Budgets 创建一个 IAM 用户，赋予其执行预算操作所需的权限。"
    },
    {
     "letter": "D",
     "text_en": "Create an IAM role for AWS Budgets to run budget actions with the required permissions.",
-    "text_zh": null
+    "text_zh": "为 AWS Budgets 创建一个 IAM 角色，赋予其执行预算操作所需的权限。"
    },
    {
     "letter": "E",
     "text_en": "Add an alert to notify the company when each account meets its budget threshold. Add a budget action that selects the IAM identity created with the appropriate config rule to prevent provisioning of additional resources.",
-    "text_zh": null
+    "text_zh": "添加告警，在各账户达到预算阈值时通知公司。添加预算操作，选用配了相应 config 规则的那个 IAM 身份，以阻止继续预置额外资源。"
    },
    {
     "letter": "F",
     "text_en": "Add an alert to notify the company when each account meets its budget threshold. Add a budget action that selects the IAM identity created with the appropriate service control policy (SCP) to prevent provisioning of additional resources.",
-    "text_zh": null
+    "text_zh": "添加告警，在各账户达到预算阈值时通知公司。添加预算操作，选用配了相应服务控制策略 (SCP) 的那个 IAM 身份，以阻止继续预置额外资源。"
    }
   ],
   "pdf_page": 166,
@@ -19864,22 +19864,22 @@
    {
     "letter": "A",
     "text_en": "Create a disaster recovery (DR) plan that has a similar number of EC2 instances in the second Region. Configure data replication.",
-    "text_zh": null
+    "text_zh": "制定一个灾难恢复 (DR) 方案，在第二个区域部署数量相当的 EC2 实例，并配置数据复制。"
    },
    {
     "letter": "B",
     "text_en": "Create point-in-time Amazon Elastic Block Store (Amazon EBS) snapshots of the EC2 instances. Copy the snapshots to the second Region periodically.",
-    "text_zh": null
+    "text_zh": "为这些 EC2 实例创建时间点 Amazon Elastic Block Store (Amazon EBS) 快照，并定期把快照复制到第二个区域。"
    },
    {
     "letter": "C",
     "text_en": "Create a backup plan by using AWS Backup. Configure cross-Region backup to the second Region for the EC2 instances.",
-    "text_zh": null
+    "text_zh": "用 AWS Backup 创建一个备份计划。为这些 EC2 实例配置到第二个区域的跨区域备份。"
    },
    {
     "letter": "D",
     "text_en": "Deploy a similar number of EC2 instances in the second Region. Use AWS DataSync to transfer the data from the source Region to the second Region.",
-    "text_zh": null
+    "text_zh": "在第二个区域部署数量相当的 EC2 实例。用 AWS DataSync 把数据从源区域传输到第二个区域。"
    }
   ],
   "pdf_page": 166,
@@ -19907,22 +19907,22 @@
    {
     "letter": "A",
     "text_en": "Use AWS DataSync to transfer the data. Create an AWS Lambda function for IdP authentication.",
-    "text_zh": null
+    "text_zh": "用 AWS DataSync 传输数据。创建一个 AWS Lambda 函数做 IdP 身份验证。"
    },
    {
     "letter": "B",
     "text_en": "Use Amazon AppFlow flows to transfer the data. Create an Amazon Elastic Container Service (Amazon ECS) task for IdP authentication.",
-    "text_zh": null
+    "text_zh": "用 Amazon AppFlow 流来传输数据。创建一个 Amazon Elastic Container Service (Amazon ECS) 任务做 IdP 身份验证。"
    },
    {
     "letter": "C",
     "text_en": "Use AWS Transfer Family to transfer the data. Create an AWS Lambda function for IdP authentication.",
-    "text_zh": null
+    "text_zh": "用 AWS Transfer Family 传输数据。创建一个 AWS Lambda 函数做 IdP 身份验证。"
    },
    {
     "letter": "D",
     "text_en": "Use AWS Storage Gateway to transfer the data. Create an Amazon Cognito identity pool for IdP authentication.",
-    "text_zh": null
+    "text_zh": "用 AWS Storage Gateway 传输数据。创建一个 Amazon Cognito 身份池做 IdP 身份验证。"
    }
   ],
   "pdf_page": 167,
@@ -19950,27 +19950,27 @@
    {
     "letter": "A",
     "text_en": "Amazon EC2",
-    "text_zh": null
+    "text_zh": "Amazon EC2"
    },
    {
     "letter": "B",
     "text_en": "AWS Lambda",
-    "text_zh": null
+    "text_zh": "AWS Lambda"
    },
    {
     "letter": "C",
     "text_en": "Amazon RDS",
-    "text_zh": null
+    "text_zh": "Amazon RDS"
    },
    {
     "letter": "D",
     "text_en": "Amazon DynamoDB",
-    "text_zh": null
+    "text_zh": "Amazon DynamoDB"
    },
    {
     "letter": "E",
     "text_en": "Amazon Elastic Kubernetes Services (Amazon EKS)",
-    "text_zh": null
+    "text_zh": "Amazon Elastic Kubernetes Service (Amazon EKS)"
    }
   ],
   "pdf_page": 167,
@@ -19999,22 +19999,22 @@
    {
     "letter": "A",
     "text_en": "From the Organizations management account billing console, activate a user-defined cost allocation tag named department. Create one cost report in Cost Explorer grouping by tag name, and filter by EC2.",
-    "text_zh": null
+    "text_zh": "在 Organizations 管理账户的账单控制台中，激活一个名为 department 的用户自定义成本分配标签。在 Cost Explorer 中创建一份按标签名分组、按 EC2 筛选的成本报告。"
    },
    {
     "letter": "B",
     "text_en": "From the Organizations management account billing console, activate an AWS-defined cost allocation tag named department. Create one cost report in Cost Explorer grouping by tag name, and filter by EC2.",
-    "text_zh": null
+    "text_zh": "在 Organizations 管理账户的账单控制台中，激活一个名为 department 的 AWS 预定义成本分配标签。在 Cost Explorer 中创建一份按标签名分组、按 EC2 筛选的成本报告。"
    },
    {
     "letter": "C",
     "text_en": "From the Organizations member account billing console, activate a user-defined cost allocation tag named department. Create one cost report in Cost Explorer grouping by the tag name, and filter by EC2.",
-    "text_zh": null
+    "text_zh": "在 Organizations 成员账户的账单控制台中，激活一个名为 department 的用户自定义成本分配标签。在 Cost Explorer 中创建一份按标签名分组、按 EC2 筛选的成本报告。"
    },
    {
     "letter": "D",
     "text_en": "From the Organizations member account billing console, activate an AWS-defined cost allocation tag named department. Create one cost report in Cost Explorer grouping by tag name, and filter by EC2.",
-    "text_zh": null
+    "text_zh": "在 Organizations 成员账户的账单控制台中，激活一个名为 department 的 AWS 预定义成本分配标签。在 Cost Explorer 中创建一份按标签名分组、按 EC2 筛选的成本报告。"
    }
   ],
   "pdf_page": 167,
@@ -20042,22 +20042,22 @@
    {
     "letter": "A",
     "text_en": "Create AWS Lambda functions to transfer the data securely from Salesforce to Amazon S3.",
-    "text_zh": null
+    "text_zh": "创建 AWS Lambda 函数，把数据从 Salesforce 安全地传输到 Amazon S3。"
    },
    {
     "letter": "B",
     "text_en": "Create an AWS Step Functions workflow. Define the task to transfer the data securely from Salesforce to Amazon S3.",
-    "text_zh": null
+    "text_zh": "创建一个 AWS Step Functions 工作流。定义任务把数据从 Salesforce 安全地传输到 Amazon S3。"
    },
    {
     "letter": "C",
     "text_en": "Create Amazon AppFlow flows to transfer the data securely from Salesforce to Amazon S3.",
-    "text_zh": null
+    "text_zh": "创建 Amazon AppFlow 流，把数据从 Salesforce 安全地传输到 Amazon S3。"
    },
    {
     "letter": "D",
     "text_en": "Create a custom connector for Salesforce to transfer the data securely from Salesforce to Amazon S3.",
-    "text_zh": null
+    "text_zh": "为 Salesforce 开发一个自定义连接器，把数据从 Salesforce 安全地传输到 Amazon S3。"
    }
   ],
   "pdf_page": 168,
@@ -20085,22 +20085,22 @@
    {
     "letter": "A",
     "text_en": "Use AWS Global Accelerator to create an accelerator. Create an Application Load Balancer (ALB) behind an accelerator endpoint that uses Global Accelerator integration and listening on the TCP and UDP ports. Update the Auto Scaling group to register instances on the ALB.",
-    "text_zh": null
+    "text_zh": "用 AWS Global Accelerator 创建一个加速器。在使用 Global Accelerator 集成的加速器端点之后创建一个 Application Load Balancer (ALB)，侦听 TCP 和 UDP 端口。更新该 Auto Scaling 组，把实例注册到该 ALB。"
    },
    {
     "letter": "B",
     "text_en": "Use AWS Global Accelerator to create an accelerator. Create a Network Load Balancer (NLB) behind an accelerator endpoint that uses Global Accelerator integration and listening on the TCP and UDP ports. Update the Auto Scaling group to register instances on the NLB.",
-    "text_zh": null
+    "text_zh": "用 AWS Global Accelerator 创建一个加速器。在使用 Global Accelerator 集成的加速器端点之后创建一个 Network Load Balancer (NLB)，侦听 TCP 和 UDP 端口。更新该 Auto Scaling 组，把实例注册到该 NLB。"
    },
    {
     "letter": "C",
     "text_en": "Create an Amazon CloudFront content delivery network (CDN) endpoint. Create a Network Load Balancer (NLB) behind the endpoint and listening on the TCP and UDP ports. Update the Auto Scaling group to register instances on the NLB. Update CloudFront to use the NLB as the origin.",
-    "text_zh": null
+    "text_zh": "创建一个 Amazon CloudFront 内容分发网络 (CDN) 端点。在该端点之后创建一个 Network Load Balancer (NLB)，侦听 TCP 和 UDP 端口。更新该 Auto Scaling 组，把实例注册到该 NLB。更新 CloudFront，把该 NLB 用作源站。"
    },
    {
     "letter": "D",
     "text_en": "Create an Amazon CloudFront content delivery network (CDN) endpoint. Create an Application Load Balancer (ALB) behind the endpoint and listening on the TCP and UDP ports. Update the Auto Scaling group to register instances on the ALB. Update CloudFront to use the ALB as the origin.",
-    "text_zh": null
+    "text_zh": "创建一个 Amazon CloudFront 内容分发网络 (CDN) 端点。在该端点之后创建一个 Application Load Balancer (ALB)，侦听 TCP 和 UDP 端口。更新该 Auto Scaling 组，把实例注册到该 ALB。更新 CloudFront，把该 ALB 用作源站。"
    }
   ],
   "pdf_page": 168,
@@ -20128,22 +20128,22 @@
    {
     "letter": "A",
     "text_en": "Increase the instance size of the EC2 instance when traffic is high. Write orders to Amazon Simple Notification Service (Amazon SNS). Subscribe the database endpoint to the SNS topic.",
-    "text_zh": null
+    "text_zh": "流量高时把该 EC2 实例规格调大。把订单写入 Amazon Simple Notification Service (Amazon SNS)，让数据库端点订阅该 SNS 主题。"
    },
    {
     "letter": "B",
     "text_en": "Write orders to an Amazon Simple Queue Service (Amazon SQS) queue. Use EC2 instances in an Auto Scaling group behind an Application Load Balancer to read from the SQS queue and process orders into the database.",
-    "text_zh": null
+    "text_zh": "把订单写入一个 Amazon Simple Queue Service (Amazon SQS) 队列。用 Application Load Balancer 之后 Auto Scaling 组中的 EC2 实例从该 SQS 队列读取消息，把订单处理入库。"
    },
    {
     "letter": "C",
     "text_en": "Write orders to Amazon Simple Notification Service (Amazon SNS). Subscribe the database endpoint to the SNS topic. Use EC2 instances in an Auto Scaling group behind an Application Load Balancer to read from the SNS topic.",
-    "text_zh": null
+    "text_zh": "把订单写入 Amazon Simple Notification Service (Amazon SNS)，让数据库端点订阅该 SNS 主题。用 Application Load Balancer 之后 Auto Scaling 组中的 EC2 实例从该 SNS 主题读取消息。"
    },
    {
     "letter": "D",
     "text_en": "Write orders to an Amazon Simple Queue Service (Amazon SQS) queue when the EC2 instance reaches CPU threshold limits. Use scheduled scaling of EC2 instances in an Auto Scaling group behind an Application Load Balancer to read from the SQS queue and process orders into the database.",
-    "text_zh": null
+    "text_zh": "当该 EC2 实例达到 CPU 阈值时把订单写入一个 Amazon Simple Queue Service (Amazon SQS) 队列。用 Application Load Balancer 之后 Auto Scaling 组中按计划伸缩的 EC2 实例从该 SQS 队列读取消息，把订单处理入库。"
    }
   ],
   "pdf_page": 168,
@@ -20171,22 +20171,22 @@
    {
     "letter": "A",
     "text_en": "Use AWS Glue with a Scala job",
-    "text_zh": null
+    "text_zh": "使用 AWS Glue 搭配 Scala 作业。"
    },
    {
     "letter": "B",
     "text_en": "Use Amazon EMR with an Apache Spark script",
-    "text_zh": null
+    "text_zh": "使用 Amazon EMR 搭配 Apache Spark 脚本。"
    },
    {
     "letter": "C",
     "text_en": "Use AWS Lambda with a Python script",
-    "text_zh": null
+    "text_zh": "使用 AWS Lambda 搭配 Python 脚本。"
    },
    {
     "letter": "D",
     "text_en": "Use AWS Glue with a PySpark job",
-    "text_zh": null
+    "text_zh": "使用 AWS Glue 搭配 PySpark 作业。"
    }
   ],
   "pdf_page": 169,
@@ -20214,22 +20214,22 @@
    {
     "letter": "A",
     "text_en": "Convert the existing database instance to a Multi-AZ deployment by modifying the database instance and specifying the Multi-AZ option.",
-    "text_zh": null
+    "text_zh": "修改现有数据库实例并勾选多可用区选项，把它转换为多可用区部署。"
    },
    {
     "letter": "B",
     "text_en": "Create a new RDS Multi-AZ deployment. Take a snapshot of the current RDS instance and restore the new Multi-AZ deployment with the snapshot.",
-    "text_zh": null
+    "text_zh": "新建一个 RDS 多可用区部署。对当前 RDS 实例做快照，用该快照恢复出新的多可用区部署。"
    },
    {
     "letter": "C",
     "text_en": "Create a read-only replica of the PostgreSQL database in another Availability Zone. Use Amazon Route 53 weighted record sets to distribute requests across the databases.",
-    "text_zh": null
+    "text_zh": "在另一个可用区创建该 PostgreSQL 数据库的只读副本。用 Amazon Route 53 加权记录集把请求分发到各数据库。"
    },
    {
     "letter": "D",
     "text_en": "Place the RDS for PostgreSQL database in an Amazon EC2 Auto Scaling group with a minimum group size of two. Use Amazon Route 53 weighted record sets to distribute requests across instances.",
-    "text_zh": null
+    "text_zh": "把该 RDS for PostgreSQL 数据库放进一个最小组规模为 2 的 Amazon EC2 Auto Scaling 组。用 Amazon Route 53 加权记录集把请求分发到各实例。"
    }
   ],
   "pdf_page": 169,
@@ -20257,22 +20257,22 @@
    {
     "letter": "A",
     "text_en": "Use General Purpose SSD (gp3) EBS volumes with Amazon Elastic Block Store (Amazon EBS) Multi-Attach",
-    "text_zh": null
+    "text_zh": "使用通用型 SSD (gp3) EBS 卷，搭配 Amazon Elastic Block Store (Amazon EBS) 多重挂载。"
    },
    {
     "letter": "B",
     "text_en": "Use Throughput Optimized HDD (st1) EBS volumes with Amazon Elastic Block Store (Amazon EBS) Multi-Attach",
-    "text_zh": null
+    "text_zh": "使用吞吐量优化型 HDD (st1) EBS 卷，搭配 Amazon Elastic Block Store (Amazon EBS) 多重挂载。"
    },
    {
     "letter": "C",
     "text_en": "Use Provisioned IOPS SSD (io2) EBS volumes with Amazon Elastic Block Store (Amazon EBS) Multi-Attach",
-    "text_zh": null
+    "text_zh": "使用预置 IOPS SSD (io2) EBS 卷，搭配 Amazon Elastic Block Store (Amazon EBS) 多重挂载。"
    },
    {
     "letter": "D",
     "text_en": "Use General Purpose SSD (gp2) EBS volumes with Amazon Elastic Block Store (Amazon EBS) Multi-Attach",
-    "text_zh": null
+    "text_zh": "使用通用型 SSD (gp2) EBS 卷，搭配 Amazon Elastic Block Store (Amazon EBS) 多重挂载。"
    }
   ],
   "pdf_page": 169,
@@ -20300,22 +20300,22 @@
    {
     "letter": "A",
     "text_en": "Configure the application to use Multi-AZ EC2 Auto Scaling and create an Application Load Balancer",
-    "text_zh": null
+    "text_zh": "把该应用配置为使用跨可用区的 EC2 Auto Scaling，并创建一个 Application Load Balancer。"
    },
    {
     "letter": "B",
     "text_en": "Configure the application to take snapshots of the EC2 instances and send them to a different AWS Region",
-    "text_zh": null
+    "text_zh": "把该应用配置为对 EC2 实例做快照，并把快照发送到另一个 AWS 区域。"
    },
    {
     "letter": "C",
     "text_en": "Configure the application to use Amazon Route 53 latency-based routing to feed requests to the application",
-    "text_zh": null
+    "text_zh": "把该应用配置为使用 Amazon Route 53 基于延迟的路由来把请求送到应用。"
    },
    {
     "letter": "D",
     "text_en": "Configure Amazon Route 53 rules to handle incoming requests and create a Multi-AZ Application Load Balancer",
-    "text_zh": null
+    "text_zh": "配置 Amazon Route 53 规则来处理传入请求，并创建一个跨可用区的 Application Load Balancer。"
    }
   ],
   "pdf_page": 170,
@@ -20343,22 +20343,22 @@
    {
     "letter": "A",
     "text_en": "Turn on discount sharing from the Billing Preferences section of the account console in the member account that purchased the Compute Savings Plan.",
-    "text_zh": null
+    "text_zh": "在购买了该计算类节省计划的成员账户的账户控制台「账单首选项」板块中开启折扣共享。"
    },
    {
     "letter": "B",
     "text_en": "Turn on discount sharing from the Billing Preferences section of the account console in the company's Organizations management account.",
-    "text_zh": null
+    "text_zh": "在该公司 Organizations 管理账户的账户控制台「账单首选项」板块中开启折扣共享。"
    },
    {
     "letter": "C",
     "text_en": "Migrate additional compute workloads from another AWS account to the account that has the Compute Savings Plan.",
-    "text_zh": null
+    "text_zh": "把其他 AWS 账户中的更多计算负载迁移到持有该计算类节省计划的账户中。"
    },
    {
     "letter": "D",
     "text_en": "Sell the excess Savings Plan commitment in the Reserved Instance Marketplace.",
-    "text_zh": null
+    "text_zh": "在预留实例市场上把用不完的节省计划承诺额卖掉。"
    }
   ],
   "pdf_page": 170,
@@ -20386,22 +20386,22 @@
    {
     "letter": "A",
     "text_en": "Design a WebSocket API by using Amazon API Gateway. Host the application in Amazon Elastic Container Service (Amazon ECS) in a private subnet. Create a private VPC link for API Gateway to access Amazon ECS.",
-    "text_zh": null
+    "text_zh": "用 Amazon API Gateway 设计一个 WebSocket API。把应用托管在私有子网中的 Amazon Elastic Container Service (Amazon ECS) 上。创建一个私有 VPC 链接供 API Gateway 访问 Amazon ECS。"
    },
    {
     "letter": "B",
     "text_en": "Design a REST API by using Amazon API Gateway. Host the application in Amazon Elastic Container Service (Amazon ECS) in a private subnet. Create a private VPC link for API Gateway to access Amazon ECS.",
-    "text_zh": null
+    "text_zh": "用 Amazon API Gateway 设计一个 REST API。把应用托管在私有子网中的 Amazon Elastic Container Service (Amazon ECS) 上。创建一个私有 VPC 链接供 API Gateway 访问 Amazon ECS。"
    },
    {
     "letter": "C",
     "text_en": "Design a WebSocket API by using Amazon API Gateway. Host the application in Amazon Elastic Container Service (Amazon ECS) in a private subnet. Create a security group for API Gateway to access Amazon ECS.",
-    "text_zh": null
+    "text_zh": "用 Amazon API Gateway 设计一个 WebSocket API。把应用托管在私有子网中的 Amazon Elastic Container Service (Amazon ECS) 上。创建一个安全组供 API Gateway 访问 Amazon ECS。"
    },
    {
     "letter": "D",
     "text_en": "Design a REST API by using Amazon API Gateway. Host the application in Amazon Elastic Container Service (Amazon ECS) in a private subnet. Create a security group for API Gateway to access Amazon ECS.",
-    "text_zh": null
+    "text_zh": "用 Amazon API Gateway 设计一个 REST API。把应用托管在私有子网中的 Amazon Elastic Container Service (Amazon ECS) 上。创建一个安全组供 API Gateway 访问 Amazon ECS。"
    }
   ],
   "pdf_page": 170,
@@ -20429,22 +20429,22 @@
    {
     "letter": "A",
     "text_en": "Use S3 replication to transition infrequently accessed objects to S3 Standard-Infrequent Access (S3 Standard-IA)",
-    "text_zh": null
+    "text_zh": "用 S3 复制把不常访问的对象转换到 S3 Standard-Infrequent Access (S3 Standard-IA)。"
    },
    {
     "letter": "B",
     "text_en": "Use S3 Lifecycle rules to transition objects from S3 Standard to Standard-Infrequent Access (S3 Standard-IA)",
-    "text_zh": null
+    "text_zh": "用 S3 生命周期规则把对象从 S3 Standard 转换到 S3 Standard-Infrequent Access (S3 Standard-IA)。"
    },
    {
     "letter": "C",
     "text_en": "Use S3 Lifecycle rules to transition objects from S3 Standard to S3 Intelligent-Tiering",
-    "text_zh": null
+    "text_zh": "用 S3 生命周期规则把对象从 S3 Standard 转换到 S3 Intelligent-Tiering。"
    },
    {
     "letter": "D",
     "text_en": "Use S3 Inventory to identify and transition objects that have not been accessed from S3 Standard to S3 Intelligent-Tiering",
-    "text_zh": null
+    "text_zh": "用 S3 清单找出未被访问过的对象，把它们从 S3 Standard 转换到 S3 Intelligent-Tiering。"
    }
   ],
   "pdf_page": 171,
@@ -20472,22 +20472,22 @@
    {
     "letter": "A",
     "text_en": "Create a NAT gateway and make it the destination of the subnet's route table",
-    "text_zh": null
+    "text_zh": "创建一个 NAT 网关，并把它设为该子网路由表的目标。"
    },
    {
     "letter": "B",
     "text_en": "Create an internet gateway and make it the destination of the subnet's route table",
-    "text_zh": null
+    "text_zh": "创建一个互联网网关，并把它设为该子网路由表的目标。"
    },
    {
     "letter": "C",
     "text_en": "Create a virtual private gateway and make it the destination of the subnet's route table",
-    "text_zh": null
+    "text_zh": "创建一个虚拟专用网关，并把它设为该子网路由表的目标。"
    },
    {
     "letter": "D",
     "text_en": "Create an egress-only internet gateway and make it the destination of the subnet's route table",
-    "text_zh": null
+    "text_zh": "创建一个仅出口互联网网关，并把它设为该子网路由表的目标。"
    }
   ],
   "pdf_page": 171,
@@ -20515,22 +20515,22 @@
    {
     "letter": "A",
     "text_en": "Enable S3 Intelligent-Tiering for the S3 bucket",
-    "text_zh": null
+    "text_zh": "为该 S3 存储桶启用 S3 Intelligent-Tiering。"
    },
    {
     "letter": "B",
     "text_en": "Enable S3 Transfer Acceleration for the S3 bucket",
-    "text_zh": null
+    "text_zh": "为该 S3 存储桶启用 S3 Transfer Acceleration。"
    },
    {
     "letter": "C",
     "text_en": "Create a gateway VPC endpoint for Amazon S3. Associate this endpoint with all route tables in the VPC",
-    "text_zh": null
+    "text_zh": "为 Amazon S3 创建一个网关 VPC 端点，并把该端点关联到该 VPC 的所有路由表。"
    },
    {
     "letter": "D",
     "text_en": "Create an interface endpoint for Amazon S3 in the VPC. Associate this endpoint with all route tables in the VPC",
-    "text_zh": null
+    "text_zh": "在该 VPC 中为 Amazon S3 创建一个接口端点，并把该端点关联到该 VPC 的所有路由表。"
    }
   ],
   "pdf_page": 171,
@@ -20558,22 +20558,22 @@
    {
     "letter": "A",
     "text_en": "Configure Amazon DynamoDB Accelerator (DAX) for the new messages table. Update the code to use the DAX endpoint.",
-    "text_zh": null
+    "text_zh": "为新消息表配置 Amazon DynamoDB Accelerator (DAX)。更新代码改用 DAX 端点。"
    },
    {
     "letter": "B",
     "text_en": "Add DynamoDB read replicas to handle the increased read load. Update the application to point to the read endpoint for the read replicas.",
-    "text_zh": null
+    "text_zh": "添加 DynamoDB 只读副本来承担增加的读取负载。更新应用指向这些只读副本的读取端点。"
    },
    {
     "letter": "C",
     "text_en": "Double the number of read capacity units for the new messages table in DynamoDB. Continue to use the existing DynamoDB endpoint.",
-    "text_zh": null
+    "text_zh": "把 DynamoDB 中新消息表的读取容量单位翻倍。继续使用现有的 DynamoDB 端点。"
    },
    {
     "letter": "D",
     "text_en": "Add an Amazon ElastiCache for Redis cache to the application stack. Update the application to point to the Redis cache endpoint instead of DynamoDB.",
-    "text_zh": null
+    "text_zh": "在应用技术栈中加入 Amazon ElastiCache for Redis 缓存。更新应用，让它指向 Redis 缓存端点而不是 DynamoDB。"
    }
   ],
   "pdf_page": 172,
@@ -20601,22 +20601,22 @@
    {
     "letter": "A",
     "text_en": "Create an Amazon CloudFront distribution to cache state files at edge locations",
-    "text_zh": null
+    "text_zh": "创建一个 Amazon CloudFront 分配，在边缘站点缓存这些静态文件。"
    },
    {
     "letter": "B",
     "text_en": "Create an Amazon ElastiCache cluster. Connect the ALB to the ElastiCache cluster to serve cached files",
-    "text_zh": null
+    "text_zh": "创建一个 Amazon ElastiCache 集群。把该 ALB 连到该 ElastiCache 集群来提供缓存文件。"
    },
    {
     "letter": "C",
     "text_en": "Create an AWS WAF web ACL and associate it with the ALB. Add a rule to the web ACL to cache static files",
-    "text_zh": null
+    "text_zh": "创建一个 AWS WAF Web ACL 并关联到该 ALB。在该 Web ACL 中添加一条缓存静态文件的规则。"
    },
    {
     "letter": "D",
     "text_en": "Create a second ALB in an alternative AWS Region. Route user traffic to the closest Region to minimize data transfer costs",
-    "text_zh": null
+    "text_zh": "在另一个 AWS 区域再建一个 ALB。把用户流量路由到最近的区域，以尽量降低数据传输成本。"
    }
   ],
   "pdf_page": 172,
@@ -20644,17 +20644,17 @@
    {
     "letter": "A",
     "text_en": "Use VPC peering to manage VPC communication in a single Region. Use VPC peering across Regions to manage VPC communications.",
-    "text_zh": null
+    "text_zh": "在单个区域内用 VPC 对等连接来管理 VPC 间通信，跨区域也用 VPC 对等连接来管理 VPC 间通信。"
    },
    {
     "letter": "B",
     "text_en": "Use AWS Direct Connect gateways across all Regions to connect VPCs across regions and manage VPC communications.",
-    "text_zh": null
+    "text_zh": "在所有区域使用 AWS Direct Connect 网关来连接跨区域的 VPC 并管理 VPC 间通信。"
    },
    {
     "letter": "C",
     "text_en": "Use AWS Transit Gateway to manage VPC communication in a single Region and Transit Gateway peering across Regions to manage VPC communications.",
-    "text_zh": null
+    "text_zh": "在单个区域内用 AWS Transit Gateway 管理 VPC 间通信，跨区域用中转网关对等连接来管理 VPC 间通信。"
    },
    {
     "letter": "D",
