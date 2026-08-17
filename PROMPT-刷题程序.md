@@ -1,7 +1,19 @@
-# 任务提示词：AWS SAA-C03 中英对照刷题程序
+# AWS SAA-C03 刷题程序 · 产品规格
 
-> 把本文件整份交给 Opus 即可。文件本身就是提示词。
-> 使用方式：`请阅读并严格执行 PROMPT-刷题程序.md`
+> **这是规格，不是待执行的任务。** 程序已经建成并在跑（`build_bank.py` / `app.py` /
+> `verify_bank.py` / `i18n_next.py` / `start.sh`）。本文件的作用变成三件事：
+>
+> 1. **记录设计意图** —— §4 那套 SRS 设计（三段式会话、R1–R4 四档、信心度规则、
+>    Leitner 间隔、假掌握判定、考试日期倒排）只有这里写着「为什么这么设计」。
+>    改行为之前先看它，别从代码反推。
+> 2. **验收基准** —— §6。其中数据侧的检查已由 `python3 verify_bank.py` 自动化，
+>    行为侧的仍需人工过一遍。
+> 3. **历史存档** —— 它最初是交给模型施工的提示词，保留原貌便于回看当初的取舍。
+>
+> **数据源的实况细节不在这里，在 `.claude/skills/saa-bank/reference.md`。**
+> 那份是唯一权威，本文件 §2 只留摘要。两边冲突时以 reference.md 为准。
+>
+> 日常维护走 skill：`saa-bank`。
 
 ---
 
@@ -30,135 +42,34 @@
 | 依赖安装 | **禁止** `pip install` 任何第三方包 |
 | 前端 | 单文件 HTML，CSS/JS 全部内联，**禁止引用任何 CDN**（必须离线可用）|
 | 网络 | 运行期与构建期**均禁止联网** |
-| PDF 解析 | **`pdftotext` 本机未安装，且不得安装**。必须用 `zlib` + `re` 纯 Python 解析，解码方法见 §2.1（已实测可用，不要再找其他工具）|
+| PDF 解析 | **`pdftotext` 本机未安装，且不得安装**。必须用 `zlib` + `re` 纯 Python 解析，解码方法见 `.claude/skills/saa-bank/reference.md`（已实测可用，不要再找其他工具）|
 | 启动 | `python3 app.py` → 监听 `127.0.0.1:8765` → 自动打开浏览器 |
 | 存储 | 所有状态写入 `data/`，**禁止把 localStorage 作为唯一存储** |
 | 只读文件 | **不得修改、移动或删除** `AWS Certified Solutions Architect Associate SAA-C03.pdf`、`AWS SAA-03 Solution.txt`、`AWS SAA-03 Solution.zh-CN.txt`、`README.md`、`.git/`、`.idea/` |
 
 ---
 
-## 2. 数据源实况（已实测，直接采信，不要重新猜测格式）
+## 2. 数据源实况（摘要）
 
-### 2.1 `AWS Certified Solutions Architect Associate SAA-C03.pdf` —— 题干与选项来源
+> ⚠️ **完整版在 `.claude/skills/saa-bank/reference.md`，那份是唯一权威。**
+> 这里只留一页纸的摘要，供读 §3/§4 时对照。两边不一致时以 reference.md 为准 ——
+> 它随实现同步更新，本节不再逐条维护。
 
-249 页，**684 题，编号 1–684 连续无缺**。
+| 数据源 | 角色 | 关键事实 |
+|---|---|---|
+| `AWS Certified ... SAA-C03.pdf` | 题干 + A–F 选项（唯一权威） | 684 题连续无缺；选项 **2831** 个（ABCD 599 / ABCDE 75 / ABCDEF 10，其中 477 题 4 个是图片无文字）；多选 86 题 |
+| `AWS SAA-03 Solution.txt` | 答案 + 解析 | 切分命中 **674/684**；36 题需相似度兜底取答案；**254 题源文件本就没有解析** |
+| `AWS SAA-03 Solution.zh-CN.txt` | 路 A 中文（已完成） | `stem_zh` + `explanation_zh`；题干与 PDF **逐字相同**（中位相似度 1.000），可直接复用 |
+| `data/i18n_zh.jsonl` | 路 B 中文（补译中） | `options[].text_zh` + 失真题干的 `stem_zh`；JSONL 增量追加，热加载 |
 
-#### 抽取方法（已实测跑通，照抄即可，不要自己摸索）
+**四条绕不过去的硬事实**（细节见 reference.md）：
 
-该 PDF 用 **Type3 子集字体 + 十六进制单字节字形码**，几乎没有 `/ToUnicode` 表，直接读字符串是乱码。但字形编码是**统一偏移**的：
-
-```python
-import re, zlib
-raw = open(PDF, "rb").read()
-for s in re.findall(rb'stream\r?\n(.*?)endstream', raw, re.S):
-    try: d = zlib.decompress(s)          # 2649 个流中 2638 个可 flate 解压
-    except Exception: continue
-    for bt in re.finditer(rb'BT(.*?)ET', d, re.S):
-        text = ''.join(chr(int(h, 16) + 0x1C)          # ← 关键：+28 偏移回 ASCII
-                       for h in re.findall(rb'<([0-9A-Fa-f]{2})>\s*Tj', bt.group(1)))
-```
-
-偏移后仍有 6 个非 ASCII 码位，用固定表替换（**连字必须还原，不要留断字**）：
-
-| 原码 | +0x1C 后 | 实际字符 | 出现次数 |
-|---|---|---|---|
-| `0xAC` | `È` | `fi` | 1812 |
-| `0xAE` | `Ê` | `ffi` | 267 |
-| `0xAD` | `É` | `fl` | 52 |
-| `0xAF` | `Ë` | `ffl` | 3 |
-| `0x9E` | `º` | `'` (U+2019) | 169 |
-| `0xA3` | `¿` | `•` (U+2022) | 8 |
-
-实测产出 68 万字符，`Question #1..684` 全部命中、零缺失。抽取后结构极规整：
-
-```
-Question #684
-
-Topic 1
-
-A company wants to migrate its web applications from on premises to AWS. ...
-
-Which solution will meet these requirements?
-
-A. Deploy the applications in eu-central-1. Extend the company's VPC ...
-B. Deploy the applications in AWS Local Zones by extending the company's VPC ...
-C. Deploy the applications in eu-central-1. Extend the company's VPC ...
-D. Deploy the applications in AWS Wavelength Zones by extending ...
-```
-
-- 切题正则：`(?m)^Question #(\d+)$`
-- 选项行正则：`(?m)^([A-F])\.\s`
-- 选项数量分布：**ABCD 599 题、ABCDE 75 题、ABCDEF 10 题**（不要写死 4 个选项）
-- **86 题为多选**，题干含 `(Choose two.)` 或 `(Choose three.)`
-- 题干可能跨多行、含换行；选项文本也可能折行到下一行（下一行不以 `[A-F]. ` 开头即属于上一个选项）
-- 上表的连字表用对之后**不会有断字**（`log files` 不会变成 `log  les`）。仍需一次轻量清洗：合并多空格、统一引号，但**不要**自作主张改写业务词汇。
-- 全量统计：题干 684 条共 285,002 字符（均长 416）；选项 **2,831 条**（其中 477 题的 4 个为图片、无文字）共约 373,700 字符（均长 132，中位 119，最长 499）
-
-**PDF 是题干与选项的唯一可信来源。**
-
-### 2.2 `AWS SAA-03 Solution.txt` —— 正确答案与解析来源
-
-6206 行，包含 684 题的答案与解析，但**编号风格混杂、质量参差**：
-
-- 主流格式：`51] 题干…` / `251] 题干…`（方括号）
-- 第 51–200 段落改用：`51.题干…`（英文句点，且**没有**分隔线）
-- 题间分隔：一行 5 个以上连字符 `-----`（仅部分区段有）
-- 答案行风格不统一，实测出现过：`ans- xxx`、`ans-xxx`、`Answer: B) xxx`、`Answers: A) ... + C) ...`、`Correct answer A: xxx`、以及**直接一行 `B. 选项原文`**（最常见）
-
-实测结论（照此实现，别再试探）：
-
-- 用 `(?m)^\s*(\d{1,3})\s*[\].)]\s*` 切分，可命中 **658/684** 题（不要"优化"这条正则：加 `IMP>>>` 前缀兼容或要求分隔符后必须跟空白，命中数反而暴跌到 509）
-- **仍缺失的 26 题**（需兜底处理）：
-  `98, 124, 125, 136, 140, 148, 151, 157, 158, 159, 160, 172, 178, 179, 184, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 315`
-- **正文过短、疑似残缺的 13 题**：`96, 207, 210, 224, 235, 253, 257, 283, 366, 423, 429, 477, 528`
-  （例如 253 题正文只有 `policy que.` 和一个答案字母，等于没有解析）
-- **36 题无法用正则直接提取答案字母**，靠 §3.1c 的相似度兜底
-
-两条必须特判的硬事实：
-
-- **第 315 题在 txt 中被误编号为 `215]`**（源文件 typo）。不特判会导致 315 判缺失、真正的 215 被覆盖。
-- **191–200 这 10 题在 txt 中根本不存在**（正文从 `190]` 直接跳到 `201]`）。PDF 里有完整题干与选项，但永远不会有答案和解析。
-
-### 2.3 中文译文 —— 两路来源，来源不同、用途不同
-
-中文来自**两个彼此独立的源**，必须分开处理，不要混为一谈：
-
-| 路 | 状态 | 文件 | 提供字段 |
-|---|---|---|---|
-| **A 解析译文** | ✅ 已完成 | `AWS SAA-03 Solution.zh-CN.txt`（仓库根目录，纯文本，540 KB）| `stem_zh`、`explanation_zh`、正确选项的中文 |
-| **B 选项译文** | ⬜ 待产出 | `data/i18n_zh.jsonl`（格式见下，由翻译进程增量追加）| `options[].text_zh`、失真题干的 `stem_zh` |
-
-#### 2.3.1 路 A：解析译文（已就绪）
-
-- 纯文本，按行首 `N]` / `N.` / `重点>>>>N.` 分段，用与 §2.2 相同的正则即可切分
-- 实测可切出 **673/684** 段（缺的 11 段就是源文件本身没有的 191–200 与误编号的 315）
-- **重要实测结论：txt 的题干就是 PDF 题干本身，不是转述。** 逐题 difflib 比对 650 道有效题，中位相似度 **1.000**，其中 624 题 ≥ 0.96
-- 因此 `stem_zh` **直接复用路 A 即可，不需要重译**
-- 但要在构建时逐题做一次 `PDF题干 vs txt题干` 的 difflib 比对，**相似度 < 0.9 的判为「转述失真」**（实测约 26 题，多为 `563 / 477 / 429 / 423 / 297` 这类残缺段），把它们列入 §3 的待译清单，改用 PDF 原文补译
-
-#### 2.3.2 路 B：选项译文（待产出，格式由本文件规定）
-
-选项的唯一来源是 PDF，所以**翻译进程依赖构建脚本的抽取产物**，先后顺序见 §3。
-
-文件格式固定为 **JSONL**（不用整体 JSON）——理由是增量友好：写一行是一行，进程中途被杀不会留下半个非法 JSON，配合热加载可以边译边刷。
-
-```jsonl
-{"id": 12, "letter": "A", "zh": "在目标 S3 存储桶上开启 S3 Transfer Acceleration…"}
-{"id": 12, "letter": "B", "zh": "将各站点的数据上传到最近区域的 S3 存储桶…"}
-{"id": 563, "field": "stem", "zh": "某公司在 Amazon EKS 集群和本地 Kubernetes 集群上运行其应用程序…"}
-```
-
-- 有 `letter` 字段 → 选项译文；有 `"field": "stem"` → 题干补译
-- 同一 `(id, letter)` 出现多次时，**以最后一行为准**（允许翻译进程覆盖修正）
-- 解析单行失败（JSON 语法错误 / 缺字段）→ **跳过该行并计数，不要中断加载**
-
-#### 2.3.3 两路共同的硬性要求
-
-1. **文件不存在或全部解析失败 → 不要崩溃**，打印一条清晰的警告，回退到纯英文模式，程序照常可用。
-2. **热加载**：每次进入新题时检查两个译文文件的 mtime，有变化就重新载入。翻译进程边产出、你边能刷到新内容，无需重启。
-3. 某字段缺译文 → UI 显示英文原文 + 灰色角标「暂无中文译文」。**绝不允许自己临时编造翻译。**
-
----
+1. **PDF 要自己解码** —— `pdftotext` 本机没装也不装。Type3 子集字体 + 十六进制字形码，
+   统一 `+0x1C` 偏移回 ASCII，另有 6 个连字码位要查表还原。
+2. **切分正则不能"优化"** —— 主通道必须要求题号单调递增（否则解析里的编号列表会
+   把后续几十题整体错位）；补漏只能用定点修复通道。
+3. **第 315 题在 txt 里被误编号为 `215]`**，必须特判。
+4. **191–200 在 txt 里根本不存在**，这 10 题永远没有答案和解析。
 
 ## 3. 交付物一：`build_bank.py`（题库构建脚本，**两阶段**）
 
@@ -169,7 +80,7 @@ D. Deploy the applications in AWS Wavelength Zones by extending ...
          ├→ data/questions_en.json   纯英文题库（题干 + A–F 全部选项，权威）
          └→ data/i18n_todo.jsonl     待译清单（2827 条可译选项 + 约 42 条失真题干）
                      ↓
-         翻译进程消费 todo，增量追加 data/i18n_zh.jsonl（见 §2.3.2，可边译边刷）
+         翻译进程消费 todo，增量追加 data/i18n_zh.jsonl（用 i18n_next.py 驱动，可边译边刷）
                      ↓
 阶段二   python3 build_bank.py
          ├→ data/questions.json      合并 EN + 路A + 路B + manual_fixes
@@ -178,7 +89,7 @@ D. Deploy the applications in AWS Wavelength Zones by extending ...
 
 - 阶段二若发现 `data/questions_en.json` 不存在，**自动先跑一次阶段一**，不要求用户手动两步
 - `i18n_todo.jsonl` 每次重新生成；**已在 `i18n_zh.jsonl` 中译好的条目不再列入**，这样清单会随翻译进度自然收敛到空
-- todo 行格式与 §2.3.2 一致，只是没有 `zh` 字段，改带英文原文：
+- todo 行格式与 `i18n_zh.jsonl` 一致，只是没有 `zh` 字段，改带英文原文：
   `{"id": 12, "letter": "A", "en": "Turn on S3 Transfer Acceleration on the destination S3 bucket…"}`
 
 ### 3.1 合并算法
@@ -190,11 +101,11 @@ D. Deploy the applications in AWS Wavelength Zones by extending ...
 3. **确定正确答案字母**，按以下优先级：
    - a. 显式字母：`Answer: B`、`ans- C`、`Correct answer A`、行首 `B. `
    - b. 多选：抓取全部字母（`Answers: A) ... + C) ...` → `["A","C"]`）
-   - c. **文本相似度兜底**（关键，覆盖 §2.2 那 36 题）：把 txt 中的答案句与 PDF 的每个选项做 `difflib.SequenceMatcher` 比对，取最高分；**≥ 0.65 才采纳**，否则判为未确定
+   - c. **文本相似度兜底**（关键，覆盖 §2 提到的那 36 题）：把 txt 中的答案句与 PDF 的每个选项做 `difflib.SequenceMatcher` 比对，取最高分；**≥ 0.65 才采纳**，否则判为未确定
    - d. 校验：多选题（`Choose two/three`）提取到的答案个数必须等于 2/3，不符则判为未确定
 4. **挂载中文**：
    - `stem_zh` / `explanation_zh` 取自路 A；`stem_zh_source` 相应记为 `solution_paraphrase`
-   - 若该题题干相似度 < 0.9（§2.3.1），改取 `i18n_zh.jsonl` 中 `field=stem` 的补译，`stem_zh_source` 记为 `pdf_translation`
+   - 若该题题干相似度 < 0.9，改取 `i18n_zh.jsonl` 中 `field=stem` 的补译，`stem_zh_source` 记为 `pdf_translation`
    - `options[].text_zh` 按 `(id, 原始字母)` 从 `i18n_zh.jsonl` 取；取不到填 `null`
 5. 生成记录，打上质量标记。
 
@@ -229,10 +140,17 @@ D. Deploy the applications in AWS Wavelength Zones by extending ...
 
 - `type`: `single` | `multi`
 - `answer_source`: `regex_letter` | `fuzzy_match` | `manual` | `unresolved`
-- `stem_zh_source`: `solution_paraphrase`（取自路 A，约 632 题）| `pdf_translation`（题干失真已补译，约 26 题）| `null`（无中文）
+- `stem_zh_source`: `solution_paraphrase`（取自路 A，实测 639 题）| `pdf_translation`（题干失真已补译，实测 42 题）| `null`（无中文）
 - `text_zh` / `stem_zh` / `explanation_zh` 缺失时一律填 `null`，**不要填空字符串**，前端靠 `null` 判断是否显示「暂无中文译文」角标
-- `needs_review: true` 的条件：答案未确定 / txt 缺该题 / 解析长度 < 120 字符 / 多选个数不符
-  （**注意：中文缺失不算 `needs_review`**，它只影响译文覆盖率统计，不影响该题能否进考试池）
+- `needs_review: true` 的条件：**只看答案可不可信** —— 答案未确定 / 答案个数与 Choose N 不符 /
+  txt 缺该题 / 选项是图片无文字。置位后该题被排除出考试池与学习出题池。
+  - ⚠️ **原始规格曾把「解析长度 < 120 字符」也列为条件，实现时推翻了。** 照那样做
+    `needs_review:false` 只剩 **430** 题，远低于 §6 的 620 门槛 —— 因为源文件里 51–99 等
+    整段区间本就只有题目和答案、没有解析（实测 254 题）。一道答案确凿、只是没解析的题
+    照样能考，不该踢出题库。
+- `explanation_quality`: `ok`（≥120 字符）| `thin`（40–120）| `none`（<40）。
+  **非阻塞**，只进报告供人工按需补充，不影响能否出题。
+- **中文缺失同样不算 `needs_review`**，只影响译文覆盖率统计。
 - `domain`（可选加分项）：用关键词启发式打标到 SAA-C03 四大领域，无把握则填 `null`
   - `secure`（安全架构，考纲 30%）：IAM, KMS, WAF, Shield, GuardDuty, Secrets Manager, Cognito…
   - `resilient`（弹性架构，26%）：Multi-AZ, Auto Scaling, Route 53 failover, SQS, backup, DR…
@@ -471,38 +389,44 @@ data/
 
 ---
 
-## 6. 验收标准（做完请逐条自查并在总结里报告结果）
+## 6. 验收标准
 
-- [ ] `python3 build_bank.py --extract` 跑通，`data/questions_en.json` 含 684 条，`data/i18n_todo.jsonl` 已生成
-- [ ] 抽取出的选项总数为 **2831**（其中 477 题 4 个为图片型无文字），选项数分布为 ABCD 599 / ABCDE 75 / ABCDEF 10
-- [ ] 抽取文本中**没有断字**（全文搜 `les`、`traÊc`、`Éow` 等应无命中，`configure`/`traffic`/`flow` 拼写完整）
-- [ ] `python3 build_bank.py` 一次跑通，`data/questions.json` 含 684 条记录
-- [ ] `needs_review: false` 的题数 **≥ 620**（低于此数说明匹配算法有问题，需改进）
-- [ ] `data/build_report.md` 已生成，逐条列出待人工核对的题号
-- [ ] 抽查题号 **1 / 51 / 253 / 315 / 684**：题干、选项数、正确答案、解析是否正确对应（253 与 315 属已知脏数据，应被正确标记；**315 需从 txt 中误编号的 `215]` 正确取到**，且真正的 215 未被覆盖）
-- [ ] 191–200 这 10 题存在于 `questions.json`、有题干与选项、`needs_review: true`、且不出现在考试与滚动学习的出题池中
-- [ ] 多选题（如 18、44、51）`type == "multi"` 且 `answer` 长度与 `Choose two/three` 一致
-- [ ] `python3 app.py` 启动无报错，浏览器自动打开
-- [ ] 断网状态下页面完整可用（无任何外链资源）
-- [ ] 模拟考试抽满 65 题、无重复、计分与 720 分及格线正确
-- [ ] 滚动学习答 3 题后**直接 kill 进程**，重启能准确恢复到第 4 题且进度不丢
-- [ ] 同一道题连续进入两次，**选项顺序不同**，且解析中的字母引用与本次乱序一致（无错位）
-- [ ] 选「对 + 蒙的」后，该题 box **未升级**且被标记为「假掌握」，出现在统计页清单里
-- [ ] 选「错 + 有把握」后，该题出现在**下次会话热身段的第一位**
-- [ ] 会话编排符合三段式：热身题全部来自错题/到期题，Cool-down 只含本次答错的题
-- [ ] R3 闪卡模式下选项确实被遮蔽，「翻开」后才可见；自评三档能正确改写 box
-- [ ] 设置 `exam_date` 为 5 天后，间隔序列被压缩且首页显示「距考试 5 天 / 建议每天 N 题」
-- [ ] 一道题在 3 个不同日期各答对一次后才变 `mastered`；同一天答对 3 次**不算**
-- [ ] **选项中文覆盖率 ≥ 95%**（即 `text_zh` 非 null 的选项 ≥ 2686 / 2827），且该数字出现在 `build_report.md` 中
-- [ ] 切到**「中文」单语模式**，选项区显示的是中文而不是英文
-- [ ] 缺中文的选项**单独回退英文**并显示灰色角标，不会导致整题退回英文
-- [ ] **乱序后中英不错位**：同一选项的 `text_en` 与 `text_zh` 始终成对；连续刷同一题 5 次，每次中英内容都对得上
-- [ ] 中英**两份**解析里的字母引用都按本次乱序正确替换（中文的 `（选项 A）`、英文的 `Option A` 都要变）
-- [ ] `stem_zh_source` 中约 26 题为 `pdf_translation`，其余为 `solution_paraphrase`
-- [ ] 两个译文文件都不存在时程序正常运行（纯英文模式，仅警告）
-- [ ] `data/i18n_zh.jsonl` 中途追加新行后，翻新题时能自动加载到新译文（热加载生效）
-- [ ] `i18n_zh.jsonl` 中混入一行非法 JSON，加载时**跳过该行并计数**，不影响其余译文
-- [ ] 原始 PDF / `AWS SAA-03 Solution.txt` / `AWS SAA-03 Solution.zh-CN.txt` / README / .git 未被修改（用 `git status` 确认）
+> **数据侧的检查已经自动化**：`python3 verify_bank.py`（结构完整性、抽取质量、题型分布、
+> 已知脏数据标记、与上次基线的回归对比）。数据源更新后跑它就够，不用手工过下面的清单。
+>
+> 下面标 🤖 的项目由 `verify_bank.py` 覆盖，标 👤 的仍需人工在浏览器里过一遍。
+
+
+- [ ] 🤖 `python3 build_bank.py --extract` 跑通，`data/questions_en.json` 含 684 条，`data/i18n_todo.jsonl` 已生成
+- [ ] 🤖 抽取出的选项总数为 **2831**（其中 477 题 4 个为图片型无文字），选项数分布为 ABCD 599 / ABCDE 75 / ABCDEF 10
+- [ ] 🤖 抽取文本中**没有断字**（全文搜 `les`、`traÊc`、`Éow` 等应无命中，`configure`/`traffic`/`flow` 拼写完整）
+- [ ] 🤖 `python3 build_bank.py` 一次跑通，`data/questions.json` 含 684 条记录
+- [ ] 🤖 `needs_review: false` 的题数 **≥ 620**（低于此数说明匹配算法有问题，需改进）
+- [ ] 🤖 `data/build_report.md` 已生成，逐条列出待人工核对的题号
+- [ ] 🤖 抽查题号 **1 / 51 / 253 / 315 / 684**：题干、选项数、正确答案、解析是否正确对应（253 与 315 属已知脏数据，应被正确标记；**315 需从 txt 中误编号的 `215]` 正确取到**，且真正的 215 未被覆盖）
+- [ ] 🤖 191–200 这 10 题存在于 `questions.json`、有题干与选项、`needs_review: true`、且不出现在考试与滚动学习的出题池中
+- [ ] 🤖 多选题（如 18、44、51）`type == "multi"` 且 `answer` 长度与 `Choose two/three` 一致
+- [ ] 👤 `python3 app.py` 启动无报错，浏览器自动打开
+- [ ] 👤 断网状态下页面完整可用（无任何外链资源）
+- [ ] 👤 模拟考试抽满 65 题、无重复、计分与 720 分及格线正确
+- [ ] 👤 滚动学习答 3 题后**直接 kill 进程**，重启能准确恢复到第 4 题且进度不丢
+- [ ] 👤 同一道题连续进入两次，**选项顺序不同**，且解析中的字母引用与本次乱序一致（无错位）
+- [ ] 👤 选「对 + 蒙的」后，该题 box **未升级**且被标记为「假掌握」，出现在统计页清单里
+- [ ] 👤 选「错 + 有把握」后，该题出现在**下次会话热身段的第一位**
+- [ ] 👤 会话编排符合三段式：热身题全部来自错题/到期题，Cool-down 只含本次答错的题
+- [ ] 👤 R3 闪卡模式下选项确实被遮蔽，「翻开」后才可见；自评三档能正确改写 box
+- [ ] 👤 设置 `exam_date` 为 5 天后，间隔序列被压缩且首页显示「距考试 5 天 / 建议每天 N 题」
+- [ ] 👤 一道题在 3 个不同日期各答对一次后才变 `mastered`；同一天答对 3 次**不算**
+- [ ] 🤖 **选项中文覆盖率 ≥ 95%**（即 `text_zh` 非 null 的选项 ≥ 2686 / 2827），且该数字出现在 `build_report.md` 中
+- [ ] 👤 切到**「中文」单语模式**，选项区显示的是中文而不是英文
+- [ ] 👤 缺中文的选项**单独回退英文**并显示灰色角标，不会导致整题退回英文
+- [ ] 👤 **乱序后中英不错位**：同一选项的 `text_en` 与 `text_zh` 始终成对；连续刷同一题 5 次，每次中英内容都对得上
+- [ ] 👤 中英**两份**解析里的字母引用都按本次乱序正确替换（中文的 `（选项 A）`、英文的 `Option A` 都要变）
+- [ ] 🤖 `stem_zh_source` 中约 26 题为 `pdf_translation`，其余为 `solution_paraphrase`
+- [ ] 👤 两个译文文件都不存在时程序正常运行（纯英文模式，仅警告）
+- [ ] 👤 `data/i18n_zh.jsonl` 中途追加新行后，翻新题时能自动加载到新译文（热加载生效）
+- [ ] 👤 `i18n_zh.jsonl` 中混入一行非法 JSON，加载时**跳过该行并计数**，不影响其余译文
+- [ ] 🤖 原始 PDF / `AWS SAA-03 Solution.txt` / `AWS SAA-03 Solution.zh-CN.txt` / README / .git 未被修改（用 `git status` 确认）
 
 ---
 
