@@ -1,0 +1,24 @@
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+.fastRequest
+
+# Python
+__pycache__/
+*.pyc
+
+# 刷题程序的个人运行时状态（不入库）
+data/progress.json
+data/wrong_book.json
+data/settings.json
+data/exams/
+*.tmp
+
+# start.sh 的运行时产物
+data/app.log
+.saa-app.pid
