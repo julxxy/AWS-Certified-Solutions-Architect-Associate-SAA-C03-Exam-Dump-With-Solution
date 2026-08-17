@@ -88,10 +88,10 @@ def stem_similarity(stem_en, seg):
 # 该 PDF 用 Type3 子集字体 + 十六进制单字节字形码，几乎没有 /ToUnicode 表。
 # 字形编码是统一 +0x1C 偏移到 ASCII，偏移后剩 6 个码位需要固定表替换。
 LIGATURES = {
-    "È": "fi",      # 0xAC
-    "Ê": "ffi",     # 0xAE
-    "É": "fl",      # 0xAD
-    "Ë": "ffl",     # 0xAF
+    "È": "fi",  # 0xAC
+    "Ê": "ffi",  # 0xAE
+    "É": "fl",  # 0xAD
+    "Ë": "ffl",  # 0xAF
     "º": "’",  # 0x9E  右单引号
     "¿": "•",  # 0xA3  项目符号
 }
@@ -159,7 +159,7 @@ def parse_pdf(path):
             if mt:
                 pending_topic = "Topic " + mt.group(1)
                 continue
-            if s == "Topic 1 - Exam A":     # 页眉
+            if s == "Topic 1 - Exam A":  # 页眉
                 continue
             buf_lines.append(line)
     if buf_id is not None:
@@ -197,7 +197,6 @@ def parse_pdf(path):
 
 
 _RE_TOPIC_LINE = re.compile(r"(?m)^Topic \d+\s*$\n?")
-
 
 # --------------------------------------------------------------------------
 # 解析文档（英文 / 中文）切分
@@ -475,11 +474,11 @@ def split_segment(seg, stem_en=None, zh=False):
         j = first
         while j < len(rest) and j - first < 6:
             line = rest[j]
-            if not line.strip():          # a) 吃掉答案块尾部这一个空行后收工
+            if not line.strip():  # a) 吃掉答案块尾部这一个空行后收工
                 j += 1
                 break
             if j > first and not rgx.match(line):
-                break                     # b) 已经是解析正文了
+                break  # b) 已经是解析正文了
             j += 1
         rest = rest[j:]
     else:

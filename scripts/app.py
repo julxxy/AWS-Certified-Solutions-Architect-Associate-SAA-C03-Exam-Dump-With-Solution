@@ -40,21 +40,21 @@ F_INDEX = os.path.join(ROOT, "web", "index.html")
 _INDEX_CACHE = None
 _INDEX_MTIME = None
 
-BOX_INTERVALS = [1, 2, 4, 9, 21]        # Leitner 5 档，单位天。box1 是 1 天不是 0 天
+BOX_INTERVALS = [1, 2, 4, 9, 21]  # Leitner 5 档，单位天。box1 是 1 天不是 0 天
 EXAM_SIZE = 65
 EXAM_MINUTES = 130
 PASS_SCORE = 720
 DOMAIN_MIX = {"secure": 0.30, "resilient": 0.26, "performant": 0.24, "cost": 0.20}
 
 DEFAULT_SETTINGS = {
-    "lang_mode": "both",          # zh | en | both
+    "lang_mode": "both",  # zh | en | both
     "timer_enabled": True,
-    "scoring_mode": "linear",     # linear | aws_scaled
+    "scoring_mode": "linear",  # linear | aws_scaled
     "partial_credit": False,
-    "theme": "system",            # system | light | dark
-    "exam_date": None,            # "YYYY-MM-DD"
+    "theme": "system",  # system | light | dark
+    "exam_date": None,  # "YYYY-MM-DD"
     "session_size": 25,
-    "order": "sequential",        # sequential | random | review_first
+    "order": "sequential",  # sequential | random | review_first
 }
 
 _LOCK = threading.RLock()
@@ -209,7 +209,6 @@ class Bank:
 
 
 BANK = None
-
 
 # ==========================================================================
 # 选项乱序 + 解析字母重映射
@@ -384,7 +383,7 @@ def apply_result(prog, settings, qid, correct, confidence, picked_orig):
             factor = 1.0
         elif confidence == "unsure":
             st["box"] = min(5, st["box"] + 1)
-            factor = 0.5           # 升 box 但 next_due 折半
+            factor = 0.5  # 升 box 但 next_due 折半
         else:
             st["box"] = min(5, st["box"] + 1)
             st["false_mastery"] = False
@@ -471,7 +470,7 @@ def wrong_remove(qid):
 
 def pick_review_mode(st):
     if st.get("wrong_picks") and st.get("box", 1) <= 3:
-        return "R2"                      # 有错误记录 → 干扰项狙击，优先于 R1
+        return "R2"  # 有错误记录 → 干扰项狙击，优先于 R1
     box = st.get("box", 1)
     if box <= 2:
         return "R1"
@@ -531,7 +530,7 @@ def build_session(prog, settings, bank, size=None):
             new_ids.append(qid)
         i += 1
         guard += 1
-    if len(new_ids) < n_new:      # 新题用尽，用未掌握的旧题补齐
+    if len(new_ids) < n_new:  # 新题用尽，用未掌握的旧题补齐
         for qid in ids:
             if len(new_ids) >= n_new:
                 break
@@ -924,7 +923,7 @@ class Handler(BaseHTTPRequestHandler):
     def api_selfassess(self, body):
         """R3 闪卡自评：记得→等同答对，模糊→box 不动，忘了→等同答错。"""
         qid = int(body.get("id"))
-        grade = body.get("grade")     # remember | vague | forgot
+        grade = body.get("grade")  # remember | vague | forgot
         with _LOCK:
             settings = read_json(F_SETTINGS, DEFAULT_SETTINGS)
             for k, v in DEFAULT_SETTINGS.items():
@@ -1170,7 +1169,6 @@ def index_html():
             _INDEX_CACHE = f.read()
         _INDEX_MTIME = mt
     return _INDEX_CACHE
-
 
 
 # ==========================================================================

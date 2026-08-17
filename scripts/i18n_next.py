@@ -45,7 +45,7 @@ def load_done():
             r = json.loads(line)
             if not r.get("zh"):
                 raise ValueError("empty zh")
-            done[key(r)] = r["zh"]      # 后写覆盖先写
+            done[key(r)] = r["zh"]  # 后写覆盖先写
         except Exception:
             bad += 1
     return done, bad
