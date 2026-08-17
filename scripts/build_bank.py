@@ -3,11 +3,11 @@
 """
 build_bank.py — AWS SAA-C03 题库构建脚本（两阶段）
 
-阶段一  python3 build_bank.py --extract
+阶段一  python3 scripts/build_bank.py --extract
         → data/questions_en.json   纯英文题库（PDF 抽取，权威）
         → data/i18n_todo.jsonl     待译清单
 
-阶段二  python3 build_bank.py
+阶段二  python3 scripts/build_bank.py
         → data/questions.json      合并 EN + 解析译文 + 选项译文 + manual_fixes
         → data/build_report.md     数据质量报告
 
@@ -23,7 +23,10 @@ import sys
 import zlib
 from collections import Counter, defaultdict
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+# 脚本在 scripts/ 下，仓库根目录要再往上退一层。
+# 别"简化"成 dirname(__file__) —— 那样 data/ 会解析到 scripts/data/，
+# 题库读不到、进度写错地方，而且不报错。
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
 
 PDF_FILE = os.path.join(ROOT, "AWS Certified Solutions Architect Associate SAA-C03.pdf")

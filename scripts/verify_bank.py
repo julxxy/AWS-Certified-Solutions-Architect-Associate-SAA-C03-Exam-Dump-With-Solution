@@ -3,8 +3,8 @@
 """
 verify_bank.py — 题库自检。数据源更新后跑这个，确认没有静默劣化。
 
-    python3 verify_bank.py            # 全量自检
-    python3 verify_bank.py --strict   # 任一项不达标则退出码非 0（给 CI / 钩子用）
+    python3 scripts/verify_bank.py            # 全量自检
+    python3 scripts/verify_bank.py --strict   # 任一项不达标则退出码非 0（给 CI / 钩子用）
 
 检查项分三类：
   硬性  —— 不通过说明构建逻辑坏了，必须修
@@ -19,7 +19,10 @@ import re
 import sys
 from collections import Counter
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+# 脚本在 scripts/ 下，仓库根目录要再往上退一层。
+# 别"简化"成 dirname(__file__) —— 那样 data/ 会解析到 scripts/data/，
+# 题库读不到、进度写错地方，而且不报错。
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
 F_BANK = os.path.join(DATA, "questions.json")
 F_EN = os.path.join(DATA, "questions_en.json")
@@ -48,7 +51,7 @@ def main():
     args = ap.parse_args()
 
     if not os.path.exists(F_BANK):
-        print("找不到 data/questions.json，先跑 python3 build_bank.py")
+        print("找不到 data/questions.json，先跑 python3 scripts/build_bank.py")
         sys.exit(2)
 
     bank = {q["id"]: q for q in json.load(open(F_BANK, encoding="utf-8"))}

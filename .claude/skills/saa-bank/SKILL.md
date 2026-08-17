@@ -12,28 +12,44 @@ description: 维护本仓库的 AWS SAA-C03 刷题系统。当 PDF、Solution.tx
 ## 系统组成
 
 ```
-AWS Certified ... SAA-C03.pdf   题干 + A–F 选项（唯一权威来源，只读）
-AWS SAA-03 Solution.txt         答案 + 解析（只读）
-AWS SAA-03 Solution.zh-CN.txt   上一份的中文译文（只读）
+仓库根/
+├── AWS Certified ... SAA-C03.pdf   题干 + A–F 选项（唯一权威来源，只读）
+├── AWS SAA-03 Solution.txt         答案 + 解析（只读）
+├── AWS SAA-03 Solution.zh-CN.txt   路 A 中文译文（只读）
+├── SPEC-刷题程序.md                产品规格与验收基准
+├── start.sh                        一键入口（留在根目录）
+├── scripts/                        所有 Python 脚本都在这里
+│   ├── build_bank.py               题库构建（两阶段）
+│   ├── app.py                      本地 web 刷题程序
+│   ├── verify_bank.py              自检 + 基线回归对比
+│   └── i18n_next.py                补译工作台
+└── data/                           全部产物与状态
+
+数据流：
+  三个源文件
         │
-        ├─ build_bank.py --extract → data/questions_en.json + data/i18n_todo.jsonl
-        │                                                          ↓ 翻译进程补
-        │                                                     data/i18n_zh.jsonl
-        └─ build_bank.py           → data/questions.json + data/build_report.md
-                                              ↓
-                                    app.py（本地 web，热加载译文）
+        ├─ scripts/build_bank.py --extract → data/questions_en.json + data/i18n_todo.jsonl
+        │                                                                ↓ 翻译进程补
+        │                                                           data/i18n_zh.jsonl
+        └─ scripts/build_bank.py           → data/questions.json + data/build_report.md
+                                                    ↓
+                                          scripts/app.py（本地 web，热加载译文）
 ```
 
 三个源文件 **只读**，任何情况下不要改动它们。
+
+⚠️ **脚本在 `scripts/` 下，但所有路径都相对仓库根解析**（脚本内 `ROOT` 多退一层）。
+所以从任何目录调用都能跑，`data/` 永远指向仓库根下那个。改 `ROOT` 时别"简化"掉那层
+`dirname` —— 会让 `data/` 跑到 `scripts/data/`，而且不报错。
 
 ## 常见任务
 
 ### 1. 数据源更新后重建
 
 ```bash
-python3 build_bank.py --extract # PDF 变了才需要；只有 txt 变了可跳过
-python3 build_bank.py
-python3 verify_bank.py # 必跑：和上次基线对比，防止静默劣化
+python3 scripts/build_bank.py --extract # PDF 变了才需要；只有 txt 变了可跳过
+python3 scripts/build_bank.py
+python3 scripts/verify_bank.py # 必跑：和上次基线对比，防止静默劣化
 ```
 
 `verify_bank.py` 会把关键指标写进 `data/verify_baseline.json`。 **任一指标低于基线就是回归**， 先查清楚原因再决定要不要接受新基线（有检查项失败时基线不会被覆盖）。
@@ -45,10 +61,10 @@ python3 verify_bank.py # 必跑：和上次基线对比，防止静默劣化
 用 `i18n_next.py` 驱动，不用手工翻清单：
 
 ```bash
-python3 i18n_next.py            # 看进度
-python3 i18n_next.py 100        # 取下一批 100 条（已译的自动跳过）
-python3 i18n_next.py 100 --ctx  # 同上，附带题干作为上下文
-python3 i18n_next.py --check    # 校验有没有坏行/重复/漏项
+python3 scripts/i18n_next.py            # 看进度
+python3 scripts/i18n_next.py 100        # 取下一批 100 条（已译的自动跳过）
+python3 scripts/i18n_next.py 100 --ctx  # 同上，附带题干作为上下文
+python3 scripts/i18n_next.py --check    # 校验有没有坏行/重复/漏项
 ```
 
 翻完一批 → 追加到 `data/i18n_zh.jsonl` → 再取下一批。**断点续译天然支持**：
@@ -91,7 +107,7 @@ python3 i18n_next.py --check    # 校验有没有坏行/重复/漏项
 补完一批后：
 
 ```bash
-python3 build_bank.py && python3 verify_bank.py
+python3 scripts/build_bank.py && python3 scripts/verify_bank.py
 ```
 
 ### 3. 启动

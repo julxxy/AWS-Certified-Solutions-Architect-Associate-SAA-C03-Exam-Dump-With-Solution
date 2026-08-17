@@ -24,7 +24,7 @@ if [ "${1:-}" = "--stop" ]; then
   if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
     kill "$(cat "$PIDFILE")" && rm -f "$PIDFILE" && echo "✓ 已停止"
   else
-    pkill -f "python3 app.py" 2>/dev/null && echo "✓ 已停止" || echo "· 本来就没在跑"
+    pkill -f "scripts/app.py" 2>/dev/null && echo "✓ 已停止" || echo "· 本来就没在跑"
     rm -f "$PIDFILE"
   fi
   exit 0
@@ -50,14 +50,14 @@ need_build=0
 [ ! -f "$BANK" ] && need_build=1
 [ "$FORCE" = "1" ] && need_build=1
 # 任一数据源比题库新 → 重建
-for src in "$PDF" "$SOL" "$SOLZH" build_bank.py; do
+for src in "$PDF" "$SOL" "$SOLZH" scripts/build_bank.py; do
   [ -f "$src" ] && [ -f "$BANK" ] && [ "$src" -nt "$BANK" ] && need_build=1
 done
 
 if [ "$need_build" = "1" ]; then
   echo "▸ 数据源有更新，重新构建题库…"
-  [ "$FORCE" = "1" ] && "$PY" build_bank.py --extract
-  "$PY" build_bank.py
+  [ "$FORCE" = "1" ] && "$PY" scripts/build_bank.py --extract
+  "$PY" scripts/build_bank.py
   echo
 else
   echo "▸ 题库是最新的，跳过构建（要强制重建用 --rebuild）"
@@ -70,7 +70,7 @@ if alive; then
   echo "▸ 服务已在 ${URL} 运行，直接打开"
 else
   mkdir -p data
-  nohup "$PY" app.py --no-open --port "$PORT" >"$LOGFILE" 2>&1 &
+  nohup "$PY" scripts/app.py --no-open --port "$PORT" >"$LOGFILE" 2>&1 &
   echo $! > "$PIDFILE"
   for _ in $(seq 1 40); do alive && break; sleep 0.25; done
   if alive; then

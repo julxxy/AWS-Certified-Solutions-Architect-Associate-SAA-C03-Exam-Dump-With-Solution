@@ -3,9 +3,9 @@
 """
 app.py — AWS SAA-C03 中英对照刷题程序（本地、离线、仅标准库）
 
-    python3 app.py            # 监听 127.0.0.1:8765 并自动打开浏览器
-    python3 app.py --no-open  # 不自动开浏览器
-    python3 app.py --port N
+    python3 scripts/app.py            # 监听 127.0.0.1:8765 并自动打开浏览器
+    python3 scripts/app.py --no-open  # 不自动开浏览器
+    python3 scripts/app.py --port N
 
 模式 A 模拟考试：65 题 / 130 分钟 / 720 分及格
 模式 B 滚动学习：三段式会话 + Leitner 间隔重复 + 四档复习强度 + 信心度打分
@@ -23,7 +23,10 @@ from datetime import date, datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+# 脚本在 scripts/ 下，仓库根目录要再往上退一层。
+# 别"简化"成 dirname(__file__) —— 那样 data/ 会解析到 scripts/data/，
+# 题库读不到、进度写错地方，而且不报错。
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
 EXAMS = os.path.join(DATA, "exams")
 
@@ -111,7 +114,7 @@ class Bank:
     def load(self):
         if not os.path.exists(F_QUESTIONS):
             raise SystemExit(
-                "找不到 data/questions.json，请先运行：python3 build_bank.py")
+                "找不到 data/questions.json，请先运行：python3 scripts/build_bank.py")
         with open(F_QUESTIONS, "r", encoding="utf-8") as f:
             qs = json.load(f)
         self.questions = {q["id"]: q for q in qs}
