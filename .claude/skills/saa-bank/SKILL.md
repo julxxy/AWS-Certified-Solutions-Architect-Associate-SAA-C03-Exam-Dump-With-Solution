@@ -20,9 +20,10 @@ description: 维护本仓库的 AWS SAA-C03 刷题系统。当 PDF、Solution.tx
 ├── start.sh                        一键入口（留在根目录）
 ├── scripts/                        所有 Python 脚本都在这里
 │   ├── build_bank.py               题库构建（两阶段）
-│   ├── app.py                      本地 web 刷题程序
+│   ├── app.py                      本地 web 刷题程序（只有后端）
 │   ├── verify_bank.py              自检 + 基线回归对比
 │   └── i18n_next.py                补译工作台
+├── web/index.html                  前端全部（markup + 内联 CSS/JS），按 mtime 热加载
 └── data/                           全部产物与状态
 
 数据流：
@@ -144,6 +145,15 @@ python3 scripts/build_bank.py && python3 scripts/verify_bank.py
 | 大量题变成 needs_review              | 解析长度阈值语义被改回阻塞式          | §质量标记            |
 | 解析里的「Option C」与屏幕选项对不上 | 乱序字母重映射漏了某种写法            | §乱序                |
 | 中文不显示                           | JSONL 坏行 / letter 大小写 / 没热加载 | §译文                |
+
+## 要改前端时
+
+页面在 `web/index.html`，`app.py` 只负责读它并原样返回。改完刷新浏览器就生效，
+不用重启服务（按 mtime 热加载）。
+
+SPEC §技术选型 那条「单文件 HTML，CSS/JS 全部内联，禁止引用任何 CDN」约束的是
+**发出去的页面**，不是源码怎么放。所以别把 CSS/JS 拆成 `/static/*` 之类的额外
+请求路由 —— 断网可用是验收项（§6 有一条 👤 要人工过）。
 
 ## 要改程序行为（不是改数据）时
 
