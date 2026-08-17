@@ -47,16 +47,20 @@ SOLZH="AWS SAA-03 Solution.zh-CN.txt"
 BANK="data/questions.json"
 
 need_build=0
+need_extract=0
 [ ! -f "$BANK" ] && need_build=1
-[ "$FORCE" = "1" ] && need_build=1
+[ "$FORCE" = "1" ] && need_build=1 && need_extract=1
 # 任一数据源比题库新 → 重建
 for src in "$PDF" "$SOL" "$SOLZH" scripts/build_bank.py; do
   [ -f "$src" ] && [ -f "$BANK" ] && [ "$src" -nt "$BANK" ] && need_build=1
 done
+# PDF 变了必须重跑阶段一。阶段二只读 questions_en.json，光跑它对 PDF 改动是空转：
+# 会打印"重新构建题库"，但题干和选项一个字都不会变。
+{ [ -f "$PDF" ] && [ -f "$BANK" ] && [ "$PDF" -nt "$BANK" ]; } && need_extract=1
 
 if [ "$need_build" = "1" ]; then
   echo "▸ 数据源有更新，重新构建题库…"
-  [ "$FORCE" = "1" ] && "$PY" scripts/build_bank.py --extract
+  [ "$need_extract" = "1" ] && "$PY" scripts/build_bank.py --extract
   "$PY" scripts/build_bank.py
   echo
 else
@@ -93,7 +97,8 @@ esac
 import json, os
 try:
     qs = json.load(open("data/questions.json", encoding="utf-8"))
-    tot = sum(len(q["options"]) for q in qs)
+    # 分母只算可译的选项：477 题的选项是图片、无英文原文，算进去覆盖率永远到不了 100%
+    tot = sum(1 for q in qs for o in q["options"] if o.get("text_en"))
     zh = sum(1 for q in qs for o in q["options"] if o.get("text_zh"))
     todo = sum(1 for _ in open("data/i18n_todo.jsonl", encoding="utf-8")) \
         if os.path.exists("data/i18n_todo.jsonl") else 0

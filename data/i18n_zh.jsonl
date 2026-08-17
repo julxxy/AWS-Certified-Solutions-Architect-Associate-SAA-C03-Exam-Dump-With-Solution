@@ -2871,3 +2871,5 @@
 {"id": 460, "field": "stem", "zh": "某公司希望在其软件即服务 (SaaS) 应用 Salesforce 账户与 Amazon S3 之间安全地交换数据。该公司必须使用 AWS Key Management Service (AWS KMS) 客户托管密钥 (CMK) 对静态数据加密，同时还必须对传输中的数据加密。该公司已为该 Salesforce 账户启用了 API 访问。"}
 {"id": 467, "field": "stem", "zh": "某公司使用 AWS Organizations。一个成员账户购买了计算类节省计划。由于该成员账户内工作负载发生变化，该账户已无法充分享受这份计算类节省计划承诺额带来的优惠。该公司使用的算力不到已购买量的 50%。"}
 {"id": 473, "field": "stem", "zh": "某公司在一个 Application Load Balancer (ALB) 之后的 Amazon EC2 实例上托管一个网站。该网站提供静态内容。网站流量正在增长，该公司担心成本随之上升。"}
+{"id": 125, "letter": "D", "zh": "配置一个 VPC，跨两个可用区包含一个公有子网、一个私有子网和两个 NAT 网关。在该公有子网中部署一个 Application Load Balancer。"}
+{"id": 125, "letter": "E", "zh": "配置一个 VPC，跨两个可用区包含两个公有子网、两个私有子网和两个 NAT 网关。在这些公有子网中部署一个 Application Load Balancer。"}

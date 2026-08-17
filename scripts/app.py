@@ -12,12 +12,12 @@ app.py — AWS SAA-C03 中英对照刷题程序（本地、离线、仅标准库
 """
 
 import argparse
-import hashlib
 import json
 import os
 import random
 import re
 import threading
+import uuid
 import webbrowser
 from datetime import date, datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -62,6 +62,15 @@ _LOCK = threading.RLock()
 
 def now_iso():
     return datetime.now().astimezone().replace(microsecond=0).isoformat()
+
+
+def new_id():
+    """会话/考试 id。
+
+    别退回 md5(now_iso())：now_iso() 只到秒，同一秒内开两次会话会算出同一个 id，
+    后开的那个把前一个从 SESSIONS 里挤掉，前一个的答题进度当场丢失。
+    """
+    return uuid.uuid4().hex[:10]
 
 
 def today_str():
@@ -178,7 +187,11 @@ class Bank:
                 if not q["needs_review"] and q.get("answer")]
 
     def coverage(self):
-        tot_o = sum(len(q["options"]) for q in self.questions.values())
+        # 分母只算「可译」的选项。477 题的选项在 PDF 里是图片、没有英文原文，
+        # 永远补不出译文；把它们算进分母，覆盖率就会永久卡在 99.9% 下不来，
+        # 而 verify_bank.py 用的是可译分母、报 100%，两边对不上会让人以为漏译了。
+        tot_o = sum(1 for q in self.questions.values()
+                    for o in q["options"] if o.get("text_en"))
         zh_o = sum(1 for q in self.questions.values()
                    for o in q["options"] if o.get("text_zh"))
         return {
@@ -563,6 +576,23 @@ SESSIONS = {}
 # 模拟考试
 # ==========================================================================
 
+def domain_quota(size, mix):
+    """按 mix 比例给各 domain 分名额，用最大余数法保证合计**恰好** = size。
+
+    别退回逐域 round(size * ratio)：比例和虽然是 1.0，各项独立取整后合计会漂。
+    65 题时四个域取整得 20/17/16/13 = 66，多出的一个名额最后被 picked[:size]
+    截掉 —— 而截断按 dict 顺序发生，等于每次都固定从最后一个域（cost）扣人，
+    实测三个 seed 下 cost 恒为 12。这种偏差不报错，只是考试配比一直不对。
+    """
+    base = {d: int(size * r) for d, r in mix.items()}
+    short = size - sum(base.values())
+    # 余数大的先补；余数相同按域名排序，保证同 size 下结果稳定可复现
+    order = sorted(mix, key=lambda d: (-(size * mix[d] - base[d]), d))
+    for d in order[:max(0, short)]:
+        base[d] += 1
+    return base
+
+
 def build_exam(bank, seed=None):
     rng = random.Random(seed)
     pool = bank.pool()
@@ -572,12 +602,14 @@ def build_exam(bank, seed=None):
         by_dom = {}
         for q in tagged:
             by_dom.setdefault(q["domain"], []).append(q)
-        for dom, ratio in DOMAIN_MIX.items():
-            want = round(EXAM_SIZE * ratio)
+        quota = domain_quota(EXAM_SIZE, DOMAIN_MIX)
+        for dom in DOMAIN_MIX:
             avail = by_dom.get(dom, [])
             rng.shuffle(avail)
-            picked.extend(avail[:want])
-    rest = [q for q in pool if q not in picked]
+            picked.extend(avail[:quota[dom]])
+    # 用 id 判重：picked 里是 dict，`q not in picked` 会逐题做深比较，白烧 O(n²)
+    taken = {q["id"] for q in picked}
+    rest = [q for q in pool if q["id"] not in taken]
     rng.shuffle(rest)
     picked.extend(rest[: max(0, EXAM_SIZE - len(picked))])
     picked = picked[:EXAM_SIZE]
@@ -737,7 +769,7 @@ class Handler(BaseHTTPRequestHandler):
                         "quota": {"warmup": len(ids), "new": 0, "cooldown": 0}}
             else:
                 plan = build_session(prog, settings, BANK, body.get("size"))
-            sid = hashlib.md5(now_iso().encode()).hexdigest()[:10]
+            sid = new_id()
             SESSIONS[sid] = {
                 "id": sid, "queue": plan["queue"], "pos": 0,
                 "quota": plan["quota"], "cursor_next": plan["cursor_next"],
@@ -1029,7 +1061,7 @@ class Handler(BaseHTTPRequestHandler):
         seed = body.get("seed")
         with _LOCK:
             picked = build_exam(BANK, seed)
-            eid = hashlib.md5((now_iso() + str(seed)).encode()).hexdigest()[:10]
+            eid = new_id()
             qs = []
             for idx, q in enumerate(picked):
                 s = "%s-%d" % (eid, q["id"])
@@ -1217,7 +1249,7 @@ pre.expl{white-space:pre-wrap;background:var(--chip);border-radius:8px;padding:1
   <button data-nav="browse" class="ghost">题库</button>
   <span class="sp"></span>
   <span class="seg" id="langSeg">
-    <button data-lang="zh">中</button><button data-lang="en">英</button><button data-lang="both">双语</button>
+    <button data-lang="zh">中</button><button data-lang="en">EN</button><button data-lang="both">双语</button>
   </span>
   <button id="themeBtn" class="ghost" title="切换主题">◐</button>
   <button data-nav="settings" class="ghost">设置</button>

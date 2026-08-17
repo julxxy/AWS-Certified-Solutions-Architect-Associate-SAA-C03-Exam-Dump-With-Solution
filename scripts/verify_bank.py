@@ -140,6 +140,15 @@ def main():
         check(bool(bank[215]["answer"]), "真正的 215 未被误编号覆盖",
               "answer=%s" % bank[215]["answer"])
 
+    # 题面与解析段开头对不上的题。多数只是解析文档改写了题干，答案照样对，
+    # 所以不判失败、也不踢出出题池 —— 但要点名，人工抽查时从这份名单开始。
+    # 651 当初就藏在这里：解析文档在它段尾多粘了一份 649 的解析。
+    mism = sorted(i for i, q in bank.items() if q.get("stem_mismatch"))
+    live = [i for i in mism if not bank[i]["needs_review"] and bank[i].get("answer")]
+    info("题面与解析开头不符", "%d 题，其中 %d 题仍在出题池" % (len(mism), len(live)))
+    if live:
+        info("  └ 建议人工抽查", "%s" % live[:30])
+
     print("\n【基线】译文覆盖")
     zh_o = sum(1 for q in bank.values() for o in q["options"] if o.get("text_zh"))
     trans_o = sum(1 for q in bank.values() for o in q["options"] if o["text_en"])

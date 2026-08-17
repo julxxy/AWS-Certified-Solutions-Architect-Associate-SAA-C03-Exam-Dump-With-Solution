@@ -461,18 +461,26 @@ def split_segment(seg, stem_en=None, zh=False):
             first = i
             break
     if first is not None:
-        # 答案块 = 从答案行起到下一个空行为止的整段。
-        # 不能"连续跳过所有像答案的行"——解析里常把答案字母原样重复一遍
-        # （如 45 题的 `B. …` / `E. …`），那样会把解析本身也吃掉。
-        j, seen = first, False
+        # 答案块的收尾条件有两个，谁先到算谁：
+        #
+        #   a) 碰到空行 —— 老格式的答案块自成一段，段后空行才是解析。
+        #      这一条必须留着：解析里常把答案字母原样重复一遍再展开（45 题的
+        #      `B. …` / `E. …`），只按"像不像答案行"判会把解析本身吃掉。
+        #   b) 碰到第一条不像答案行的正文 —— 解析文档尾部（652 起几乎整段）是
+        #      `Answer: B) …` 紧跟解析、中间没有空行。只按 a) 判会把整段解析
+        #      当成答案块跳过，42 道题的解析就是这么丢的（651 还因此串成了
+        #      649 的内容）。
+        #
+        # 两条都是"提前停"，答案块只会比原来短，解析只会比原来多，不会倒退。
+        j = first
         while j < len(rest) and j - first < 6:
-            if rest[j].strip():
-                seen = True
+            line = rest[j]
+            if not line.strip():          # a) 吃掉答案块尾部这一个空行后收工
                 j += 1
-            else:
-                j += 1
-                if seen:
-                    break
+                break
+            if j > first and not rgx.match(line):
+                break                     # b) 已经是解析正文了
+            j += 1
         rest = rest[j:]
     else:
         # 没有字母标记时，答案句通常就是紧接题干的第一段，跳过它
@@ -510,19 +518,30 @@ def stage_extract():
     n_opt = sum(len(q["options"]) for q in payload)
     log("  → %s（%d 题 / %d 选项）" % (os.path.relpath(QUESTIONS_EN, ROOT), len(payload), n_opt))
 
-    # 待译清单：排除已译条目
+    sol_segs = read_sol_segs()
+    distorted = write_i18n_todo(payload, sol_segs)
+    return payload, distorted
+
+
+def read_sol_segs():
+    if not os.path.exists(SOL_EN):
+        return {}
+    with open(SOL_EN, "r", encoding="utf-8", errors="replace") as f:
+        return split_solution(f.read(), _RE_SEG_EN)
+
+
+def write_i18n_todo(payload, sol_segs):
+    """重算待译清单，返回题干失真（PDF 题干 vs 解析文档题干相似度 <0.9）的题号。
+
+    两个阶段都要调。以前只有阶段一写这个文件，于是补完译文只跑 stage_build 时，
+    i18n_todo.jsonl 会一直停在上次 --extract 的快照 —— 译文早已 100%，verify
+    还在报"待译清单 2405 条"。i18n_next.py 因为会拿 i18n_zh.jsonl 过一遍才没受影响。
+    """
     zh_opts, zh_stems, bad = load_i18n_jsonl(I18N_ZH)
     if bad:
         log("  [警告] i18n_zh.jsonl 有 %d 行无法解析，已跳过" % bad)
 
-    # 题干失真判定：PDF 题干 vs 解析文档题干，相似度 < 0.9 需按 PDF 补译
-    sol_segs = {}
-    if os.path.exists(SOL_EN):
-        with open(SOL_EN, "r", encoding="utf-8", errors="replace") as f:
-            sol_segs = split_solution(f.read(), _RE_SEG_EN)
-
-    todo = []
-    distorted = []
+    todo, distorted = [], []
     for q in payload:
         for o in q["options"]:
             # 图片型选项（PDF 无文字）没有可译内容，不进清单
@@ -540,7 +559,7 @@ def stage_extract():
         os.path.relpath(I18N_TODO, ROOT), len(todo),
         sum(1 for t in todo if "letter" in t), sum(1 for t in todo if t.get("field") == "stem")))
     log("  题干失真（相似度 <0.9）%d 题：%s" % (len(distorted), distorted[:30]))
-    return payload, distorted
+    return distorted
 
 
 # --------------------------------------------------------------------------
@@ -582,6 +601,9 @@ def stage_build():
         log("  [警告] i18n_zh.jsonl 有 %d 行无法解析，已跳过" % bad)
     log("  选项译文：%d 条；题干补译：%d 条" % (len(zh_opts), len(zh_stems)))
 
+    # 译文补进来了，待译清单要跟着收敛；顺带拿到题干失真的题号
+    distorted = set(write_i18n_todo(en_list, sol_segs))
+
     out = []
     for qid in sorted(en):
         q = dict(en[qid])
@@ -594,6 +616,12 @@ def stage_build():
         q["answer"] = letters
         q["answer_source"] = src
         q["answer_confidence"] = conf
+
+        # 题面与解析段开头对不上。多数只是解析文档改写/省略了题干（答案照样是对的），
+        # 所以**不能**据此判 needs_review —— 31 题里有 21 题答案没问题，一刀切会
+        # 把可出题数从 642 砍到 621，为抓 1 道错题赔掉 20 道好题。
+        # 这里只做标记：verify 会把它和答案状态一起列出来，人工复核时有据可查。
+        q["stem_mismatch"] = qid in distorted
 
         # 解析（剥掉与题面重复的题干部分）
         _, q["explanation_en"] = split_segment(seg_en, q["stem_en"], zh=False)
@@ -656,10 +684,16 @@ def stage_build():
                 fixes = json.load(f)
             idx = {q["id"]: q for q in out}
             for k, patch in fixes.items():
+                # 下划线开头的键是注释（顶层的 _comment、每题的 _why）。
+                # 不跳过的话 int("_comment") 会抛到外层 except，整份修正被静默丢弃。
+                if k.startswith("_"):
+                    continue
                 q = idx.get(int(k))
                 if not q:
                     continue
                 for field, val in patch.items():
+                    if field.startswith("_"):
+                        continue
                     q[field] = val
                 if "answer" in patch:
                     q["answer_source"] = "manual"
@@ -694,6 +728,10 @@ def write_report(qs, bad_i18n_lines):
     dom_dist = Counter(q["domain"] or "null" for q in qs)
 
     n_opts = sum(len(q["options"]) for q in qs)
+    # 覆盖率的分母只能算「可译」的选项。477 题的选项在 PDF 里是图片、没有英文原文，
+    # 算进去覆盖率永远到不了 100%，而 verify_bank.py 用的是可译分母 —— 两边报的数
+    # 对不上，会让人一直以为还有 4 条没译。
+    n_opts_tr = sum(1 for q in qs for o in q["options"] if o["text_en"])
     n_opts_zh = sum(1 for q in qs for o in q["options"] if o["text_zh"])
     n_stem_zh = sum(1 for q in qs if q["stem_zh"])
     n_expl = sum(1 for q in qs if q["explanation_en"])
@@ -716,7 +754,7 @@ def write_report(qs, bad_i18n_lines):
     A("|---|---|---|---|")
     A("| 题干（中） | %d | %d | %.1f%% |" % (n_stem_zh, total, 100.0 * n_stem_zh / total))
     A("| **选项（中）** | **%d** | **%d** | **%.1f%%** |" % (
-        n_opts_zh, n_opts, 100.0 * n_opts_zh / n_opts if n_opts else 0))
+        n_opts_zh, n_opts_tr, 100.0 * n_opts_zh / n_opts_tr if n_opts_tr else 0))
     A("| 解析（英） | %d | %d | %.1f%% |" % (n_expl, total, 100.0 * n_expl / total))
     A("| 解析（中） | %d | %d | %.1f%% |" % (n_expl_zh, total, 100.0 * n_expl_zh / total))
     A("")
@@ -768,7 +806,8 @@ def write_report(qs, bad_i18n_lines):
     log("  → %s" % os.path.relpath(BUILD_REPORT, ROOT))
     log("")
     log("  ✅ needs_review:false = %d / %d（门槛 ≥620）" % (total - len(nr), total))
-    log("  选项中文覆盖率 = %.1f%%（门槛 ≥95%%）" % (100.0 * n_opts_zh / n_opts if n_opts else 0))
+    log("  选项中文覆盖率 = %.1f%%（门槛 ≥95%%，分母只算可译选项）"
+        % (100.0 * n_opts_zh / n_opts_tr if n_opts_tr else 0))
 
 
 # --------------------------------------------------------------------------

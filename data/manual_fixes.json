@@ -1,0 +1,56 @@
+{
+  "_comment": [
+    "构建最后一步覆盖，见 scripts/build_bank.py 的『人工修正最后覆盖』。",
+    "只放源文件本身有缺陷、靠解析逻辑救不回来的题；每条都写清为什么。"
+  ],
+
+  "125": {
+    "_why": [
+      "PDF 把第 5 个选项的标号也印成了 'D.'，抽取时整段并进了 D 的正文，题库只剩 4 个选项。",
+      "解析文档给的答案是 A + E；E 在题库里不存在，resolve_answer 退到 fuzzy_match，",
+      "按文本相似度把 E 匹到了 B（置信度 0.907），得出 answer=['A','B']。",
+      "但 B 是『把 ALB 部署在私有子网』，与题目『EC2/RDS 不暴露公网 + ALB 对外』直接矛盾，是错的。",
+      "这里把 D 拆回 D 和 E，并按解析文档改正答案。"
+    ],
+    "answer": ["A", "E"],
+    "answer_source": "manual",
+    "answer_confidence": 1.0,
+    "options": [
+      {
+        "letter": "A",
+        "text_en": "Use an Auto Scaling group to launch the EC2 instances in private subnets. Deploy an RDS Multi-AZ DB instance in private subnets.",
+        "text_zh": "使用 Auto Scaling 组在私有子网中启动 EC2 实例。在私有子网中部署一个 RDS 多可用区数据库实例。"
+      },
+      {
+        "letter": "B",
+        "text_en": "Configure a VPC with two private subnets and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the private subnets.",
+        "text_zh": "配置一个 VPC，跨两个可用区包含两个私有子网和两个 NAT 网关。在私有子网中部署一个 Application Load Balancer。"
+      },
+      {
+        "letter": "C",
+        "text_en": "Use an Auto Scaling group to launch the EC2 instances in public subnets across two Availability Zones. Deploy an RDS Multi-AZ DB instance in private subnets.",
+        "text_zh": "使用 Auto Scaling 组跨两个可用区在公有子网中启动 EC2 实例。在私有子网中部署一个 RDS 多可用区数据库实例。"
+      },
+      {
+        "letter": "D",
+        "text_en": "Configure a VPC with one public subnet, one private subnet, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnet.",
+        "text_zh": "配置一个 VPC，跨两个可用区包含一个公有子网、一个私有子网和两个 NAT 网关。在该公有子网中部署一个 Application Load Balancer。"
+      },
+      {
+        "letter": "E",
+        "text_en": "Configure a VPC with two public subnets, two private subnets, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnets.",
+        "text_zh": "配置一个 VPC，跨两个可用区包含两个公有子网、两个私有子网和两个 NAT 网关。在这些公有子网中部署一个 Application Load Balancer。"
+      }
+    ]
+  },
+
+  "651": {
+    "_why": [
+      "解析文档在本题正确解析之后，又多粘了一份第 649 题的解析（gp3 / 15,000 IOPS）。",
+      "split_segment 的答案块边界修好后，正确解析已排在前面，这里只把多出来的尾巴截掉。",
+      "答案 C 本来就对（Standard-IA → Glacier Instant Retrieval → Deep Archive），不改。"
+    ],
+    "explanation_en": "S3 Standard-IA (instead of One Zone-IA) ensures high durability across multiple AZs for infrequent access.\nGlacier Instant Retrieval meets the \"instant availability\" requirement after 360 days, while Glacier Deep Archive is cost-effective for audits after 5 years.\n(Option A/B use less durable One Zone-IA, and Option D uses slower Glacier Flexible Retrieval, which violates the \"instant\" requirement.)",
+    "explanation_zh": "S3 Standard-IA（而非 One Zone-IA）可为不频繁访问的数据提供跨多个可用区的高持久性。\nGlacier Instant Retrieval 满足 360 天后「即时可用」的要求，而 Glacier Deep Archive 对 5 年后的审计场景具有成本效益。\n（选项 A/B 使用了持久性较低的 One Zone-IA，选项 D 使用了较慢的 Glacier Flexible Retrieval，违反了「即时」的要求。）"
+  }
+}
