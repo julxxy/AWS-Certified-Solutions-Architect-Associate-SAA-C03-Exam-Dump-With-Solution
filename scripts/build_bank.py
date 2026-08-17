@@ -607,6 +607,12 @@ def stage_build():
         elif head_ratio >= 0.9 and zh_stem_part:
             q["stem_zh"] = zh_stem_part
             q["stem_zh_source"] = "solution_paraphrase"
+        elif qid in zh_stems:
+            # 题面与解析开头一致，但中文解析里切不出题干段（zh 源文件缺这一段）。
+            # 这类题不会进 i18n_todo，只能人工往 i18n_zh.jsonl 补 field:"stem"；
+            # 少了这条兜底，补进去的译文会被静默丢弃。
+            q["stem_zh"] = zh_stems[qid]
+            q["stem_zh_source"] = "pdf_translation"
         else:
             q["stem_zh"] = None
             q["stem_zh_source"] = None

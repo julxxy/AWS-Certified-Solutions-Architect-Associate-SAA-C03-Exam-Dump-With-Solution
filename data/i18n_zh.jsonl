@@ -2432,3 +2432,442 @@
 {"id": 582, "letter": "A", "zh": "配置地理位置路由策略。把靠近 us-west-1 的流量发往本地数据中心，把靠近 eu-central-1 的流量发往 eu-central-1。"}
 {"id": 582, "letter": "B", "zh": "配置简单路由策略，把靠近 eu-central-1 的所有流量路由到 eu-central-1，把靠近本地数据中心的所有流量路由到本地数据中心。"}
 {"id": 582, "letter": "C", "zh": "配置基于延迟的路由策略，并把该策略关联到 us-west-1。"}
+{"id": 582, "letter": "D", "zh": "配置加权路由策略，把流量在 eu-central-1 和本地数据中心之间平均分配。"}
+{"id": 583, "letter": "A", "zh": "在本地读取磁带上的数据，先暂存到本地 NFS 存储。再用 AWS DataSync 把数据迁移到 Amazon S3 Glacier Flexible Retrieval。"}
+{"id": 583, "letter": "B", "zh": "用本地备份软件读取磁带上的数据，直接写入 Amazon S3 Glacier Deep Archive。"}
+{"id": 583, "letter": "C", "zh": "订购多台带 Tape Gateway 的 AWS Snowball 设备。把物理磁带复制成 Snowball 中的虚拟磁带。把 Snowball 设备寄给 AWS。创建生命周期策略把这些磁带转移到 Amazon S3 Glacier Deep Archive。"}
+{"id": 583, "letter": "D", "zh": "在本地配置一个 Tape Gateway。在 AWS 云中创建虚拟磁带。用备份软件把物理磁带复制到虚拟磁带上。"}
+{"id": 584, "letter": "A", "zh": "把这些 EC2 实例运行在一个分散型 (spread) 置放群组中。"}
+{"id": 584, "letter": "B", "zh": "把这些 EC2 实例分组放在不同的账户中。"}
+{"id": 584, "letter": "C", "zh": "把这些 EC2 实例配置为专用租户 (dedicated tenancy)。"}
+{"id": 584, "letter": "D", "zh": "把这些 EC2 实例配置为共享租户 (shared tenancy)。"}
+{"id": 585, "letter": "A", "zh": "在故障转移区域购买按需实例。"}
+{"id": 585, "letter": "B", "zh": "在故障转移区域购买 EC2 节省计划。"}
+{"id": 585, "letter": "C", "zh": "在故障转移区域购买区域级预留实例。"}
+{"id": 585, "letter": "D", "zh": "在故障转移区域购买容量预留 (Capacity Reservation)。"}
+{"id": 586, "letter": "A", "zh": "让研发 AWS 账户在过渡期间同时属于两个组织。"}
+{"id": 586, "letter": "B", "zh": "等研发 AWS 账户先退出原组织之后，再邀请它加入新组织。"}
+{"id": 586, "letter": "C", "zh": "在新组织中新建一个研发 AWS 账户，把资源从原研发账户迁移到新研发账户。"}
+{"id": 586, "letter": "D", "zh": "让研发 AWS 账户加入新组织，同时把新的管理账户变成原组织的成员账户。"}
+{"id": 587, "letter": "A", "zh": "在一个 Amazon Elastic Container Service (Amazon ECS) 容器实例前面配置一个 Gateway Load Balancer (GWLB)，由该容器实例把收到的信息存入一个 Amazon Elastic File System (Amazon EFS) 文件系统。授权在该 GWLB 上完成。"}
+{"id": 587, "letter": "B", "zh": "在一个 Amazon Kinesis 数据流前面配置一个 Amazon API Gateway 端点，由该数据流把收到的信息存入一个 Amazon S3 存储桶。用一个 AWS Lambda 函数来完成授权。"}
+{"id": 587, "letter": "C", "zh": "在一个 Amazon Kinesis Data Firehose 前面配置一个 Amazon API Gateway 端点，由它把收到的信息存入一个 Amazon S3 存储桶。用 API Gateway Lambda 授权方来完成授权。"}
+{"id": 587, "letter": "D", "zh": "在一个 Amazon Elastic Container Service (Amazon ECS) 容器实例前面配置一个 Gateway Load Balancer (GWLB)，由该容器实例把收到的信息存到一个 Amazon Elastic File System (Amazon EFS) 文件系统上。用一个 AWS Lambda 函数来完成授权。"}
+{"id": 588, "letter": "A", "zh": "创建一个跨区域只读副本，并把该只读副本提升为主实例。"}
+{"id": 588, "letter": "B", "zh": "用 AWS Database Migration Service (AWS DMS) 建立 RDS 跨区域复制。"}
+{"id": 588, "letter": "C", "zh": "每 24 小时用跨区域复制把原生备份复制到一个 Amazon S3 存储桶。"}
+{"id": 588, "letter": "D", "zh": "每 24 小时把自动快照复制到另一个区域。"}
+{"id": 589, "letter": "A", "zh": "用一个 Amazon ElastiCache for Memcached 实例存储会话数据。改造应用改用 ElastiCache for Memcached 存储会话状态。"}
+{"id": 589, "letter": "B", "zh": "用 Amazon ElastiCache for Redis 存储会话状态。改造应用改用 ElastiCache for Redis 存储会话状态。"}
+{"id": 589, "letter": "C", "zh": "用 AWS Storage Gateway 缓存卷存储会话数据。改造应用改用 AWS Storage Gateway 缓存卷存储会话状态。"}
+{"id": 589, "letter": "D", "zh": "用 Amazon RDS 存储会话状态。改造应用改用 Amazon RDS 存储会话状态。"}
+{"id": 590, "letter": "A", "zh": "创建该数据库的只读副本，把这些查询导向该只读副本。"}
+{"id": 590, "letter": "B", "zh": "备份该数据库，把备份恢复到另一个数据库实例，把这些查询导向新数据库。"}
+{"id": 590, "letter": "C", "zh": "把数据导出到 Amazon S3，用 Amazon Athena 查询该 S3 存储桶。"}
+{"id": 590, "letter": "D", "zh": "调大该数据库实例规格以容纳额外的负载。"}
+{"id": 591, "letter": "A", "zh": "用 AWS Load Balancer Controller 预置一个 Network Load Balancer。"}
+{"id": 591, "letter": "B", "zh": "用 AWS Load Balancer Controller 预置一个 Application Load Balancer。"}
+{"id": 591, "letter": "C", "zh": "用一个 AWS Lambda 函数把请求接到 Amazon EKS。"}
+{"id": 591, "letter": "D", "zh": "用 Amazon API Gateway 把请求接到 Amazon EKS。"}
+{"id": 592, "letter": "A", "zh": "用 Amazon S3 存放这些图片。开启多重身份验证 (MFA) 和存储桶公有访问。把该 S3 存储桶的链接提供给客户。"}
+{"id": 592, "letter": "B", "zh": "用 Amazon S3 存放这些图片。为每个客户创建一个 IAM 用户，把这些用户加入一个有权访问该 S3 存储桶的组。"}
+{"id": 592, "letter": "C", "zh": "用 Application Load Balancer (ALB) 之后的 Amazon EC2 实例存放这些图片。只在该公司提供服务的国家/地区部署实例。把各自国家/地区实例对应的 ALB 链接提供给客户。"}
+{"id": 592, "letter": "D", "zh": "用 Amazon S3 存放这些图片。用 Amazon CloudFront 分发图片并施加地理限制。为每个客户提供一个签名 URL 来访问 CloudFront 中的数据。"}
+{"id": 593, "letter": "A", "zh": "使用多可用区 Redis 复制组，其分片包含多个节点。"}
+{"id": 593, "letter": "B", "zh": "使用包含多个节点的 Redis 分片，并开启 Redis 只追加文件 (AOF)。"}
+{"id": 593, "letter": "C", "zh": "使用多可用区 Redis 集群，并在复制组中配置一个以上的只读副本。"}
+{"id": 593, "letter": "D", "zh": "使用包含多个节点的 Redis 分片，并开启 Auto Scaling。"}
+{"id": 594, "letter": "A", "zh": "启动两台或更多 EC2 按需实例。开启自动伸缩功能，使这些 EC2 按需实例在下一轮测试期间可用。"}
+{"id": 594, "letter": "B", "zh": "启动 EC2 Spot 实例来支撑该应用并进行伸缩，使其在下一轮测试期间可用。"}
+{"id": 594, "letter": "C", "zh": "启动开启了休眠功能的 EC2 按需实例。在下一轮测试期间配置 EC2 Auto Scaling 预热池 (warm pool)。"}
+{"id": 594, "letter": "D", "zh": "启动带容量预留的 EC2 按需实例。在下一轮测试期间再启动额外的 EC2 实例。"}
+{"id": 595, "letter": "A", "zh": "用手动伸缩来调整该 Auto Scaling 组的规模。"}
+{"id": 595, "letter": "B", "zh": "用预测性伸缩来调整该 Auto Scaling 组的规模。"}
+{"id": 595, "letter": "C", "zh": "用动态伸缩来调整该 Auto Scaling 组的规模。"}
+{"id": 595, "letter": "D", "zh": "用计划伸缩来调整该 Auto Scaling 组的规模。"}
+{"id": 596, "letter": "A", "zh": "把该 PostgreSQL 数据库迁移到 Amazon Aurora Serverless v2。"}
+{"id": 596, "letter": "B", "zh": "为该 EC2 实例上的 PostgreSQL 数据库启用自动伸缩以应对用量增长。"}
+{"id": 596, "letter": "C", "zh": "把该 PostgreSQL 数据库迁移到更大实例类型的 Amazon RDS for PostgreSQL。"}
+{"id": 596, "letter": "D", "zh": "把该 PostgreSQL 数据库迁移到 Amazon Redshift 以应对用量增长。"}
+{"id": 597, "letter": "A", "zh": "提高 API Gateway 的限流上限。"}
+{"id": 597, "letter": "B", "zh": "配置计划伸缩，在员工每天开始使用该应用之前提高 Lambda 预置并发。"}
+{"id": 597, "letter": "C", "zh": "创建一个 Amazon CloudWatch 告警，每天开始时以一个 Lambda 函数作为告警目标来触发它。"}
+{"id": 597, "letter": "D", "zh": "增加该 Lambda 函数的内存。"}
+{"id": 598, "letter": "A", "zh": "在本地以 Amazon S3 File Gateway 模式部署一个 AWS Storage Gateway。"}
+{"id": 598, "letter": "B", "zh": "在本地以 Amazon FSx File Gateway 模式部署一个 AWS Storage Gateway。"}
+{"id": 598, "letter": "C", "zh": "配置一个 AWS Glue 爬网程序，基于 Amazon S3 中的数据创建表。"}
+{"id": 598, "letter": "D", "zh": "搭建一个带 EMR File System (EMRFS) 的 Amazon EMR 集群来查询 Amazon S3 中的数据，并开放给分析师访问。"}
+{"id": 598, "letter": "E", "zh": "搭建一个 Amazon Redshift 集群来查询 Amazon S3 中的数据，并开放给分析师访问。"}
+{"id": 598, "letter": "F", "zh": "配置 Amazon Athena 来查询 Amazon S3 中的数据，并开放给分析师访问。"}
+{"id": 599, "letter": "A", "zh": "为 Outposts 机架提供可靠的供电和网络连接"}
+{"id": 599, "letter": "B", "zh": "管理虚拟化管理程序、存储系统以及运行在 Outposts 上的 AWS 服务"}
+{"id": 599, "letter": "C", "zh": "数据中心环境的物理安全与门禁管控"}
+{"id": 599, "letter": "D", "zh": "保障 Outposts 基础设施的可用性，包括 Outposts 机架内的供电设备、服务器和网络设备"}
+{"id": 599, "letter": "E", "zh": "Outposts 组件的物理维护"}
+{"id": 599, "letter": "F", "zh": "为 Amazon ECS 集群提供额外容量，以缓解服务器故障和维护事件的影响"}
+{"id": 600, "letter": "A", "zh": "部署一个 Network Load Balancer (NLB)。把该 NLB 配置为在该应用所需的 TCP 端口上可公开访问。"}
+{"id": 600, "letter": "B", "zh": "部署一个 Application Load Balancer (ALB)。把该 ALB 配置为在该应用所需的 TCP 端口上可公开访问。"}
+{"id": 600, "letter": "C", "zh": "部署一个在该应用所需 TCP 端口上侦听的 Amazon CloudFront 分配，以一个 Application Load Balancer 作为源站。"}
+{"id": 600, "letter": "D", "zh": "部署一个配置了该应用所需 TCP 端口的 Amazon API Gateway API。配置带预置并发的 AWS Lambda 函数来处理这些请求。"}
+{"id": 601, "letter": "A", "zh": "为该 RDS for PostgreSQL 数据库实例创建一个数据库快照，用它来生成一个新的 Aurora PostgreSQL 数据库集群。"}
+{"id": 601, "letter": "B", "zh": "为该 RDS for PostgreSQL 数据库实例创建一个 Aurora 只读副本，再把该 Aurora 只读副本提升为一个新的 Aurora PostgreSQL 数据库集群。"}
+{"id": 601, "letter": "C", "zh": "通过从 Amazon S3 导入数据的方式，把该数据库迁移到一个 Aurora PostgreSQL 数据库集群。"}
+{"id": 601, "letter": "D", "zh": "用 pg_dump 工具备份该 RDS for PostgreSQL 数据库，再把备份恢复到一个新的 Aurora PostgreSQL 数据库集群。"}
+{"id": 602, "letter": "A", "zh": "对挂载在每台 EC2 实例上的 EBS 存储做快照。创建一个 AWS CloudFormation 模板，从这些 EBS 存储启动新的 EC2 实例。"}
+{"id": 602, "letter": "B", "zh": "对挂载在每台 EC2 实例上的 EBS 存储做快照。用 AWS Elastic Beanstalk 基于该 EC2 模板搭建环境并挂上这些 EBS 存储。"}
+{"id": 602, "letter": "C", "zh": "用 AWS Backup 为整组 EC2 实例配置一个备份计划。用 AWS Backup API 或 AWS CLI 来加快多台 EC2 实例的恢复过程。"}
+{"id": 602, "letter": "D", "zh": "创建一个 AWS Lambda 函数，对挂载在每台 EC2 实例上的 EBS 存储做快照并复制相应的 Amazon Machine Image (AMI)。再创建另一个 Lambda 函数，用这些复制的 AMI 执行恢复并挂上 EBS 存储。"}
+{"id": 603, "letter": "A", "zh": "使用 Inline 模式的 AWS Step Functions Map 状态来并行处理数据。"}
+{"id": 603, "letter": "B", "zh": "使用 Distributed 模式的 AWS Step Functions Map 状态来并行处理数据。"}
+{"id": 603, "letter": "C", "zh": "用 AWS Glue 来并行处理数据。"}
+{"id": 603, "letter": "D", "zh": "用多个 AWS Lambda 函数来并行处理数据。"}
+{"id": 604, "letter": "A", "zh": "配置 AWS DataSync 把数据迁移到 Amazon S3，并自动校验数据。"}
+{"id": 604, "letter": "B", "zh": "用 rsync 把数据直接传输到 Amazon S3。"}
+{"id": 604, "letter": "C", "zh": "用 AWS CLI 起多个复制进程把数据直接发送到 Amazon S3。"}
+{"id": 604, "letter": "D", "zh": "订购多台 AWS Snowball 设备。把数据复制到设备上，再把设备寄给 AWS 以便把数据导入 Amazon S3。"}
+{"id": 605, "letter": "A", "zh": "部署一个 Amazon S3 File Gateway。"}
+{"id": 605, "letter": "B", "zh": "部署 Amazon Elastic Block Store (Amazon EBS) 存储并备份到 Amazon S3。"}
+{"id": 605, "letter": "C", "zh": "部署一个配置为存储卷 (stored volumes) 的 AWS Storage Gateway 卷网关。"}
+{"id": 605, "letter": "D", "zh": "部署一个配置为缓存卷 (cached volumes) 的 AWS Storage Gateway 卷网关。"}
+{"id": 606, "letter": "A", "zh": "所有对象都存放在 S3 Standard 中，并用一条 S3 生命周期规则在 30 天后把对象转换到 S3 Glacier。"}
+{"id": 606, "letter": "B", "zh": "所有对象都存放在 S3 Standard 中，并用一条 S3 生命周期规则在 30 天后把对象转换到 S3 Standard-Infrequent Access (S3 Standard-IA)。"}
+{"id": 606, "letter": "C", "zh": "所有对象都存放在 S3 Standard 中，并用一条 S3 生命周期规则在 30 天后把对象转换到 S3 One Zone-Infrequent Access (S3 One Zone-IA)。"}
+{"id": 606, "letter": "D", "zh": "所有对象都存放在 S3 Intelligent-Tiering 中，并用一条 S3 生命周期规则在 30 天后把对象转换到 S3 Standard-Infrequent Access (S3 Standard-IA)。"}
+{"id": 607, "letter": "A", "zh": "缩小该 RDS 数据库实例规格。把存储容量扩到 24 TiB。把存储类型改为磁介质。"}
+{"id": 607, "letter": "B", "zh": "扩大该 RDS 数据库实例规格。把存储容量扩到 24 TiB。把存储类型改为预置 IOPS。"}
+{"id": 607, "letter": "C", "zh": "创建一个 Amazon S3 存储桶。改造应用把文档存到该 S3 存储桶中。对象元数据仍存放在现有数据库里。"}
+{"id": 607, "letter": "D", "zh": "创建一张 Amazon DynamoDB 表。改造应用改用 DynamoDB。用 AWS Database Migration Service (AWS DMS) 把数据从 Oracle 数据库迁移到 DynamoDB。"}
+{"id": 608, "letter": "A", "zh": "把一个 AWS WAF Web ACL 关联到该 ALB。在该 ALB 上用 IP 规则集筛选流量。更新规则中的 IP 地址，把已登记的 IP 地址纳入其中。"}
+{"id": 608, "letter": "B", "zh": "部署 AWS Firewall Manager 来管理该 ALB。配置防火墙规则限制到该 ALB 的流量。修改防火墙规则把已登记的 IP 地址纳入其中。"}
+{"id": 608, "letter": "C", "zh": "把这些 IP 地址存放在一张 Amazon DynamoDB 表中。在该 ALB 上配置一个 AWS Lambda 授权函数，校验传入请求是否来自已登记的 IP 地址。"}
+{"id": 608, "letter": "D", "zh": "在承载该 ALB 公有接口的子网上配置网络 ACL。在该网络 ACL 的入站规则中为每个已登记的 IP 地址添加条目。"}
+{"id": 609, "letter": "A", "zh": "创建一个包含访问 Lake Formation 表权限的 IAM 角色。"}
+{"id": 609, "letter": "B", "zh": "创建数据筛选器来实现行级安全和单元格级安全。"}
+{"id": 609, "letter": "C", "zh": "创建一个 AWS Lambda 函数，在 Lake Formation 接入数据之前先去掉敏感信息。"}
+{"id": 609, "letter": "D", "zh": "创建一个 AWS Lambda 函数，定期查询并从 Lake Formation 表中删除敏感信息。"}
+{"id": 610, "letter": "A", "zh": "为 Amazon EC2 部署一个接口 VPC 端点。在公司与该 VPC 之间建立一条 AWS Site-to-Site VPN 连接。"}
+{"id": 610, "letter": "B", "zh": "为 Amazon S3 部署一个网关 VPC 端点。在本地网络与该 VPC 之间搭建一条 AWS Direct Connect 连接。"}
+{"id": 610, "letter": "C", "zh": "建立一条从该 VPC 到这些 S3 存储桶的 AWS Transit Gateway 连接。在公司与该 VPC 之间建立一条 AWS Site-to-Site VPN 连接。"}
+{"id": 610, "letter": "D", "zh": "搭建带 NAT 网关路由的代理 EC2 实例。配置这些代理 EC2 实例去拉取 S3 数据并转发给应用实例。"}
+{"id": 611, "letter": "A", "zh": "用 Amazon Kinesis Data Streams 接入数据。用 AWS Lambda 函数处理数据。"}
+{"id": 611, "letter": "B", "zh": "在现有应用之上加一层 Amazon API Gateway。创建一个带配额上限的使用计划给该第三方供应商。"}
+{"id": 611, "letter": "C", "zh": "用 Amazon Simple Notification Service (Amazon SNS) 接入数据。把这些 EC2 实例放到一个 Application Load Balancer 之后的 Auto Scaling 组中。"}
+{"id": 611, "letter": "D", "zh": "把该应用重新打包为容器。用 Amazon Elastic Container Service (Amazon ECS) 的 EC2 启动类型配合 Auto Scaling 组来部署该应用。"}
+{"id": 612, "letter": "A", "zh": "配置一个互联网网关。更新该 S3 存储桶策略允许来自该互联网网关的访问。更新应用改用这个新的互联网网关。"}
+{"id": 612, "letter": "B", "zh": "配置一条 VPN 连接。更新该 S3 存储桶策略允许来自该 VPN 连接的访问。更新应用改用这条新的 VPN 连接。"}
+{"id": 612, "letter": "C", "zh": "配置一个 NAT 网关。更新该 S3 存储桶策略允许来自该 NAT 网关的访问。更新应用改用这个新的 NAT 网关。"}
+{"id": 612, "letter": "D", "zh": "配置一个 VPC 端点。更新该 S3 存储桶策略允许来自该 VPC 端点的访问。更新应用改用这个新的 VPC 端点。"}
+{"id": 613, "letter": "A", "zh": "由容器应用自己用 AWS Key Management Service (AWS KMS) 来加密这些信息。"}
+{"id": 613, "letter": "B", "zh": "在该 EKS 集群上用 AWS Key Management Service (AWS KMS) 启用 secrets 加密。"}
+{"id": 613, "letter": "C", "zh": "实现一个 AWS Lambda 函数，用 AWS Key Management Service (AWS KMS) 来加密这些信息。"}
+{"id": 613, "letter": "D", "zh": "用 AWS Systems Manager Parameter Store 配合 AWS Key Management Service (AWS KMS) 来加密这些信息。"}
+{"id": 614, "letter": "A", "zh": "在应用服务器前面部署 AWS PrivateLink。配置网络 ACL，只允许 Web 服务器访问应用服务器。"}
+{"id": 614, "letter": "B", "zh": "在应用服务器前面部署一个 VPC 端点。配置安全组，只允许 Web 服务器访问应用服务器。"}
+{"id": 614, "letter": "C", "zh": "部署一个 Network Load Balancer，其目标组包含应用服务器的 Auto Scaling 组。配置网络 ACL，只允许 Web 服务器访问应用服务器。"}
+{"id": 614, "letter": "D", "zh": "部署一个 Application Load Balancer，其目标组包含应用服务器的 Auto Scaling 组。配置安全组，只允许 Web 服务器访问应用服务器。"}
+{"id": 615, "letter": "A", "zh": "在现有 EKS 集群中运行 Amazon CloudWatch 代理。在 CloudWatch 控制台查看指标和日志。"}
+{"id": 615, "letter": "B", "zh": "在现有 EKS 集群中运行 AWS App Mesh。在 App Mesh 控制台查看指标和日志。"}
+{"id": 615, "letter": "C", "zh": "配置 AWS CloudTrail 捕获数据事件。用 Amazon OpenSearch Service 查询 CloudTrail。"}
+{"id": 615, "letter": "D", "zh": "在现有 EKS 集群中配置 Amazon CloudWatch Container Insights。在 CloudWatch 控制台查看指标和日志。"}
+{"id": 616, "letter": "A", "zh": "配置 Amazon Macie 进行监控，并把发现项上报到 AWS Config。"}
+{"id": 616, "letter": "B", "zh": "配置 Amazon Inspector 进行监控，并把发现项上报到 AWS CloudTrail。"}
+{"id": 616, "letter": "C", "zh": "配置 Amazon GuardDuty 进行监控，并把发现项上报到 AWS Security Hub。"}
+{"id": 616, "letter": "D", "zh": "配置 AWS Config 进行监控，并把发现项上报到 Amazon EventBridge。"}
+{"id": 617, "letter": "A", "zh": "创建一个 Amazon FSx for Lustre 文件系统。"}
+{"id": 617, "letter": "B", "zh": "创建一个 Amazon Elastic File System (Amazon EFS) 文件系统。"}
+{"id": 617, "letter": "C", "zh": "创建一个 Amazon S3 存储桶来接收数据。"}
+{"id": 617, "letter": "D", "zh": "手动用操作系统的复制命令把数据推送到 AWS 目标位置。"}
+{"id": 617, "letter": "E", "zh": "在本地数据中心安装一个 AWS DataSync 代理。在本地位置与 AWS 之间用一个 DataSync 任务传输数据。"}
+{"id": 618, "letter": "A", "zh": "在 us-east-1 创建一个 Single-AZ 2 部署类型的 FSx for Windows File Server 文件系统。用 AWS Backup 创建一个每日备份计划，其中包含把备份复制到 us-west-2 的备份规则。为 us-west-2 中的目标保管库配置合规模式 (compliance mode) 的 AWS Backup Vault Lock，最短保留期设为 5 年。"}
+{"id": 618, "letter": "B", "zh": "在 us-east-1 创建一个多可用区部署类型的 FSx for Windows File Server 文件系统。用 AWS Backup 创建一个每日备份计划，其中包含把备份复制到 us-west-2 的备份规则。为 us-west-2 中的目标保管库配置治理模式 (governance mode) 的 AWS Backup Vault Lock，最短保留期设为 5 年。"}
+{"id": 618, "letter": "C", "zh": "在 us-east-1 创建一个多可用区部署类型的 FSx for Windows File Server 文件系统。用 AWS Backup 创建一个每日备份计划，其中包含把备份复制到 us-west-2 的备份规则。为 us-west-2 中的目标保管库配置合规模式 (compliance mode) 的 AWS Backup Vault Lock，最短保留期设为 5 年。"}
+{"id": 618, "letter": "D", "zh": "在 us-east-1 创建一个 Single-AZ 2 部署类型的 FSx for Windows File Server 文件系统。用 AWS Backup 创建一个每日备份计划，其中包含把备份复制到 us-west-2 的备份规则。为 us-west-2 中的目标保管库配置治理模式 (governance mode) 的 AWS Backup Vault Lock，最短保留期设为 5 年。"}
+{"id": 619, "letter": "A", "zh": "创建一条禁止修改 CloudTrail 的 IAM 策略，并把它附加到根用户上。"}
+{"id": 619, "letter": "B", "zh": "在各开发账户内新建一个 CloudTrail 跟踪，并启用组织跟踪选项。"}
+{"id": 619, "letter": "C", "zh": "创建一条禁止修改 CloudTrail 的服务控制策略 (SCP)，并把它附加到这些开发账户上。"}
+{"id": 619, "letter": "D", "zh": "为 CloudTrail 创建一个服务相关角色，其策略条件只允许来自管理账户中某个 Amazon 资源名称 (ARN) 的变更。"}
+{"id": 620, "letter": "A", "zh": "实例存储卷"}
+{"id": 620, "letter": "B", "zh": "Amazon ElastiCache for Memcached 集群"}
+{"id": 620, "letter": "C", "zh": "预置 IOPS SSD 的 Amazon Elastic Block Store (Amazon EBS) 卷"}
+{"id": 620, "letter": "D", "zh": "吞吐量优化型 HDD 的 Amazon Elastic Block Store (Amazon EBS) 卷"}
+{"id": 621, "letter": "A", "zh": "在 us-east-1 再建一个 S3 存储桶。用 S3 跨区域复制把照片从现有 S3 存储桶复制到第二个 S3 存储桶。"}
+{"id": 621, "letter": "B", "zh": "为现有 S3 存储桶创建跨源资源共享 (CORS) 配置。在 CORS 规则的 AllowedOrigin 元素中指定 us-east-1。"}
+{"id": 621, "letter": "C", "zh": "在 us-east-1 跨多个可用区再建一个 S3 存储桶。创建一条 S3 生命周期规则把照片存入第二个 S3 存储桶。"}
+{"id": 621, "letter": "D", "zh": "在 us-east-1 再建一个 S3 存储桶。为对象创建和更新事件配置 S3 事件通知，调用一个 AWS Lambda 函数把照片从现有 S3 存储桶复制到第二个 S3 存储桶。"}
+{"id": 622, "letter": "A", "zh": "用 Amazon DynamoDB 作为数据库方案，预置按需容量。"}
+{"id": 622, "letter": "B", "zh": "用 Amazon Aurora 作为数据库方案，选择无服务器数据库引擎模式。"}
+{"id": 622, "letter": "C", "zh": "用 Amazon DynamoDB 作为数据库方案，确保开启 DynamoDB 自动伸缩。"}
+{"id": 622, "letter": "D", "zh": "把静态内容部署到一个 Amazon S3 存储桶。预置一个以该 S3 存储桶为源站的 Amazon CloudFront 分配。"}
+{"id": 622, "letter": "E", "zh": "把承载静态内容的 Web 服务器部署在 Auto Scaling 组的一批 Amazon EC2 实例上。配置这些实例定期从一个 Amazon Elastic File System (Amazon EFS) 卷刷新内容。"}
+{"id": 623, "letter": "A", "zh": "配置 AWS Shield。"}
+{"id": 623, "letter": "B", "zh": "配置 AWS WAF。"}
+{"id": 623, "letter": "C", "zh": "在 API Gateway 前面配置一个 Amazon CloudFront 分配，并在 CloudFront 上配置 AWS Shield。"}
+{"id": 623, "letter": "D", "zh": "在 API Gateway 前面配置一个 Amazon CloudFront 分配，并在 CloudFront 上配置 AWS WAF。"}
+{"id": 624, "letter": "A", "zh": "为公司里每个用户创建一个 IAM 用户，并给每个用户附加相应的策略。"}
+{"id": 624, "letter": "B", "zh": "使用 Amazon Cognito 搭配 Active Directory 用户池。创建附加了相应策略的角色。"}
+{"id": 624, "letter": "C", "zh": "定义附加了相应策略的跨账户角色，并把这些角色映射到 Active Directory 组。"}
+{"id": 624, "letter": "D", "zh": "配置基于安全断言标记语言 (SAML) 2.0 的联合身份验证。创建附加了相应策略的角色，并把这些角色映射到 Active Directory 组。"}
+{"id": 625, "letter": "A", "zh": "配置 Amazon CloudFront 搭配 AWS WAF。"}
+{"id": 625, "letter": "B", "zh": "配置 Application Load Balancer 搭配 AWS WAF。"}
+{"id": 625, "letter": "C", "zh": "配置 Amazon Route 53 使用地理位置策略。"}
+{"id": 625, "letter": "D", "zh": "配置 Amazon Route 53 使用地理位置临近路由策略。"}
+{"id": 626, "letter": "A", "zh": "订购一台 AWS Snowball Edge 设备。配置该 Snowball Edge 设备把数据在线传输到一个 S3 存储桶。"}
+{"id": 626, "letter": "B", "zh": "在本地部署一个 AWS DataSync 代理。配置该 DataSync 代理把数据在线传输到一个 S3 存储桶。"}
+{"id": 626, "letter": "C", "zh": "在本地创建一个 Amazon S3 File Gateway。配置该 S3 File Gateway 把数据在线传输到一个 S3 存储桶。"}
+{"id": 626, "letter": "D", "zh": "在本地配置一个 Amazon S3 Transfer Acceleration 加速器。配置该加速器把数据在线传输到一个 S3 存储桶。"}
+{"id": 627, "letter": "A", "zh": "在 Amazon Route 53 控制台中新建 200 个托管区域，并导入区域文件。"}
+{"id": 627, "letter": "B", "zh": "启动一台大规格的 Amazon EC2 实例，导入区域文件。配置 Amazon CloudWatch 告警和通知，在出现宕机时提醒公司。"}
+{"id": 627, "letter": "C", "zh": "用 AWS Server Migration Service (AWS SMS) 把这些服务器迁移到 AWS。配置 Amazon CloudWatch 告警和通知，在出现宕机时提醒公司。"}
+{"id": 627, "letter": "D", "zh": "在跨两个可用区的 Auto Scaling 组中启动一台 Amazon EC2 实例，导入区域文件。把该 Auto Scaling 组的期望容量设为 1、最大容量设为 3。配置按 CPU 利用率伸缩的告警。"}
+{"id": 628, "letter": "A", "zh": "配置一条 AWS Config 规则来报告未完成分段上传的对象数量。"}
+{"id": 628, "letter": "B", "zh": "创建一条服务控制策略 (SCP) 来报告未完成分段上传的对象数量。"}
+{"id": 628, "letter": "C", "zh": "配置 S3 Storage Lens 来报告未完成分段上传的对象数量。"}
+{"id": 628, "letter": "D", "zh": "创建一个 S3 多区域接入点来报告未完成分段上传的对象数量。"}
+{"id": 629, "letter": "A", "zh": "创建一个 RDS 手动快照，然后升级到新版本的 Amazon RDS for MySQL。"}
+{"id": 629, "letter": "B", "zh": "使用原生备份与还原，把数据还原到升级后的新版本 Amazon RDS for MySQL。"}
+{"id": 629, "letter": "C", "zh": "用 AWS Database Migration Service (AWS DMS) 把数据复制到升级后的新版本 Amazon RDS for MySQL。"}
+{"id": 629, "letter": "D", "zh": "用 Amazon RDS 蓝绿部署来部署并测试生产变更。"}
+{"id": 630, "letter": "A", "zh": "编写一个脚本，在一台 Amazon EC2 预留实例上本地运行，由 cron 作业触发。"}
+{"id": 630, "letter": "B", "zh": "创建一个由 Amazon EventBridge 计划事件触发的 AWS Lambda 函数。"}
+{"id": 630, "letter": "C", "zh": "使用一个由 Amazon EventBridge 计划事件触发的 Amazon Elastic Container Service (Amazon ECS) Fargate 任务。"}
+{"id": 630, "letter": "D", "zh": "使用一个运行在 Amazon EC2 上、由 Amazon EventBridge 计划事件触发的 Amazon Elastic Container Service (Amazon ECS) 任务。"}
+{"id": 631, "letter": "A", "zh": "用 Amazon Neptune 存储这些信息。用 Amazon Kinesis Data Streams 处理数据库中的变更。"}
+{"id": 631, "letter": "B", "zh": "用 Amazon Neptune 存储这些信息。用 Neptune Streams 处理数据库中的变更。"}
+{"id": 631, "letter": "C", "zh": "用 Amazon Quantum Ledger Database (Amazon QLDB) 存储这些信息。用 Amazon Kinesis Data Streams 处理数据库中的变更。"}
+{"id": 631, "letter": "D", "zh": "用 Amazon Quantum Ledger Database (Amazon QLDB) 存储这些信息。用 Neptune Streams 处理数据库中的变更。"}
+{"id": 632, "letter": "A", "zh": "把数据存放在 Amazon S3 Glacier 中。更新 S3 Glacier 保管库策略，允许这些应用实例访问。"}
+{"id": 632, "letter": "B", "zh": "把数据存放在一个 Amazon Elastic Block Store (Amazon EBS) 卷上。把该 EBS 卷挂载到这些应用实例上。"}
+{"id": 632, "letter": "C", "zh": "把数据存放在一个 Amazon Elastic File System (Amazon EFS) 文件系统中。把该文件系统挂载到这些应用实例上。"}
+{"id": 632, "letter": "D", "zh": "把数据存放在一个由这些应用实例共享的 Amazon Elastic Block Store (Amazon EBS) 预置 IOPS 卷上。"}
+{"id": 633, "letter": "A", "zh": "由多可用区的备用副本承担读取流量。"}
+{"id": 633, "letter": "B", "zh": "把该数据库实例配置为使用 Transfer Acceleration。"}
+{"id": 633, "letter": "C", "zh": "从源数据库实例创建一个只读副本，由该只读副本承担读取流量。"}
+{"id": 633, "letter": "D", "zh": "在应用与 Amazon RDS 之间使用 Amazon Kinesis Data Firehose，以提高数据库请求的并发度。"}
+{"id": 634, "letter": "A", "zh": "配置 S3 全局表为每家机构复制数据。"}
+{"id": 634, "letter": "B", "zh": "把该 S3 存储桶临时设为公开，只把这件事告知这些机构。"}
+{"id": 634, "letter": "C", "zh": "为该 S3 存储桶配置跨账户访问，开放给这些机构自有的账户。"}
+{"id": 634, "letter": "D", "zh": "在源数据账户中为每位分析师各设置一个 IAM 用户，并授予每个用户访问该 S3 存储桶的权限。"}
+{"id": 635, "letter": "A", "zh": "创建一个 AWS Lambda 函数把数据复制到一个 Amazon S3 存储桶。把该 S3 存储桶复制到第二区域。"}
+{"id": 635, "letter": "B", "zh": "用 AWS Backup 为这些 FSx for ONTAP 卷创建备份。把卷复制到第二区域。从备份创建一个新的 FSx for ONTAP 实例。"}
+{"id": 635, "letter": "C", "zh": "在第二区域创建一个 FSx for ONTAP 实例。用 NetApp SnapMirror 把数据从主区域复制到第二区域。"}
+{"id": 635, "letter": "D", "zh": "创建一个 Amazon Elastic File System (Amazon EFS) 卷。把当前数据迁移到该卷，并把该卷复制到第二区域。"}
+{"id": 636, "letter": "A", "zh": "创建一个 SNS 订阅，让事件在进入 Lambda 之前先由 Amazon Elastic Container Service (Amazon ECS) 处理。"}
+{"id": 636, "letter": "B", "zh": "创建一个 SNS 订阅，让事件在进入 Lambda 之前先由 Amazon Elastic Kubernetes Service (Amazon EKS) 处理。"}
+{"id": 636, "letter": "C", "zh": "创建一个把事件发送到 Amazon Simple Queue Service (Amazon SQS) 的 SNS 订阅。配置该 SQS 队列去触发一个 Lambda 函数。"}
+{"id": 636, "letter": "D", "zh": "创建一个把事件发送到 AWS Server Migration Service (AWS SMS) 的 SNS 订阅。配置该 Lambda 函数从 SMS 事件中轮询。"}
+{"id": 637, "letter": "A", "zh": "AWS Fargate"}
+{"id": 637, "letter": "B", "zh": "AWS Lambda"}
+{"id": 637, "letter": "C", "zh": "Amazon DynamoDB"}
+{"id": 637, "letter": "D", "zh": "Amazon EC2 Auto Scaling"}
+{"id": 637, "letter": "E", "zh": "兼容 MySQL 的 Amazon Aurora"}
+{"id": 638, "letter": "A", "zh": "用一个 AWS Lambda 函数生成 S3 预签名 URL，让员工使用该 URL。"}
+{"id": 638, "letter": "B", "zh": "为每位员工创建一个 IAM 用户。为每位员工创建一条允许访问 S3 的 IAM 策略。让员工使用 AWS 管理控制台。"}
+{"id": 638, "letter": "C", "zh": "创建一个 S3 File Gateway。分别创建用于上传和下载的共享。允许员工在自己的本地电脑上挂载这些共享来使用 S3 File Gateway。"}
+{"id": 638, "letter": "D", "zh": "配置 AWS Transfer Family SFTP 端点。选择自定义身份提供方选项。用 AWS Secrets Manager 管理用户凭证。让员工使用 Transfer Family。"}
+{"id": 639, "letter": "A", "zh": "关闭该 ALB 上的会话亲和性（粘性会话）。"}
+{"id": 639, "letter": "B", "zh": "把该 ALB 换成 Network Load Balancer。"}
+{"id": 639, "letter": "C", "zh": "增加每个可用区中的 EC2 实例数量。"}
+{"id": 639, "letter": "D", "zh": "调整该 ALB 目标组上运行状况检查的频率。"}
+{"id": 640, "letter": "A", "zh": "把 kms:decrypt 权限加到该 Lambda 函数的资源策略中。"}
+{"id": 640, "letter": "B", "zh": "在该 KMS 密钥的策略中，为该 Lambda IAM 角色授予解密权限。"}
+{"id": 640, "letter": "C", "zh": "在该 KMS 密钥的策略中，为该 Lambda 资源策略授予解密权限。"}
+{"id": 640, "letter": "D", "zh": "新建一条带 kms:decrypt 权限的 IAM 策略，并把该策略附加到该 Lambda 函数上。"}
+{"id": 640, "letter": "E", "zh": "新建一个带 kms:decrypt 权限的 IAM 角色，并把该执行角色附加到该 Lambda 函数上。"}
+{"id": 641, "letter": "A", "zh": "在管理账户中启用「成本与使用情况报告」。把报告投递到 Amazon Kinesis。用 Amazon EMR 做分析。"}
+{"id": 641, "letter": "B", "zh": "在管理账户中启用「成本与使用情况报告」。把报告投递到 Amazon S3。用 Amazon Athena 做分析。"}
+{"id": 641, "letter": "C", "zh": "为各成员账户启用「成本与使用情况报告」。把报告投递到 Amazon S3。用 Amazon Redshift 做分析。"}
+{"id": 641, "letter": "D", "zh": "为各成员账户启用「成本与使用情况报告」。把报告投递到 Amazon Kinesis。用 Amazon QuickSight 做分析。"}
+{"id": 642, "letter": "A", "zh": "给该 Auto Scaling 组挂一个 Network Load Balancer。"}
+{"id": 642, "letter": "B", "zh": "给该 Auto Scaling 组挂一个 Application Load Balancer。"}
+{"id": 642, "letter": "C", "zh": "部署一条采用加权策略的 Amazon Route 53 记录集来适当地路由流量。"}
+{"id": 642, "letter": "D", "zh": "部署一台配置了端口转发的 NAT 实例，转发到该 Auto Scaling 组中的 EC2 实例。"}
+{"id": 643, "letter": "A", "zh": "把日志存放在 Amazon S3 中，用 Amazon Athena 做分析。"}
+{"id": 643, "letter": "B", "zh": "把日志存放在 Amazon RDS 中，用数据库客户端做分析。"}
+{"id": 643, "letter": "C", "zh": "把日志存放在 Amazon OpenSearch Service 中，用 OpenSearch Service 做分析。"}
+{"id": 643, "letter": "D", "zh": "把日志存放在一个 Amazon EMR 集群中，用其支持的开源框架做基于 SQL 的分析。"}
+{"id": 644, "letter": "A", "zh": "在 AWS Certificate Manager (ACM) 控制台中，为顶级域 example.com 申请一张公有证书，并为 *.example.com 申请一张通配符证书。"}
+{"id": 644, "letter": "B", "zh": "在 AWS Certificate Manager (ACM) 控制台中，为顶级域 example.com 申请一张私有证书，并为 *.example.com 申请一张通配符证书。"}
+{"id": 644, "letter": "C", "zh": "在 AWS Certificate Manager (ACM) 控制台中，为顶级域 example.com 同时申请公有证书和私有证书。"}
+{"id": 644, "letter": "D", "zh": "先用电子邮件地址验证域名所有权，再通过在 DNS 提供商处添加所需的 DNS 记录切换到 DNS 验证。"}
+{"id": 644, "letter": "E", "zh": "通过在 DNS 提供商处添加所需的 DNS 记录来验证该域名的所有权。"}
+{"id": 645, "letter": "A", "zh": "使用由 CloudHSM 集群支撑的 AWS CloudHSM 密钥存储。"}
+{"id": 645, "letter": "B", "zh": "使用由外部密钥管理器支撑的 AWS Key Management Service (AWS KMS) 外部密钥存储。"}
+{"id": 645, "letter": "C", "zh": "使用默认的 AWS Key Management Service (AWS KMS) 托管密钥存储。"}
+{"id": 645, "letter": "D", "zh": "使用由 AWS CloudHSM 集群支撑的自定义密钥存储。"}
+{"id": 646, "letter": "A", "zh": "用 Amazon Elastic File System (Amazon EFS) 作为共享文件系统，从 Amazon EFS 访问数据集。"}
+{"id": 646, "letter": "B", "zh": "把一个 Amazon S3 存储桶挂载为共享文件系统，直接从该 S3 存储桶做后处理。"}
+{"id": 646, "letter": "C", "zh": "用 Amazon FSx for Lustre 作为共享文件系统。把该文件系统链接到一个 Amazon S3 存储桶用于后处理。"}
+{"id": 646, "letter": "D", "zh": "配置 AWS Resource Access Manager 共享一个 Amazon S3 存储桶，使其能挂载到所有实例上用于处理和后处理。"}
+{"id": 647, "letter": "A", "zh": "使用带运行状况检查的 AWS Global Accelerator。"}
+{"id": 647, "letter": "B", "zh": "使用采用地理位置路由策略的 Amazon Route 53。"}
+{"id": 647, "letter": "C", "zh": "创建一个包含多个源站的 Amazon CloudFront 分配。"}
+{"id": 647, "letter": "D", "zh": "创建一个使用基于路径路由的 Application Load Balancer。"}
+{"id": 648, "letter": "A", "zh": "使用 Amazon FSx for Lustre 暂存 (scratch) 文件系统。"}
+{"id": 648, "letter": "B", "zh": "使用 Amazon FSx for Lustre 持久化 (persistent) 文件系统。"}
+{"id": 648, "letter": "C", "zh": "使用突增吞吐量模式的 Amazon Elastic File System (Amazon EFS)。"}
+{"id": 648, "letter": "D", "zh": "使用预置吞吐量模式的 Amazon Elastic File System (Amazon EFS)。"}
+{"id": 649, "letter": "A", "zh": "配置通用型 SSD (gp2) EBS 卷存储类型，并预置 15,000 IOPS。"}
+{"id": 649, "letter": "B", "zh": "配置预置 IOPS SSD (io1) EBS 卷存储类型，并预置 15,000 IOPS。"}
+{"id": 649, "letter": "C", "zh": "配置通用型 SSD (gp3) EBS 卷存储类型，并预置 15,000 IOPS。"}
+{"id": 649, "letter": "D", "zh": "配置 EBS 磁介质卷类型以获得最大 IOPS。"}
+{"id": 650, "letter": "A", "zh": "迁移到 Amazon RDS for Microsoft SQL Server，用只读副本承担报表用途。"}
+{"id": 650, "letter": "B", "zh": "迁移到 Amazon EC2 上的 Microsoft SQL Server，用 Always On 只读副本承担报表用途。"}
+{"id": 650, "letter": "C", "zh": "迁移到 Amazon DynamoDB，用 DynamoDB 按需副本承担报表用途。"}
+{"id": 650, "letter": "D", "zh": "迁移到 Amazon Aurora MySQL，用 Aurora 只读副本承担报表用途。"}
+{"id": 651, "letter": "A", "zh": "180 天后把对象转换到 S3 One Zone-Infrequent Access (S3 One Zone-IA)，360 天后转到 S3 Glacier Instant Retrieval，5 年后转到 S3 Glacier Deep Archive。"}
+{"id": 651, "letter": "B", "zh": "180 天后把对象转换到 S3 One Zone-Infrequent Access (S3 One Zone-IA)，360 天后转到 S3 Glacier Flexible Retrieval，5 年后转到 S3 Glacier Deep Archive。"}
+{"id": 651, "letter": "C", "zh": "180 天后把对象转换到 S3 Standard-Infrequent Access (S3 Standard-IA)，360 天后转到 S3 Glacier Instant Retrieval，5 年后转到 S3 Glacier Deep Archive。"}
+{"id": 651, "letter": "D", "zh": "180 天后把对象转换到 S3 Standard-Infrequent Access (S3 Standard-IA)，360 天后转到 S3 Glacier Flexible Retrieval，5 年后转到 S3 Glacier Deep Archive。"}
+{"id": 651, "field": "stem", "zh": "某公司在一个 Amazon S3 存储桶中存放大量图片文件。前 180 天这些图片需要随时可用。接下来的 180 天里访问频率较低。360 天之后这些图片需要归档，但请求时必须能立即取得。5 年之后只有审计员才能访问这些图片，且审计员必须能在 12 小时内取回。整个过程中不能丢失图片。开发人员在前 180 天会使用 S3 Standard 存储。该开发人员需要配置一条 S3 生命周期规则。哪个方案能以最高性价比满足这些需求？"}
+{"id": 652, "letter": "A", "zh": "配置一个长期运行的集群，主节点和核心节点用按需实例，任务节点用 Spot 实例。"}
+{"id": 652, "letter": "B", "zh": "配置一个临时集群，主节点和核心节点用按需实例，任务节点用 Spot 实例。"}
+{"id": 652, "letter": "C", "zh": "配置一个临时集群，主节点用按需实例，核心节点和任务节点都用 Spot 实例。"}
+{"id": 652, "letter": "D", "zh": "配置一个长期运行的集群，主节点用按需实例，核心节点用 Spot 实例，任务节点也用 Spot 实例。"}
+{"id": 653, "letter": "A", "zh": "从管理账户把这个特定 AWS 账户移到 Organizations 中一个新的组织单位 (OU)。创建一条服务控制策略 (SCP)，要求所有资源在创建前必须带上正确的成本中心标签。把该 SCP 应用到这个新 OU 上。"}
+{"id": 653, "letter": "B", "zh": "创建一个 AWS Lambda 函数，先从该 RDS 数据库查出对应的成本中心，再给资源打标签。配置一条响应 AWS CloudTrail 事件的 Amazon EventBridge 规则来调用该 Lambda 函数。"}
+{"id": 653, "letter": "C", "zh": "创建一个 AWS CloudFormation 堆栈来部署一个 AWS Lambda 函数。配置该 Lambda 函数从该 RDS 数据库查出对应的成本中心并给资源打标签。创建一条 Amazon EventBridge 计划规则来触发该 CloudFormation 堆栈。"}
+{"id": 653, "letter": "D", "zh": "创建一个 AWS Lambda 函数，用默认值给资源打标签。配置一条响应 AWS CloudTrail 事件的 Amazon EventBridge 规则，在资源缺少成本中心标签时调用该 Lambda 函数。"}
+{"id": 653, "field": "stem", "zh": "某公司维护着一个把用户映射到成本中心的 Amazon RDS 数据库。该公司在 AWS Organizations 的一个组织中拥有多个账户。该公司需要一个方案，对该组织中某个特定 AWS 账户内创建的所有资源自动打标签，标签内容为创建该资源的用户所属的成本中心 ID。哪个方案能满足这些需求？"}
+{"id": 654, "letter": "A", "zh": "用 AWS Elastic Beanstalk 承载静态内容和该 PHP 应用。配置 Elastic Beanstalk 把其 EC2 实例部署到公有子网，并分配公有 IP 地址。"}
+{"id": 654, "letter": "B", "zh": "用 AWS Lambda 承载静态内容和该 PHP 应用。用一个 Amazon API Gateway REST API 把请求代理给该 Lambda 函数。把 API Gateway 的 CORS 配置设为响应该域名。配置 Amazon ElastiCache for Redis 来处理会话信息。"}
+{"id": 654, "letter": "C", "zh": "后端代码仍留在该 EC2 实例上。创建一个开启了多可用区的 Amazon ElastiCache for Redis 集群，并把它配置为集群模式。把前端资源复制到 Amazon S3。配置后端代码引用该 EC2 实例。"}
+{"id": 654, "letter": "D", "zh": "配置一个 Amazon CloudFront 分配，其 Amazon S3 端点指向一个配置为承载静态内容的 S3 存储桶。配置一个 Application Load Balancer，目标为运行该 PHP 应用 AWS Fargate 任务的 Amazon Elastic Container Service (Amazon ECS) 服务。配置该 PHP 应用使用一个跨多个可用区运行的 Amazon ElastiCache for Redis 集群。"}
+{"id": 655, "letter": "A", "zh": "创建一个面向公网的 Network Load Balancer，指定该应用的目标组。"}
+{"id": 655, "letter": "B", "zh": "创建一个 Gateway Load Balancer，指定该应用的目标组。"}
+{"id": 655, "letter": "C", "zh": "创建一个面向公网的 Application Load Balancer，指定该应用的目标组。"}
+{"id": 655, "letter": "D", "zh": "再创建一个目标组，并为这些 EC2 实例分配弹性 IP 地址。"}
+{"id": 655, "letter": "E", "zh": "在 AWS WAF 中创建一个 Web ACL，并把该 Web ACL 关联到该端点。"}
+{"id": 655, "field": "stem", "zh": "某公司在一个带目标组的 Auto Scaling 组内的 Amazon EC2 实例上运行一个 Web 应用。为了获得更好的用户体验，该公司把应用设计为配合会话亲和性（粘性会话）工作。该应用必须作为一个端点在互联网上公开可用，并且必须在该端点上应用 WAF 以增强安全性，同时端点上必须配置会话亲和性（粘性会话）。以下哪几步组合能满足这些需求？（选择两项。）"}
+{"id": 656, "letter": "A", "zh": "把图片存放在 Amazon Elastic Block Store (Amazon EBS) 中。使用运行在 Amazon EC2 上的 Web 服务器。"}
+{"id": 656, "letter": "B", "zh": "把图片存放在 Amazon Elastic File System (Amazon EFS) 中。使用运行在 Amazon EC2 上的 Web 服务器。"}
+{"id": 656, "letter": "C", "zh": "把图片存放在 Amazon S3 Standard 中。用 S3 Standard 通过静态网站直接分发图片。"}
+{"id": 656, "letter": "D", "zh": "把图片存放在 Amazon S3 Standard-Infrequent Access (S3 Standard-IA) 中。用 S3 Standard-IA 通过静态网站直接分发图片。"}
+{"id": 657, "letter": "A", "zh": "在该组织的管理账户中创建 VPC 安全组。需要更新 CIDR 范围时就更新这些安全组。"}
+{"id": 657, "letter": "B", "zh": "创建一个包含这些 CIDR 列表的 VPC 客户托管前缀列表。用 AWS Resource Access Manager (AWS RAM) 把该前缀列表共享到整个组织。在组织内各处的安全组中引用该前缀列表。"}
+{"id": 657, "letter": "C", "zh": "创建一个 AWS 托管前缀列表。用 AWS Security Hub 策略在整个组织强制执行安全组更新。用一个 AWS Lambda 函数在 CIDR 范围变化时自动更新前缀列表。"}
+{"id": 657, "letter": "D", "zh": "在一个中央管理 AWS 账户中创建安全组。为整个组织创建一条 AWS Firewall Manager 通用安全组策略。在该策略中把先前创建的安全组选为主安全组。"}
+{"id": 657, "field": "stem", "zh": "某公司在 AWS Organizations 的一个组织中拥有多个 AWS 账户，供不同业务部门使用。该公司在全球有多个办公地点。该公司需要在整个组织范围内更新安全组规则，以放通新办公地点的 CIDR 范围或移除旧的 CIDR 范围。该公司希望集中管理安全组规则，以尽量减少更新 CIDR 范围带来的管理开销。哪个方案能以最高性价比满足这些需求？"}
+{"id": 658, "letter": "A", "zh": "把计算优化型 EC2 实例部署到一个集群 (cluster) 置放群组中。"}
+{"id": 658, "letter": "B", "zh": "把计算优化型 EC2 实例部署到一个分区 (partition) 置放群组中。"}
+{"id": 658, "letter": "C", "zh": "把这些 EC2 实例挂到一个 Amazon FSx for Lustre 文件系统上。"}
+{"id": 658, "letter": "D", "zh": "把这些 EC2 实例挂到一个 Amazon FSx for OpenZFS 文件系统上。"}
+{"id": 658, "letter": "E", "zh": "把这些 EC2 实例挂到一个 Amazon FSx for NetApp ONTAP 文件系统上。"}
+{"id": 658, "field": "stem", "zh": "某公司用本地的网络附加存储 (NAS) 系统为其高性能计算 (HPC) 工作负载提供文件共享。该公司想把这些对延迟敏感的 HPC 工作负载及其存储迁移到 AWS 云。该文件系统必须能同时提供 NFS 和 SMB 多协议访问。以下哪几项组合能以最低延迟满足这些需求？（选择两项。）"}
+{"id": 659, "letter": "A", "zh": "带 VPC 端点的 AWS DataSync"}
+{"id": 659, "letter": "B", "zh": "AWS Direct Connect"}
+{"id": 659, "letter": "C", "zh": "AWS Snowball Edge Storage Optimized"}
+{"id": 659, "letter": "D", "zh": "AWS Storage Gateway"}
+{"id": 660, "letter": "A", "zh": "配置一个 Application Load Balancer 把流量正确地分发到这些实例。"}
+{"id": 660, "letter": "B", "zh": "为该 Auto Scaling 组配置一条按内存利用率启动新实例的动态伸缩策略。"}
+{"id": 660, "letter": "C", "zh": "为该 Auto Scaling 组配置一条按 CPU 利用率启动新实例的动态伸缩策略。"}
+{"id": 660, "letter": "D", "zh": "为该 Auto Scaling 组配置一条计划伸缩策略，在高峰时段之前启动新实例。"}
+{"id": 661, "letter": "A", "zh": "为该数据库使用带目标组配置和连接池的 Amazon DynamoDB。改造应用改用 DynamoDB 端点。"}
+{"id": 661, "letter": "B", "zh": "为该数据库使用带目标组的 Amazon RDS Proxy。改造应用改用 RDS Proxy 端点。"}
+{"id": 661, "letter": "C", "zh": "用一个运行在 Amazon EC2 上的自定义代理作为数据库的中间层。改造应用改用该自定义代理端点。"}
+{"id": 661, "letter": "D", "zh": "用一个 AWS Lambda 函数为该数据库提供带目标组配置的连接池。改造应用改用该 Lambda 函数。"}
+{"id": 662, "letter": "A", "zh": "用 Amazon CloudWatch Logs 中的日志监控 Amazon EBS 的存储使用率。用 Amazon EBS 弹性卷缩小这些 EBS 卷。"}
+{"id": 662, "letter": "B", "zh": "用自定义脚本监控空间使用情况。用 Amazon EBS 弹性卷缩小这些 EBS 卷。"}
+{"id": 662, "letter": "C", "zh": "删除所有过期和未使用的快照以降低快照成本。"}
+{"id": 662, "letter": "D", "zh": "删除所有非必要的快照。用 Amazon Data Lifecycle Manager 按公司的快照策略要求来创建和管理快照。"}
+{"id": 663, "letter": "A", "zh": "新建一个 AWS Key Management Service (AWS KMS) 客户托管密钥，用它同时加密该 S3 存储桶和该 RDS for MySQL 数据库。确保该 KMS 密钥策略中包含 ECS 任务执行角色的加密和解密权限。"}
+{"id": 663, "letter": "B", "zh": "创建一个 AWS Key Management Service (AWS KMS) AWS 托管密钥，用它同时加密该 S3 存储桶和该 RDS for MySQL 数据库。确保该 S3 存储桶策略把 ECS 任务执行角色指定为使用者。"}
+{"id": 663, "letter": "C", "zh": "创建一条把存储桶访问限制给 ECS 任务执行角色的 S3 存储桶策略。为 Amazon RDS for MySQL 创建一个 VPC 端点。更新 RDS for MySQL 安全组，只允许来自 ECS 集群产生任务的那些子网的访问。"}
+{"id": 663, "letter": "D", "zh": "为 Amazon RDS for MySQL 创建一个 VPC 端点。更新 RDS for MySQL 安全组，只允许来自 ECS 集群产生任务的那些子网的访问。为 Amazon S3 创建一个 VPC 端点。更新该 S3 存储桶策略，只允许来自该 S3 VPC 端点的访问。"}
+{"id": 664, "letter": "A", "zh": "配置一个 Elastic Beanstalk 环境，使用无限模式的可突增性能实例。把该环境配置为按请求数伸缩。"}
+{"id": 664, "letter": "B", "zh": "配置一个 Elastic Beanstalk 环境，使用计算优化型实例。把该环境配置为按请求数伸缩。"}
+{"id": 664, "letter": "C", "zh": "配置一个 Elastic Beanstalk 环境，使用计算优化型实例。把该环境配置为按计划伸缩。"}
+{"id": 664, "letter": "D", "zh": "配置一个 Elastic Beanstalk 环境，使用无限模式的可突增性能实例。把该环境配置为按预测指标伸缩。"}
+{"id": 665, "letter": "A", "zh": "用 AWS Organizations 搭建基础设施，用 AWS Config 跟踪变更。"}
+{"id": 665, "letter": "B", "zh": "用 AWS CloudFormation 搭建基础设施，用 AWS Config 跟踪变更。"}
+{"id": 665, "letter": "C", "zh": "用 AWS Organizations 搭建基础设施，用 AWS Service Catalog 跟踪变更。"}
+{"id": 665, "letter": "D", "zh": "用 AWS CloudFormation 搭建基础设施，用 AWS Service Catalog 跟踪变更。"}
+{"id": 666, "letter": "A", "zh": "在每个使用中的可用区各预置一个互联网网关。"}
+{"id": 666, "letter": "B", "zh": "把数据库迁移到多可用区的 Amazon RDS for MySQL 数据库实例。"}
+{"id": 666, "letter": "C", "zh": "把数据库迁移到 Amazon DynamoDB，并启用 DynamoDB 自动伸缩。"}
+{"id": 666, "letter": "D", "zh": "用 AWS DataSync 在多台 EC2 实例之间同步数据库数据。"}
+{"id": 666, "letter": "E", "zh": "创建一个 Application Load Balancer，把流量分发到一个跨两个可用区的 EC2 实例 Auto Scaling 组。"}
+{"id": 667, "letter": "A", "zh": "为 Amazon S3 创建网关端点。通过这些网关端点从该区域和本地位置安全访问数据。"}
+{"id": 667, "letter": "B", "zh": "在 AWS Transit Gateway 中创建一个网关，以便从该区域和本地位置安全访问 Amazon S3。"}
+{"id": 667, "letter": "C", "zh": "为 Amazon S3 创建接口端点。通过这些接口端点从该区域和本地位置安全访问数据。"}
+{"id": 667, "letter": "D", "zh": "用一个 AWS Key Management Service (AWS KMS) 密钥从该区域和本地位置安全访问数据。"}
+{"id": 668, "letter": "A", "zh": "创建一个 IAM 组，其条件式 Allow 策略要求创建资源时必须指定应用名称标签。"}
+{"id": 668, "letter": "B", "zh": "创建一个跨账户角色，其 Deny 策略拒绝任何带应用名称标签的资源。"}
+{"id": 668, "letter": "C", "zh": "在 AWS Resource Groups 中创建一个资源组，用来校验所有账户中的所有资源是否都打了标签。"}
+{"id": 668, "letter": "D", "zh": "在 Organizations 中创建一条标签策略，其中列出允许的应用名称。"}
+{"id": 668, "field": "stem", "zh": "某公司在 AWS Organizations 中新建了一个组织，其中为公司的开发团队设立了多个账户。开发团队成员使用 AWS IAM Identity Center (AWS Single Sign-On) 访问这些账户。对该公司的每个应用，开发团队都必须用预先定义好的应用名称给创建的资源打标签。解决方案架构师需要设计一个方案，让开发团队只有在应用名称标签取值属于已批准范围时才能创建资源。哪个方案能满足这些需求？"}
+{"id": 669, "letter": "A", "zh": "用 Amazon EventBridge 定时调度一个自定义 AWS Lambda 函数，每 30 天轮换一次密码。"}
+{"id": 669, "letter": "B", "zh": "用 AWS CLI 的 modify-db-instance 命令来修改密码。"}
+{"id": 669, "letter": "C", "zh": "把 AWS Secrets Manager 与 Amazon RDS for PostgreSQL 集成，实现密码自动轮换。"}
+{"id": 669, "letter": "D", "zh": "把 AWS Systems Manager Parameter Store 与 Amazon RDS for PostgreSQL 集成，实现密码自动轮换。"}
+{"id": 670, "letter": "A", "zh": "选择按需模式，并适当调整读写容量单位。"}
+{"id": 670, "letter": "B", "zh": "选择预置模式，并适当调整读写容量单位。"}
+{"id": 670, "letter": "C", "zh": "购买 1 年期的 DynamoDB 预留容量。"}
+{"id": 670, "letter": "D", "zh": "购买 3 年期的 DynamoDB 预留容量。"}
+{"id": 671, "letter": "A", "zh": "用 AWS Budgets 模板创建一个零支出预算。"}
+{"id": 671, "letter": "B", "zh": "在 AWS 账单与成本管理控制台中创建一个 AWS Cost Anomaly Detection 监控器。"}
+{"id": 671, "letter": "C", "zh": "用 AWS Pricing Calculator 为当前运行的工作负载创建定价明细估算。"}
+{"id": 671, "letter": "D", "zh": "用 Amazon CloudWatch 监控成本并识别异常支出。"}
+{"id": 671, "field": "stem", "zh": "某公司在 Amazon EC2 实例上运行其应用。该公司会定期对 AWS 成本做财务评估，最近发现了异常支出。该公司需要一个能防范异常支出的方案：该方案必须监控成本，并在出现异常支出时通知相关负责人。哪个方案能满足这些需求？"}
+{"id": 672, "letter": "A", "zh": "在 Spark 目录中创建外部表。在 AWS Glue 中配置作业来查询数据。"}
+{"id": 672, "letter": "B", "zh": "配置一个 AWS Glue 爬网程序来爬取数据。配置 Amazon Athena 来查询数据。"}
+{"id": 672, "letter": "C", "zh": "在 Hive 元数据存储中创建外部表。在 Amazon EMR 中配置 Spark 作业来查询数据。"}
+{"id": 672, "letter": "D", "zh": "配置一个 AWS Glue 爬网程序来爬取数据。配置 Amazon Kinesis Data Analytics 用 SQL 查询数据。"}
+{"id": 673, "letter": "A", "zh": "用 AWS DataSync 把 SMB 文件服务器上超过 7 天的数据复制到 AWS。"}
+{"id": 673, "letter": "B", "zh": "创建一个 Amazon S3 File Gateway 来扩充该公司的存储空间。创建一条 S3 生命周期策略，7 天后把数据转换到 S3 Glacier Deep Archive。"}
+{"id": 673, "letter": "C", "zh": "创建一个 Amazon FSx File Gateway 来扩充该公司的存储空间。创建一条 Amazon S3 生命周期策略，7 天后转换数据。"}
+{"id": 673, "letter": "D", "zh": "为每位用户配置 Amazon S3 访问权限。创建一条 S3 生命周期策略，7 天后把数据转换到 S3 Glacier Flexible Retrieval。"}
+{"id": 674, "letter": "A", "zh": "为该数据库实例开启自动伸缩。"}
+{"id": 674, "letter": "B", "zh": "为该数据库实例创建一个只读副本。配置应用把读取流量发送到该只读副本。"}
+{"id": 674, "letter": "C", "zh": "把该数据库实例改为多可用区数据库实例部署。配置应用把读取流量发送到备用数据库实例。"}
+{"id": 674, "letter": "D", "zh": "创建一个 Amazon ElastiCache 集群。配置应用把查询结果缓存到该 ElastiCache 集群中。"}
+{"id": 674, "letter": "E", "zh": "配置该 Auto Scaling 组的子网，确保 EC2 实例与该数据库实例预置在同一个可用区。"}
+{"id": 674, "field": "stem", "zh": "某公司在一个 Auto Scaling 组中的 Amazon EC2 实例上运行一个 Web 应用。该应用使用运行在 Amazon RDS for PostgreSQL 数据库实例上的数据库。流量增加时该应用变慢，高流量时段数据库承受着很重的读取负载。解决方案架构师应该采取哪几项措施来解决这些性能问题？（选择两项。）"}
+{"id": 675, "letter": "A", "zh": "创建一个有删除快照权限的 IAM 角色，把该角色附加到一台新的 EC2 实例上。从这台新 EC2 实例用 AWS CLI 删除快照。"}
+{"id": 675, "letter": "B", "zh": "创建一条拒绝删除快照的 IAM 策略，把该策略附加到存储管理员用户上。"}
+{"id": 675, "letter": "C", "zh": "给快照打上标签。在回收站 (Recycle Bin) 中为带这些标签的 EBS 快照创建保留规则。"}
+{"id": 675, "letter": "D", "zh": "锁定这些 EBS 快照以防止被删除。"}
+{"id": 676, "letter": "A", "zh": "在 Amazon CloudWatch Logs 中创建一个日志组。配置 VPC 流日志把日志数据发送到该日志组。用 Amazon Kinesis Data Streams 把日志从该日志组流式传输到 OpenSearch Service。"}
+{"id": 676, "letter": "B", "zh": "在 Amazon CloudWatch Logs 中创建一个日志组。配置 VPC 流日志把日志数据发送到该日志组。用 Amazon Kinesis Data Firehose 把日志从该日志组流式传输到 OpenSearch Service。"}
+{"id": 676, "letter": "C", "zh": "在 AWS CloudTrail 中创建一个跟踪。配置 VPC 流日志把日志数据发送到该跟踪。用 Amazon Kinesis Data Streams 把日志从该跟踪流式传输到 OpenSearch Service。"}
+{"id": 676, "letter": "D", "zh": "在 AWS CloudTrail 中创建一个跟踪。配置 VPC 流日志把日志数据发送到该跟踪。用 Amazon Kinesis Data Firehose 把日志从该跟踪流式传输到 OpenSearch Service。"}
+{"id": 676, "field": "stem", "zh": "某公司的应用使用部署在一个 Amazon VPC 中的 Network Load Balancer、Auto Scaling 组、Amazon EC2 实例和数据库。该公司希望准实时地捕获其 Amazon VPC 中进出各网络接口的流量信息，并把这些信息发送到 Amazon OpenSearch Service 做分析。哪个方案能满足这些需求？"}
+{"id": 677, "letter": "A", "zh": "创建一个只包含 Spot 实例的托管节点组。"}
+{"id": 677, "letter": "B", "zh": "创建两个托管节点组：一个用按需实例预置，另一个用 Spot 实例预置。"}
+{"id": 677, "letter": "C", "zh": "创建一个使用 Spot 实例启动配置的 Auto Scaling 组。配置用户数据把节点加入该 EKS 集群。"}
+{"id": 677, "letter": "D", "zh": "创建一个只包含按需实例的托管节点组。"}
+{"id": 678, "letter": "A", "zh": "使用默认的采用 Amazon S3 托管加密密钥的服务器端加密（SSE-S3）来存储这些敏感数据。"}
+{"id": 678, "letter": "B", "zh": "用 AWS Key Management Service (AWS KMS) 创建一个客户托管密钥。用这个新密钥以采用 AWS KMS 密钥的服务器端加密（SSE-KMS）来加密这些 S3 对象。"}
+{"id": 678, "letter": "C", "zh": "用 AWS Key Management Service (AWS KMS) 创建一个 AWS 托管密钥。用这个新密钥以采用 AWS KMS 密钥的服务器端加密（SSE-KMS）来加密这些 S3 对象。"}
+{"id": 678, "letter": "D", "zh": "把 S3 对象下载到一台 Amazon EC2 实例上，用客户托管密钥加密后再上传回 Amazon S3。"}
+{"id": 679, "letter": "A", "zh": "创建一个启用了 S3 对象锁定的 S3 存储桶。"}
+{"id": 679, "letter": "B", "zh": "创建一个启用了对象版本控制的 S3 存储桶。"}
+{"id": 679, "letter": "C", "zh": "为这些对象配置 30 天的默认保留期。"}
+{"id": 679, "letter": "D", "zh": "配置一条 S3 生命周期策略，把这些对象保护 30 天。"}
+{"id": 679, "letter": "E", "zh": "配置一条 S3 生命周期策略，让这些对象在 30 天后过期。"}
+{"id": 679, "letter": "F", "zh": "配置备份方案给这些对象打上 30 天保留期的标签。"}
+{"id": 680, "letter": "A", "zh": "为目标 S3 存储桶和该 EFS 文件系统各创建一个 AWS DataSync 位置。为目标 S3 存储桶和该 EFS 文件系统各创建一个任务。把传输模式设为只传输发生变化的数据。"}
+{"id": 680, "letter": "B", "zh": "创建一个 AWS Lambda 函数，把该文件系统挂载到函数上。设置 S3 事件通知，在 Amazon S3 中有文件创建或变更时调用该函数。配置该函数把文件复制到该文件系统和目标 S3 存储桶。"}
+{"id": 680, "letter": "C", "zh": "为目标 S3 存储桶和该 EFS 文件系统各创建一个 AWS DataSync 位置。为目标 S3 存储桶和该 EFS 文件系统各创建一个任务。把传输模式设为传输全部数据。"}
+{"id": 680, "letter": "D", "zh": "在与该文件系统相同的 VPC 中启动一台 Amazon EC2 实例并挂载该文件系统。编写脚本定期把源 S3 存储桶中发生变化的所有对象同步到目标 S3 存储桶和已挂载的文件系统。"}
+{"id": 680, "field": "stem", "zh": "解决方案架构师需要把文件从一个 Amazon S3 存储桶复制到一个 Amazon Elastic File System (Amazon EFS) 文件系统以及另一个 S3 存储桶。这些文件必须持续复制。原始 S3 存储桶中会不断新增文件。只有当源文件发生变化时，才应覆盖已复制的文件。哪个方案能以最小的运维开销满足这些需求？"}
+{"id": 681, "letter": "A", "zh": "创建一个客户托管密钥，用它加密这些 EBS 卷。"}
+{"id": 681, "letter": "B", "zh": "用 AWS 托管密钥加密这些 EBS 卷，并用该密钥配置自动密钥轮换。"}
+{"id": 681, "letter": "C", "zh": "创建一个导入了密钥材料的外部 KMS 密钥，用它加密这些 EBS 卷。"}
+{"id": 681, "letter": "D", "zh": "用 AWS 拥有的密钥加密这些 EBS 卷。"}
+{"id": 682, "letter": "A", "zh": "使用一条只允许用户创建加密 Amazon Elastic Block Store (Amazon EBS) 卷的 IAM 策略。用 AWS Config 和 AWS Systems Manager 自动检测并修复未加密的 EBS 卷。"}
+{"id": 682, "letter": "B", "zh": "用 AWS Key Management Service (AWS KMS) 管理对加密 Amazon Elastic Block Store (Amazon EBS) 卷的访问。用 AWS Lambda 和 Amazon EventBridge 自动检测并修复未加密的 EBS 卷。"}
+{"id": 682, "letter": "C", "zh": "用 Amazon Macie 检测未加密的 Amazon Elastic Block Store (Amazon EBS) 卷。用 AWS Systems Manager Automation 规则自动加密现有和新建的 EBS 卷。"}
+{"id": 682, "letter": "D", "zh": "用 Amazon Inspector 检测未加密的 Amazon Elastic Block Store (Amazon EBS) 卷。用 AWS Systems Manager Automation 规则自动加密现有和新建的 EBS 卷。"}
+{"id": 683, "letter": "A", "zh": "把 Web 层迁移到一个 Application Load Balancer 之后 Auto Scaling 组中的 Amazon EC2 实例上。"}
+{"id": 683, "letter": "B", "zh": "把数据库迁移到一个 Network Load Balancer 之后 Auto Scaling 组中的 Amazon EC2 实例上。"}
+{"id": 683, "letter": "C", "zh": "把数据库迁移到 Amazon RDS 多可用区部署。"}
+{"id": 683, "letter": "D", "zh": "把 Web 层迁移到一个 AWS Lambda 函数。"}
+{"id": 683, "letter": "E", "zh": "把数据库迁移到一张 Amazon DynamoDB 表。"}
+{"id": 684, "letter": "A", "zh": "把这些应用部署在 eu-central-1，并把该公司的 VPC 从 eu-central-1 延伸到 Amazon CloudFront 的某个边缘站点。"}
+{"id": 684, "letter": "B", "zh": "把该公司的 VPC 从 eu-central-1 延伸到选定的 AWS Local Zone，并把这些应用部署在该 Local Zone 中。"}
+{"id": 684, "letter": "C", "zh": "把这些应用部署在 eu-central-1，并把该公司的 VPC 从 eu-central-1 延伸到 Amazon CloudFront 的区域边缘缓存。"}
+{"id": 684, "letter": "D", "zh": "把该公司的 VPC 从 eu-central-1 延伸到选定的 AWS Wavelength Zone，并把这些应用部署在该 Wavelength Zone 中。"}
+{"id": 232, "field": "stem", "zh": "某公司在 Amazon EC2 实例上为客户运行演示环境。每个环境都隔离在各自的 VPC 中。该公司的运维团队需要在有人通过 RDP 或 SSH 接入某个环境时收到通知。"}
+{"id": 460, "field": "stem", "zh": "某公司希望在其软件即服务 (SaaS) 应用 Salesforce 账户与 Amazon S3 之间安全地交换数据。该公司必须使用 AWS Key Management Service (AWS KMS) 客户托管密钥 (CMK) 对静态数据加密，同时还必须对传输中的数据加密。该公司已为该 Salesforce 账户启用了 API 访问。"}
+{"id": 467, "field": "stem", "zh": "某公司使用 AWS Organizations。一个成员账户购买了计算类节省计划。由于该成员账户内工作负载发生变化，该账户已无法充分享受这份计算类节省计划承诺额带来的优惠。该公司使用的算力不到已购买量的 50%。"}
+{"id": 473, "field": "stem", "zh": "某公司在一个 Application Load Balancer (ALB) 之后的 Amazon EC2 实例上托管一个网站。该网站提供静态内容。网站流量正在增长，该公司担心成本随之上升。"}

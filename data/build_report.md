@@ -13,15 +13,15 @@
 
 | 项 | 已译 | 总数 | 覆盖率 |
 |---|---|---|---|
-| 题干（中） | 670 | 684 | 98.0% |
-| **选项（中）** | **2402** | **2831** | **84.8%** |
+| 题干（中） | 684 | 684 | 100.0% |
+| **选项（中）** | **2827** | **2831** | **99.9%** |
 | 解析（英） | 432 | 684 | 63.2% |
 | 解析（中） | 431 | 684 | 63.0% |
 
 ## 分布统计
 
 - `answer_source`：regex_letter 626，unresolved 42，fuzzy_match 16
-- `stem_zh_source`：solution_paraphrase 638，pdf_translation 32，null 14
+- `stem_zh_source`：solution_paraphrase 638，pdf_translation 46
 - 题型：single 598，multi 86
 - 选项数：ABCD 599，ABCDE 75，ABCDEF 10
 - `domain`：null 250，secure 156，resilient 148，performant 81，cost 49
@@ -60,14 +60,6 @@
 
 ## 未译选项清单
 
-共 429 条待译，详见 `data/i18n_todo.jsonl`。按题号聚合：
+共 4 条待译，详见 `data/i18n_todo.jsonl`。按题号聚合：
 
-`477:ABCD  582:D  583:ABCD  584:ABCD  585:ABCD  586:ABCD  587:ABCD  588:ABCD  589:ABCD  590:ABCD  591:ABCD  592:ABCD`
-`593:ABCD  594:ABCD  595:ABCD  596:ABCD  597:ABCD  598:ABCDEF  599:ABCDEF  600:ABCD  601:ABCD  602:ABCD  603:ABCD  604:ABCD`
-`605:ABCD  606:ABCD  607:ABCD  608:ABCD  609:ABCD  610:ABCD  611:ABCD  612:ABCD  613:ABCD  614:ABCD  615:ABCD  616:ABCD`
-`617:ABCDE  618:ABCD  619:ABCD  620:ABCD  621:ABCD  622:ABCDE  623:ABCD  624:ABCD  625:ABCD  626:ABCD  627:ABCD  628:ABCD`
-`629:ABCD  630:ABCD  631:ABCD  632:ABCD  633:ABCD  634:ABCD  635:ABCD  636:ABCD  637:ABCDE  638:ABCD  639:ABCD  640:ABCDE`
-`641:ABCD  642:ABCD  643:ABCD  644:ABCDE  645:ABCD  646:ABCD  647:ABCD  648:ABCD  649:ABCD  650:ABCD  651:ABCD  652:ABCD`
-`653:ABCD  654:ABCD  655:ABCDE  656:ABCD  657:ABCD  658:ABCDE  659:ABCD  660:ABCD  661:ABCD  662:ABCD  663:ABCD  664:ABCD`
-`665:ABCD  666:ABCDE  667:ABCD  668:ABCD  669:ABCD  670:ABCD  671:ABCD  672:ABCD  673:ABCD  674:ABCDE  675:ABCD  676:ABCD`
-`677:ABCD  678:ABCD  679:ABCDEF  680:ABCD  681:ABCD  682:ABCD  683:ABCDE  684:ABCD`
+`477:ABCD`
