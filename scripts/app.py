@@ -82,12 +82,24 @@ def today_str():
 
 
 def atomic_write_json(path, obj):
-    """先写 .tmp 再 os.replace()，进程被杀也不会留下半截 JSON。"""
+    """先写 .tmp 再 os.replace()，进程被杀也不会留下半截 JSON。
+
+    临时文件名带上 pid + 随机后缀：ThreadingHTTPServer 下两个请求同时写同一个
+    路径时，固定的 `path + ".tmp"` 会互相踩 —— 后到的 os.replace 找不到文件抛
+    FileNotFoundError（HTTP 500、这次写入被吞），并发再高一点还能落出半截 JSON。
+    """
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    tmp = path + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(obj, f, ensure_ascii=False, indent=1)
-    os.replace(tmp, path)
+    tmp = "%s.%d.%s.tmp" % (path, os.getpid(), uuid.uuid4().hex[:8])
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(obj, f, ensure_ascii=False, indent=1)
+        os.replace(tmp, path)
+    except Exception:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        raise
 
 
 def read_json(path, default):
@@ -217,7 +229,16 @@ BANK = None
 # 只在明确是「选项引用」的语境下替换字母，避免把 "A company" 的 A 改掉。
 # 中英文里出现过的写法：Option C / Options A / Correct answer A: / Answer: B /
 # 选项 A / （选项 A）/ 正确答案 A：/ 答案：B / 行首 "B. " / "C)" 。
+
+# 字母之间的连接符。解析里的并列写法实测有：`Option A/B`、`Options A and B`、
+# `Options A, B`、`(A, B)`、`（选项 A、B）`、`选项 A 和 B`。
+# 原先只吃「前缀 + 一个字母」，后半截字母原样留下 —— 而它在本次乱序里已经属于
+# 另一个选项，半对半错的引用比完全不替换更难发现（651 的解析被改成过 `Option B/B`）。
+_CONN = r"\s*(?:[,/、&]\s*(?:and\b|or\b)?|and\b|or\b|和|与|及|或)\s*"
+_LETTER = r"[A-F](?![A-Za-z])"
+
 _RE_OPTREF = re.compile(
+    # ① 明确的选项引用前缀 + 一个字母或一串并列字母
     r"(?P<pfx>"
     r"\bOptions?\s+"
     r"|\bCorrect\s+answers?\s*[:：]?\s*"
@@ -225,10 +246,17 @@ _RE_OPTREF = re.compile(
     r"|正确答案\s*[:：]?\s*"
     r"|答案\s*[:：]\s*"
     r"|选项\s*"
-    r")(?P<L1>[A-F])(?![A-Za-z])"
+    r")(?P<run>" + _LETTER + r"(?:" + _CONN + _LETTER + r")*)"
+    # ② 括号里只有字母和分隔符：(A, B) / （A、B）。里面没有别的内容，
+    #    不可能误伤 `A company` 那类裸字母。
+    r"|(?P<par>[（(]\s*[A-F](?:\s*[,/、&]\s*[A-F])+\s*[）)])"
+    # ③ 裸字母后紧跟右括号：C) / A）
     r"|(?<![A-Za-z0-9])(?P<L2>[A-F])(?=\s*[\)）])"
+    # ④ 行首 "B. " / "C、"
     r"|^(?P<L3>[A-F])(?=[\.、]\s)",
     re.M)
+
+_RE_ONE_LETTER = re.compile(r"[A-F]")
 
 
 def remap_letters(text, mapping):
@@ -236,9 +264,15 @@ def remap_letters(text, mapping):
     if not text:
         return text
 
+    def sub_all(s):
+        """只替换片段里的 A–F。连接词 and / or / 和 都是小写或中文，不会被误伤。"""
+        return _RE_ONE_LETTER.sub(lambda m: mapping.get(m.group(0), m.group(0)), s)
+
     def rep(m):
-        if m.group("L1"):
-            return m.group("pfx") + mapping.get(m.group("L1"), m.group("L1"))
+        if m.group("run"):
+            return m.group("pfx") + sub_all(m.group("run"))
+        if m.group("par"):
+            return sub_all(m.group("par"))
         if m.group("L2"):
             return mapping.get(m.group("L2"), m.group("L2"))
         return mapping.get(m.group("L3"), m.group("L3"))
@@ -254,15 +288,28 @@ def render_question(q, seed, reveal=False, only_letters=None):
     在双语并排下几乎看不出来。
     """
     opts = [dict(o) for o in q["options"]]
-    if only_letters:
-        opts = [o for o in opts if o["letter"] in only_letters]
     rng = random.Random(seed)
     rng.shuffle(opts)
+
+    # only_letters（R2 干扰项狙击）只决定**展示哪几个选项**，字母映射必须覆盖
+    # **全部**选项。原先是先过滤再编号，letter_map 里只有被保留的那两三个字母，
+    # 而 remap_letters 是 mapping.get(L, L) —— 未展示选项的原始字母原样留在解析里，
+    # 正好可能等于某个展示项被重新分配到的新字母。实测：屏幕 A 是正确答案，
+    # 解析里却写着「Option A is incorrect」，指的其实是那个没展示的原始 A。
+    # 现在展示项排前面拿 A、B…，未展示项排后面拿剩下的字母：解析里对未展示选项的
+    # 引用会指向屏幕上不存在的字母（无害），但绝不会误指某个展示项（有害）。
+    n_shown = len(opts)
+    if only_letters:
+        keep = [o for o in opts if o["letter"] in only_letters]
+        drop = [o for o in opts if o["letter"] not in only_letters]
+        opts, n_shown = keep + drop, len(keep)
 
     orig2new, shown = {}, []
     for i, o in enumerate(opts):
         new_letter = chr(ord("A") + i)
         orig2new[o["letter"]] = new_letter
+        if i >= n_shown:
+            continue
         shown.append({
             "letter": new_letter,
             "orig": o["letter"],
@@ -343,6 +390,38 @@ def qstate(prog, qid):
     return prog["questions"].setdefault(str(qid), default_qstate())
 
 
+def as_qid(v):
+    """把请求体里的题号转成 int，转不动返回 None（不抛异常）。"""
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def days_to_exam(settings):
+    """距考试还有几天；没设 exam_date 或格式坏了返回 None。"""
+    ed = settings.get("exam_date")
+    if not ed:
+        return None
+    try:
+        return (date.fromisoformat(ed) - date.today()).days
+    except Exception:
+        return None
+
+
+def exam_phase(settings):
+    """返回 (sprint, final48)，§4.2.7 的两个阶段。
+
+    首页横幅和出题逻辑必须走同一个判据 —— 原先只有 api_bootstrap 算了这两个标志
+    拿去渲染横幅，build_session 和 pick_review_mode 根本不读 exam_date，
+    于是页面上写着「冲刺模式：只出 box≤3 与假掌握」，出题却一切照旧。
+    """
+    left = days_to_exam(settings)
+    if left is None:
+        return False, False
+    return 0 < left <= 7, 0 < left <= 2
+
+
 def interval_days(box, settings):
     """box → 间隔天数。设了 exam_date 就压缩，保证考前每题还能再过一遍。"""
     base = BOX_INTERVALS[max(0, min(box, 5)) - 1] if box >= 1 else 1
@@ -370,29 +449,48 @@ def apply_result(prog, settings, qid, correct, confidence, picked_orig):
     st["high_conf_error"] = False
     st["false_mastery"] = st.get("false_mastery", False)
 
-    if correct:
+    # 「对 + 蒙的」按答错处理（§4.2.3 表格第三行）。只做到「box 不升」是不够的：
+    #
+    #   · 若照样计入 correct / correct_dates，连着三天各蒙对一次就凑齐了「≥3 次答对、
+    #     跨 ≥3 个不同日期」，第四次「对+有把握」当场判 mastered —— §4.2.6 明令禁止的
+    #     「答对一次就算掌握」就这么被绕开了，全程只有 1 次真正的「对+有把握」。
+    #   · 若 last_result 仍记 correct、next_due 又按**当前** box 全额推后
+    #     （box5 → 21 天，比答错的 1 天长 20 倍），它在 build_session 的热身候选条件
+    #     `is_due(st) or last_result == "wrong"` 里两边都不满足，21 天内一次都进不了
+    #     热身段 —— 而 §4.2.5 把假掌握列为热身第 2 优先、称其「最容易在考场翻车」。
+    #
+    # 所以这里：box 保持不动（不升也不降），但计数、last_result、间隔全部按答错走。
+    # 只有 st["wrong"] 不加 —— 那个数字在错题本上显示为「错 N / 对 M」，
+    # 用户确实选对了，记成答错会看不懂；假掌握有 false_mastery 这个专门的标记。
+    lucky_guess = correct and confidence == "guess"
+    due_box = st.get("box", 1)  # 算 next_due 用的 box，不一定等于 st["box"]
+
+    if correct and not lucky_guess:
         st["correct"] += 1
         st["last_result"] = "correct"
         st["streak"] = st.get("streak", 0) + 1
         d = today_str()
         if d not in st["correct_dates"]:
             st["correct_dates"].append(d)
-        if confidence == "guess":
-            # 对 + 蒙的 → 按答错处理，box 不升，记为「假掌握」
-            st["false_mastery"] = True
-            factor = 1.0
-        elif confidence == "unsure":
-            st["box"] = min(5, st["box"] + 1)
+        st["box"] = min(5, st["box"] + 1)
+        due_box = st["box"]
+        if confidence == "unsure":
             factor = 0.5  # 升 box 但 next_due 折半
         else:
-            st["box"] = min(5, st["box"] + 1)
             st["false_mastery"] = False
             factor = 1.0
+    elif lucky_guess:
+        st["last_result"] = "wrong"
+        st["streak"] = 0
+        st["false_mastery"] = True
+        due_box = 1  # 间隔按 box 1 算，和答错一致；box 本身不动
+        factor = 1.0
     else:
         st["wrong"] += 1
         st["last_result"] = "wrong"
         st["streak"] = 0
         st["box"] = 1
+        due_box = 1
         factor = 1.0
         if confidence == "sure":
             # 错 + 有把握 → 置顶到下次会话热身段第一位
@@ -401,7 +499,7 @@ def apply_result(prog, settings, qid, correct, confidence, picked_orig):
             for L in picked_orig:
                 st["wrong_picks"][L] = st["wrong_picks"].get(L, 0) + 1
 
-    days = interval_days(st["box"], settings) * factor
+    days = interval_days(due_box, settings) * factor
     st["next_due_at"] = (datetime.now().astimezone()
                          + timedelta(days=days)).replace(microsecond=0).isoformat()
 
@@ -423,22 +521,34 @@ def apply_result(prog, settings, qid, correct, confidence, picked_orig):
     return st
 
 
+def _parse_due(s, ref):
+    """解析 next_due_at。
+
+    程序自己写的是带时区的，但手改过、或从别的机器/旧版本带过来的 progress.json
+    里会出现 "2026-08-20T10:00:00" 这种无时区的 —— fromisoformat 会成功返回一个
+    naive datetime，拿它和 aware 的 now() 比较直接抛 TypeError。原先比较写在
+    try 之外，于是 /api/bootstrap 500、首页整页打不开，违反 §4.4「字段缺失走迁移
+    /补默认值，不要直接抛异常」。这里按本地时区补上，判不出来就返回 None。
+    """
+    try:
+        due = datetime.fromisoformat(s)
+    except Exception:
+        return None
+    return due.replace(tzinfo=ref.tzinfo) if due.tzinfo is None else due
+
+
 def is_due(st, ref=None):
     if not st.get("next_due_at"):
         return st.get("attempts", 0) > 0
-    try:
-        due = datetime.fromisoformat(st["next_due_at"])
-    except Exception:
-        return True
-    return due <= (ref or datetime.now().astimezone())
+    ref = ref or datetime.now().astimezone()
+    due = _parse_due(st["next_due_at"], ref)
+    return True if due is None else due <= ref
 
 
 def overdue_days(st):
-    try:
-        return max(0, (datetime.now().astimezone()
-                       - datetime.fromisoformat(st["next_due_at"])).days)
-    except Exception:
-        return 0
+    ref = datetime.now().astimezone()
+    due = _parse_due(st.get("next_due_at") or "", ref)
+    return 0 if due is None else max(0, (ref - due).days)
 
 
 # ==========================================================================
@@ -487,17 +597,32 @@ def build_session(prog, settings, bank, size=None):
     size = int(size or settings.get("session_size") or 25)
     pool = {q["id"]: q for q in bank.pool()}
 
+    # §4.2.1 给的基准是 25 题 → 热身 8 / 新题 14 / 收尾 3。
+    # 收尾段要**向下取整**：round(25*0.15) = round(3.75) = 4，会算出 8/13/4，
+    # 每轮少推一道新题、多留一个收尾名额，和 SPEC 写死的数字对不上。
     n_warm = max(0, round(size * 0.30))
-    n_cool = max(0, round(size * 0.15))
+    n_cool = max(0, int(size * 0.15))
     n_new = size - n_warm - n_cool
+
+    # §4.2.7 考试日期倒排。两个阶段都会改热身段的取题范围与档位。
+    sprint, final48 = exam_phase(settings)
 
     # ---- 热身段：错题 + 今日到期题，按 §4.2.5 优先级排序 ----
     cands = []
     for qid, st in prog["questions"].items():
         qid = int(qid)
-        if qid not in pool or st.get("mastered"):
+        if qid not in pool:
             continue
-        if not (is_due(st) or st.get("last_result") == "wrong"):
+        # §4.2.6：已掌握的题退出常规轮转，「只在 R4 速览和考前冲刺中出现」——
+        # 所以考前 48 小时的速览要把它们放回来。
+        if st.get("mastered") and not final48:
+            continue
+        # 考前 48 小时以速览为主，不再挑到期与否，未掌握的全都过一遍。
+        if not (final48 or is_due(st) or st.get("last_result") == "wrong"):
+            continue
+        # §4.2.7 冲刺模式（考前 7 天）：只出 box ≤ 3 与「假掌握」的题。
+        if sprint and not final48 and not (st.get("box", 1) <= 3
+                                           or st.get("false_mastery")):
             continue
         pri = (
             0 if st.get("high_conf_error") else
@@ -514,42 +639,70 @@ def build_session(prog, settings, bank, size=None):
         n_new += n_warm - len(warm_ids)
 
     # ---- 新题段：从 cursor 继续 ----
+    #
+    # 「出题顺序」管的是**新题按什么次序推进**，不该改变过滤语义。原先的过滤条件写成
+    # `qid not in warm_ids and (order_mode != "sequential" or qid not in seen)`，
+    # 非 sequential 时右半边恒为 True，seen 检查被整个绕过，mastered 也从没出现在
+    # 这个循环里 —— 结果 random 下按比例混入已掌握的题，review_first 下（ids 被排成
+    # 「做过的在前」）整段新题全是旧题，还都按 mode="R1" 完整重做，
+    # 违反 §4.2.6「已 mastered 的题退出常规轮转」。
     seen = set(int(k) for k in prog["questions"])
     order_mode = settings.get("order", "sequential")
     ids = sorted(pool)
     if order_mode == "random":
         random.shuffle(ids)
-    elif order_mode == "review_first":
-        ids = [i for i in ids if i in seen] + [i for i in ids if i not in seen]
 
-    pos = int(prog["cursor"].get("position") or 0)
-    new_ids, i, guard = [], pos, 0
-    while len(new_ids) < n_new and guard < len(ids) * 2:
-        qid = ids[i % len(ids)]
-        if qid not in warm_ids and (order_mode != "sequential" or qid not in seen):
-            new_ids.append(qid)
-        i += 1
-        guard += 1
-    if len(new_ids) < n_new:  # 新题用尽，用未掌握的旧题补齐
-        for qid in ids:
-            if len(new_ids) >= n_new:
-                break
-            if qid in warm_ids or qid in new_ids:
-                continue
-            if prog["questions"].get(str(qid), {}).get("mastered"):
-                continue
-            new_ids.append(qid)
+    # cursor.position 是「在 ids 里推进到哪儿了」，只有顺序稳定时才有意义。
+    # random 模式每次会话重排一次 ids，拿上一轮的下标去索引这个全新排列毫无对应
+    # 关系 —— 所以随机模式既不按 position 旋转，也不往回写 position，
+    # 进度完全由 seen 集合驱动（新题段本来就只取没做过的题）。
+    keeps_cursor = order_mode != "random"
+    pos = int(prog["cursor"].get("position") or 0) if keeps_cursor else 0
+    n = len(ids)
+    rotated = [ids[(pos + k) % n] for k in range(n)] if n else []
+
+    # 真·新题：没做过的。只绕**一圈** —— 原先 guard 允许绕两圈，剩余新题不够时
+    # 第二圈会把同一批题原样再取一遍，同一场会话里同一道题出现两次，
+    # 第二遍作答会立刻覆盖第一遍刚写的 box / next_due，Leitner 间隔当场失效。
+    fresh = [q for q in rotated if q not in warm_ids and q not in seen]
+    # 做过、但还没掌握的旧题。已 mastered 的一律不进常规轮转（§4.2.6）。
+    stale = [q for q in rotated if q not in warm_ids and q in seen
+             and not prog["questions"].get(str(q), {}).get("mastered")]
+
+    # review_first =「错题与到期题优先」：先排没掌握的旧题，不够再推新题。
+    # 其余顺序先推新题，新题用尽才拿旧题补齐。
+    ordered = (stale + fresh) if order_mode == "review_first" else (fresh + stale)
+    new_ids, chosen = [], set()
+    for qid in ordered:
+        if len(new_ids) >= n_new:
+            break
+        if qid in chosen:
+            continue
+        chosen.add(qid)
+        new_ids.append(qid)
+
+    # cursor 指向「下次从哪儿接着找新题」：最后一道被取用的**新**题的下一格。
+    # 只认新题 —— 拿旧题补齐不代表进度推进了。
+    cursor_next = (pos if n else 0) if keeps_cursor else int(prog["cursor"].get("position") or 0)
+    if keeps_cursor:
+        for k, qid in enumerate(rotated):
+            if qid in chosen and qid not in seen:
+                cursor_next = (pos + k + 1) % n
 
     queue = []
     for qid in warm_ids:
         st = qstate(prog, qid)
-        queue.append({"qid": qid, "phase": "warmup", "mode": pick_review_mode(st)})
+        # §4.2.7：考前 48 小时「自动切 R4 速览为主」。复习段统一压成速览，
+        # 新题段保持 R1 —— 新材料还是得真答一遍，光看不算过。
+        queue.append({"qid": qid, "phase": "warmup",
+                      "mode": "R4" if final48 else pick_review_mode(st)})
     for qid in new_ids:
         queue.append({"qid": qid, "phase": "new", "mode": "R1"})
 
     return {
         "queue": queue,
-        "cursor_next": i % len(ids) if ids else 0,
+        "cursor_next": cursor_next,
+        "cursor_mode": order_mode,
         "quota": {"warmup": len(warm_ids), "new": len(new_ids), "cooldown": n_cool},
     }
 
@@ -601,11 +754,18 @@ def build_exam(bank, seed=None):
     pool = bank.pool()
     tagged = [q for q in pool if q.get("domain")]
     picked = []
-    if len(tagged) >= EXAM_SIZE:
+    # 分层抽样的名额按**标签覆盖率**分配，不能整卷都从 tagged 里挑。
+    # §3.2 把 domain 定位成「可选加分项，无把握则填 null」，§4.1 的抽样池是
+    # 「排除 needs_review 之后的全部题」—— 原先只要 tagged ≥ 65 就把 65 个名额
+    # 全部按域分掉，617 行的补位恒为 0，domain=null 的 234 题（占可出题池 36%）
+    # 在任何 seed、任何次数的考试里都抽不到。
+    n_tagged = round(EXAM_SIZE * len(tagged) / len(pool)) if pool else 0
+    n_tagged = min(n_tagged, len(tagged))
+    if n_tagged >= len(DOMAIN_MIX):  # 名额太少就没有分层的意义，退化成纯随机
         by_dom = {}
         for q in tagged:
             by_dom.setdefault(q["domain"], []).append(q)
-        quota = domain_quota(EXAM_SIZE, DOMAIN_MIX)
+        quota = domain_quota(n_tagged, DOMAIN_MIX)
         for dom in DOMAIN_MIX:
             avail = by_dom.get(dom, [])
             rng.shuffle(avail)
@@ -633,6 +793,10 @@ def score_exam(settings, results):
 # ==========================================================================
 # HTTP
 # ==========================================================================
+
+class BadRequest(ValueError):
+    """客户端传错了参数 —— 回 400，不打 traceback。"""
+
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "SAAQuiz/1.0"
@@ -685,6 +849,11 @@ class Handler(BaseHTTPRequestHandler):
             if u.path == "/api/question":
                 return self._json(self.api_question(q))
             return self._json({"error": "not found"}, 404)
+        except BadRequest as e:
+            # 入参问题是客户端的事，回 400 就够了：既不该报 500，也不该往日志里
+            # 打一份 traceback（原先所有异常一律 500 + 打印堆栈 + 把 Python 的
+            # 原始异常文本回给浏览器，前端直接 toast 那段英文）。
+            return self._json({"error": str(e)}, 400)
         except Exception as e:
             import traceback
             traceback.print_exc()
@@ -696,6 +865,8 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if u.path == "/api/session/start":
                 return self._json(self.api_session_start(body))
+            if u.path == "/api/session/advance":
+                return self._json(self.api_session_advance(body))
             if u.path == "/api/answer":
                 return self._json(self.api_answer(body))
             if u.path == "/api/selfassess":
@@ -707,9 +878,13 @@ class Handler(BaseHTTPRequestHandler):
             if u.path == "/api/settings":
                 return self._json(self.api_settings(body))
             if u.path == "/api/wrongbook/remove":
-                wrong_remove(body.get("id"))
-                return self._json({"ok": True})
+                return self._json(self.api_wrongbook_remove(body))
             return self._json({"error": "not found"}, 404)
+        except BadRequest as e:
+            # 入参问题是客户端的事，回 400 就够了：既不该报 500，也不该往日志里
+            # 打一份 traceback（原先所有异常一律 500 + 打印堆栈 + 把 Python 的
+            # 原始异常文本回给浏览器，前端直接 toast 那段英文）。
+            return self._json({"error": str(e)}, 400)
         except Exception as e:
             import traceback
             traceback.print_exc()
@@ -739,20 +914,19 @@ class Handler(BaseHTTPRequestHandler):
                 "last_question_id": prog["cursor"].get("last_question_id"),
             }
             exam_info = None
-            ed = settings.get("exam_date")
-            if ed:
-                try:
-                    left = (date.fromisoformat(ed) - date.today()).days
-                    unmastered = len(pool) - info["mastered"]
-                    exam_info = {
-                        "days_left": left,
-                        "unmastered": unmastered,
-                        "per_day": max(1, -(-unmastered // max(1, left))) if left > 0 else unmastered,
-                        "sprint": 0 < left <= 7,
-                        "final48": 0 < left <= 2,
-                    }
-                except Exception:
-                    exam_info = None
+            # 横幅上的 sprint / final48 与 build_session 实际生效的判据必须同源，
+            # 否则又会退回「页面宣称一套、出题另一套」。
+            left = days_to_exam(settings)
+            if left is not None:
+                sprint, final48 = exam_phase(settings)
+                unmastered = len(pool) - info["mastered"]
+                exam_info = {
+                    "days_left": left,
+                    "unmastered": unmastered,
+                    "per_day": max(1, -(-unmastered // max(1, left))) if left > 0 else unmastered,
+                    "sprint": sprint,
+                    "final48": final48,
+                }
             return {"settings": settings, "info": info,
                     "coverage": BANK.coverage(), "exam_countdown": exam_info}
 
@@ -776,6 +950,7 @@ class Handler(BaseHTTPRequestHandler):
             SESSIONS[sid] = {
                 "id": sid, "queue": plan["queue"], "pos": 0,
                 "quota": plan["quota"], "cursor_next": plan["cursor_next"],
+                "cursor_mode": plan.get("cursor_mode"),
                 "wrong": [], "cooldown_done": set(),
                 "started": now_iso(), "results": [],
             }
@@ -785,7 +960,7 @@ class Handler(BaseHTTPRequestHandler):
     def _session(self, sid):
         s = SESSIONS.get(sid)
         if not s:
-            raise ValueError("会话不存在或已过期，请重新开始")
+            raise BadRequest("会话不存在或已过期，请重新开始")
         return s
 
     def api_session_next(self):
@@ -819,16 +994,24 @@ class Handler(BaseHTTPRequestHandler):
             mode = item["mode"]
             only = None
             if mode == "R2":
+                keep = set(q.get("answer") or [])
+                # 取「计数最高的、且不是正确答案的」那个字母当干扰项。
+                # 不能只看 picks[0]：老的 progress.json 里 wrong_picks 混进了正确字母
+                # （见 api_answer 里 missed 的注释），撞上就会白白降级成 R1。
                 picks = sorted(st.get("wrong_picks", {}).items(),
                                key=lambda kv: -kv[1])
-                distract = picks[0][0] if picks else None
-                keep = set(q.get("answer") or [])
-                if distract and distract not in keep:
+                distract = next((L for L, _ in picks
+                                 if L not in keep and L in {o["letter"] for o in q["options"]}),
+                                None)
+                if distract:
                     keep.add(distract)
                     only = keep
                 else:
                     mode = "R1"
-            payload = render_question(q, seed, reveal=(mode == "R4"),
+            # R3 闪卡也要带上答案与解析：SPEC §4.2.2 写的是「心里回想 → 点『翻开』
+            # **对照** → 自评」，没有答案就没法对照，自评三档等于瞎选。前端负责在
+            # 「翻开」之前不渲染它们。R1/R2 是真答题，仍然不能下发。
+            payload = render_question(q, seed, reveal=(mode in ("R3", "R4")),
                                       only_letters=only)
             counts = {p: sum(1 for it in s["queue"] if it["phase"] == p)
                       for p in ("warmup", "new", "cooldown")}
@@ -842,11 +1025,33 @@ class Handler(BaseHTTPRequestHandler):
                 "box": st.get("box", 1), "attempts": st.get("attempts", 0),
             }
 
+    def api_session_advance(self, body):
+        """R4 速览确认：只推进队列位置，不碰任何复习状态。
+
+        SPEC §4.2.2 说「R4 不改变任何 box 状态」，所以 R4 屏不该调 /api/answer，
+        也不该调 /api/selfassess —— 但队列位置只在那两个接口里 +1，于是 R4 题
+        变成死循环：前端点「下一题」只发 GET /api/session/next，服务端 pos 不动，
+        同一题无限返回，整场会话再也走不到 done，_finish() 永不执行。
+        这个端点就是缺的那一半：推进位置，别的什么都不做。
+
+        cursor.last_question_id 故意不更新 —— 速览的是复习旧题，
+        首页「上次学到第 N 题」应该继续指向新题推进的进度。
+        """
+        with _LOCK:
+            s = self._session(body.get("session_id"))
+            if s["pos"] < len(s["queue"]):
+                s["pos"] += 1
+            return {"ok": True, "pos": s["pos"], "total": len(s["queue"])}
+
     def _finish(self, s):
         prog = load_progress()
         prog["cursor"]["position"] = s["cursor_next"]
-        if s["results"]:
-            prog["cursor"]["last_question_id"] = s["results"][-1]["qid"]
+        prog["cursor"]["mode"] = s.get("cursor_mode") or prog["cursor"].get("mode")
+        # 「上次学到第 N 题」只跟新题段走。原先取 results[-1]，而收尾重测的是本场
+        # 早期答错的旧题 —— 推进到第 21 题、首页却显示「上次学到第 4 题」。
+        new_done = [r["qid"] for r in s["results"] if r.get("phase") == "new"]
+        if new_done:
+            prog["cursor"]["last_question_id"] = new_done[-1]
         prog["last_session"] = {
             "ended_at": now_iso(),
             "counts": {p: sum(1 for it in s["queue"] if it["phase"] == p)
@@ -861,7 +1066,12 @@ class Handler(BaseHTTPRequestHandler):
 
     def api_answer(self, body):
         sid = body.get("session_id")
-        qid = int(body.get("id"))
+        # 缺 id 时 int(None) 抛 TypeError、题号不存在时下面 q.get() 抛
+        # AttributeError，两者都变成 HTTP 500 并把原始 Python 异常文本回给浏览器
+        # （前端直接 toast 那段英文）。api_question 早就有这层校验，这里是漏了。
+        qid = as_qid(body.get("id"))
+        if qid is None or not BANK.get(qid):
+            raise BadRequest("题号不存在或缺失：%r" % (body.get("id"),))
         picked_new = [str(x).upper() for x in (body.get("picked") or [])]
         confidence = body.get("confidence") or "unsure"
         letter_map = body.get("letter_map") or {}
@@ -882,13 +1092,23 @@ class Handler(BaseHTTPRequestHandler):
             if s and s["pos"] < len(s["queue"]):
                 phase = s["queue"][s["pos"]]["phase"]
 
+            # wrong_picks 只记「真正选错的那些字母」。原先整题判错时把 picked_orig
+            # 整个塞进去，多选题只要选中了部分正确项，正确字母也会被记成干扰项 ——
+            # 而它的计数只增不减、永远排在最前，R2 取到它之后走
+            # `distract not in keep` 的 else 分支静默降级成 R1，
+            # 这道题的干扰项狙击档就此永久失效。86 道多选题几乎必然踩中。
+            missed = [L for L in picked_orig if L not in correct]
+
             # Cool-down 的重测只用于当场巩固，不计入 box 升降
             if phase != "cooldown":
                 st = apply_result(prog, settings, qid, is_right,
-                                  confidence, None if is_right else picked_orig)
+                                  confidence, None if is_right else missed)
             else:
                 st = qstate(prog, qid)
-            prog["cursor"]["last_question_id"] = qid
+            # 只有新题段才推进「上次学到第 N 题」——热身与收尾重测的是旧题，
+            # 拿它们改 cursor 会让首页的进度倒退。
+            if phase == "new":
+                prog["cursor"]["last_question_id"] = qid
             save_progress(prog)
 
             if not is_right:
@@ -899,7 +1119,7 @@ class Handler(BaseHTTPRequestHandler):
             if s:
                 if not is_right and phase != "cooldown":
                     s["wrong"].append({"qid": qid, "pos": s["pos"]})
-                s["results"].append({"qid": qid, "correct": is_right})
+                s["results"].append({"qid": qid, "correct": is_right, "phase": phase})
                 s["pos"] += 1
 
             rq = render_question(q, body.get("seed") or "", reveal=True)
@@ -922,7 +1142,11 @@ class Handler(BaseHTTPRequestHandler):
 
     def api_selfassess(self, body):
         """R3 闪卡自评：记得→等同答对，模糊→box 不动，忘了→等同答错。"""
-        qid = int(body.get("id"))
+        # 原先全程不查题库：任意题号都会返回 200，并在 progress.json 里凭空造出
+        # 一条 SRS 状态，永久污染 stats["answered"] 与已练题数。
+        qid = as_qid(body.get("id"))
+        if qid is None or not BANK.get(qid):
+            raise BadRequest("题号不存在或缺失：%r" % (body.get("id"),))
         grade = body.get("grade")  # remember | vague | forgot
         with _LOCK:
             settings = read_json(F_SETTINGS, DEFAULT_SETTINGS)
@@ -939,11 +1163,12 @@ class Handler(BaseHTTPRequestHandler):
                 st["last_seen_at"] = now_iso()
                 st["attempts"] += 1
                 prog["stats"]["answered"] += 1
-            prog["cursor"]["last_question_id"] = qid
+            # R3 只出现在热身段，不推进「上次学到第 N 题」（同 api_answer 的口径）
             save_progress(prog)
             s = SESSIONS.get(body.get("session_id"))
             if s:
-                s["results"].append({"qid": qid, "correct": grade == "remember"})
+                s["results"].append({"qid": qid, "correct": grade == "remember",
+                                     "phase": "warmup"})
                 if grade == "forgot":
                     s["wrong"].append({"qid": qid, "pos": s["pos"]})
                 s["pos"] += 1
@@ -980,6 +1205,20 @@ class Handler(BaseHTTPRequestHandler):
             })
         return {"rows": rows, "total": total, "page": page,
                 "pages": max(1, -(-total // size))}
+
+    def api_wrongbook_remove(self, body):
+        """从错题本移出一题。
+
+        这里原先是路由里直接调 wrong_remove()，是全仓唯一一条**不持 _LOCK** 的
+        写盘路径（其余 6 处 atomic_write_json 都在锁内）。和 api_answer 里的
+        wrong_add 撞上就会读-改-写互相覆盖，移出被静默吞掉。
+        """
+        qid = as_qid(body.get("id"))
+        if qid is None:
+            raise BadRequest("缺少题号")
+        with _LOCK:
+            wrong_remove(qid)
+        return {"ok": True}
 
     def api_wrongbook(self):
         BANK.refresh_if_changed()
@@ -1087,7 +1326,7 @@ class Handler(BaseHTTPRequestHandler):
                 settings.setdefault(k, v)
             sess = SESSIONS.get("exam:" + eid)
             if not sess:
-                raise ValueError("考试会话不存在")
+                raise BadRequest("考试会话不存在")
             results = []
             prog = load_progress()
             for qid in sess["ids"]:
