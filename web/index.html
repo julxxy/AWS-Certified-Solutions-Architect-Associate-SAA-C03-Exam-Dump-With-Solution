@@ -280,9 +280,12 @@
             margin-top: 3px
         }
 
-        .opt.hide .tx {
+        /* R3 闪卡未翻开时的占位。不能复用 .hide —— 它是 display:none!important，
+           会把整行连同字母一起干掉，回想阶段连有几个选项都看不见。 */
+        .opt.masked .tx {
             filter: blur(6px);
-            user-select: none
+            user-select: none;
+            min-height: 1.65em
         }
 
         .bar {
@@ -498,6 +501,17 @@
         document.body.dataset.lang = ST.settings.lang_mode;
         $$(".j-zh").forEach(e => e.classList.toggle("hide", ST.settings.lang_mode === "en"));
         $$(".j-en").forEach(e => e.classList.toggle("hide", ST.settings.lang_mode === "zh"));
+        // 缺中文时的两块，必须排在上面两行之后（它们都带 .j-zh，会被上面先处理一遍）：
+        //   .j-fb   —— 英文回退正文，只在「中文」单语模式下出现
+        //   .j-nozh —— 灰色角标，其余模式下出现
+        // SPEC §4.3 要求「某字段无中文则**该字段单独回退英文**并挂灰色角标」。
+        // 原先只有角标、没有回退，而 .j-en 在单语中文下被整体 display:none ——
+        // 缺译的那一块在屏幕上什么都不剩，用户连原文都看不到。
+        // 注意这两行都会**覆盖**上面 .j-zh 的结果（它们本身也带 .j-zh），
+        // 所以各自的条件必须把「en 模式下中文栏整体隐藏」也算进去。
+        const lang = ST.settings.lang_mode;
+        $$(".j-fb").forEach(e => e.classList.toggle("hide", lang !== "zh"));
+        $$(".j-nozh").forEach(e => e.classList.toggle("hide", lang !== "both"));
     }
 
     function applyTheme() {
@@ -533,29 +547,45 @@
     }
 
     /* ---------- 题目渲染 ---------- */
+    // 缺中文时的中文栏：单语中文模式下回退英文正文 + 灰角标，其余模式下只挂角标。
+    const zhSlot = (zhText, enText, tip) => zhText
+        ? `<div class="zh j-zh">${esc(zhText)}</div>`
+        : `<div class="zh j-zh j-nozh muted small">${tip}</div>` +
+          (enText ? `<div class="zh j-zh j-fb">${esc(enText)}
+             <span class="muted small">（${tip}，已回退英文）</span></div>` : "");
+
     function stemHTML(q) {
-        let h = `<div class="stem"><div class="j-en">${esc(q.stem_en)}</div>`;
-        if (q.stem_zh) h += `<div class="zh j-zh">${esc(q.stem_zh)}</div>`;
-        else h += `<div class="zh j-zh muted small">暂无中文译文</div>`;
-        h += `</div>`;
-        return h;
+        return `<div class="stem"><div class="j-en">${esc(q.stem_en)}</div>` +
+            zhSlot(q.stem_zh, q.stem_en, "暂无中文译文") + `</div>`;
     }
 
     function optHTML(o, cls) {
-        const zh = o.text_zh ? `<div class="zh j-zh">${esc(o.text_zh)}</div>`
-            : `<div class="zh j-zh muted small">暂无中文译文</div>`;
         const en = o.text_en ? `<div class="j-en">${esc(o.text_en)}</div>`
             : `<div class="j-en muted small">（该选项在 PDF 中为图片，无文字）</div>`;
         return `<div class="opt ${cls || ""}" data-letter="${o.letter}">
-    <div class="L">${o.letter}</div><div class="tx">${en}${zh}</div></div>`;
+    <div class="L">${o.letter}</div><div class="tx">${en}${
+            zhSlot(o.text_zh, o.text_en, "暂无中文译文")}</div></div>`;
     }
+
+    // R4 速览按 SPEC §4.2.2 只给「解析首句」，一屏一题好翻页
+    const firstSentence = t => {
+        if (!t) return t;
+        const m = String(t).match(/^[\s\S]*?[。？！.!?](?=\s|$)/);
+        const s = (m ? m[0] : String(t)).trim();
+        return s.length > 200 ? s.slice(0, 200) + "…" : s;
+    };
 
     function explHTML(en, zh, quality) {
         let h = "";
         if (quality === "none" && !en && !zh) return `<p class="muted small">该题在源文档中没有解析。</p>`;
         if (en) h += `<div class="j-en"><h3>解析（EN）</h3><pre class="expl">${esc(en)}</pre></div>`;
         if (zh) h += `<div class="j-zh"><h3>解析（中文）</h3><pre class="expl">${esc(zh)}</pre></div>`;
-        else h += `<div class="j-zh muted small">暂无中文解析</div>`;
+        else {
+            h += `<div class="j-zh j-nozh muted small">暂无中文解析</div>`;
+            // 单语中文下缺中文解析要回退英文，否则这一整块直接消失（684 题里有 5 题如此）
+            if (en) h += `<div class="j-zh j-fb"><h3>解析（暂无中文，已回退英文）</h3>
+        <pre class="expl">${esc(en)}</pre></div>`;
+        }
         return h;
     }
 
@@ -637,19 +667,25 @@
     function drawQ() {
         const r = S.cur, q = r.question;
         const pct = Math.round(r.pos / r.total * 100);
+        // R4 速览，以及 R3 翻开之后：都要标出正确选项供对照
+        const revealed = r.mode === "R4" || (r.mode === "R3" && S.revealed);
         let opts = "";
-        if (r.mode === "R4") {
+        if (revealed) {
             opts = q.options.map(o => optHTML(o, (q.answer || []).includes(o.letter) ? "ok" : "")).join("");
-        } else if (r.mode === "R3" && !S.revealed) {
-            // 闪卡：翻开前连文本都不渲染，只留占位（不是靠 CSS 遮一下）
-            opts = q.options.map(o => `<div class="opt hide" data-letter="${o.letter}">
+        } else if (r.mode === "R3") {
+            // 闪卡：翻开前连文本都不渲染，只留占位（不是靠 CSS 遮一下）。
+            // 占位用 masked 而不是 hide —— .hide{display:none!important} 会把整行
+            // 干掉，连有几个选项都看不见，回想阶段就没有参照物了。
+            opts = q.options.map(o => `<div class="opt masked" data-letter="${o.letter}">
       <div class="L">${o.letter}</div><div class="tx">　</div></div>`).join("");
         } else {
             opts = q.options.map(o => optHTML(o)).join("");
         }
         let ctrl = "";
         if (r.mode === "R4") {
-            ctrl = `<button class="pri" onclick="nextQ()">下一题 <kbd>Enter</kbd></button>
+            // 必须走 advanceQ()，不能直接 nextQ()：服务端的队列位置只在写接口里推进，
+            // 光重新拉一次 /api/session/next 会永远拿回同一题。
+            ctrl = `<button class="pri" onclick="advanceQ()">下一题 <kbd>Enter</kbd></button>
       <span class="muted small">速览不改变任何复习状态</span>`;
         } else if (r.mode === "R3" && !S.revealed) {
             ctrl = `<button class="pri" onclick="S.revealed=true;drawQ()">翻开</button>
@@ -678,9 +714,14 @@
     <div class="bar"><i style="width:${pct}%"></i></div>
     ${stemHTML(q)}
     ${q.select_count > 1 ? `<p class="small" style="color:var(--warn)">本题需选 ${q.select_count} 项</p>` : ""}
+    ${r.mode === "R2" ? `<p class="small muted">只列出正确选项和你上次选错的那个选项。
+      解析里若提到屏幕上没有的字母，指的是本次未展示的选项。</p>` : ""}
     <div id="opts">${opts}</div>
     <div class="row" id="ctrl" style="margin-top:12px">${ctrl}</div>
-    <div id="fb"></div>
+    <div id="fb">${revealed ? explHTML(
+            r.mode === "R4" ? firstSentence(q.explanation_en) : q.explanation_en,
+            r.mode === "R4" ? firstSentence(q.explanation_zh) : q.explanation_zh,
+            q.explanation_quality) : ""}</div>
   </div>`;
         applyLang();
         if (r.mode !== "R4" && !(r.mode === "R3" && !S.revealed) && r.mode !== "R3") {
@@ -724,6 +765,19 @@
         applyLang();
     }
 
+    async function advanceQ() {
+        // R4 速览：先让服务端推进队列位置，再取下一题。
+        // 少了这一步，/api/session/next 会一直返回同一道题（服务端的 pos 只在写接口里 +1）。
+        if (S.answered) return;
+        S.answered = true;
+        const r = await api("/api/session/advance", {session_id: S.sid});
+        if (r.error) {
+            S.sid = null;
+            return renderLearnHome();
+        }
+        nextQ();
+    }
+
     async function selfAssess(g) {
         if (S.answered) return;
         S.answered = true;
@@ -756,31 +810,57 @@
       抽样自动排除答案存疑的题</p>
     <div class="row"><label class="small muted">随机种子（可选，便于复现）</label>
       <input type="number" id="seed" placeholder="留空则随机" style="width:150px"></div>
-    <div class="row" style="margin-top:10px"><button class="pri" onclick="startExam()">开始考试</button></div>
+    <div class="row" style="margin-top:10px"><button class="pri" id="startExamBtn" onclick="startExam()">开始考试</button></div>
   </div>`;
     }
 
-    async function startExam() {
-        const s = $("#seed").value;
-        const r = await api("/api/exam/start", {seed: s ? Number(s) : null});
-        if (r.error) return;
-        E = {
-            id: r.exam_id, qs: r.questions, ans: {}, marks: new Set(), i: 0, t0: Date.now(),
-            timer: null, left: r.minutes * 60
-        };
-        if (ST.settings.timer_enabled) {
-            E.timer = setInterval(() => {
-                E.left--;
-                const el = $("#clock");
-                if (el) el.textContent = fmt(E.left);
-                if (E.left <= 0) {
-                    clearInterval(E.timer);
-                    toast("时间到，自动交卷");
-                    submitExam();
-                }
-            }, 1000);
+    // 倒计时按墙钟算，interval 只负责重绘。逐秒自减是不行的：浏览器会把后台标签页的
+    // setInterval 节流到几十秒一次，切走 30 分钟屏幕上只走了 30 秒，130 分钟上限
+    // 形同虚设；而交卷上报的 elapsed_sec 用的是真实墙钟，结果页会出现
+    // 「用时 3 小时」却还剩 100 分钟的自相矛盾。
+    function tickExam() {
+        E.left = Math.max(0, Math.round((E.deadline - Date.now()) / 1000));
+        const el = $("#clock");
+        if (el) el.textContent = fmt(E.left);
+        if (E.left <= 0) {
+            clearInterval(E.timer);
+            E.timer = null;
+            toast("时间到，自动交卷");
+            submitExam();
         }
-        drawExam();
+    }
+
+    let EXAM_STARTING = false;
+
+    async function startExam() {
+        // await 期间按钮仍可点：E.id 这时还是 null，renderExamHome 的守卫拦不住，
+        // 连点两下会起两个 interval 同减一个 E.left（2 倍速），交卷只 clear 掉最后
+        // 一个，孤儿那个会一直跑到 0 再拿空 exam_id 去交卷，每秒弹一次错误 toast。
+        if (EXAM_STARTING) return;
+        EXAM_STARTING = true;
+        const btn = $("#startExamBtn");
+        if (btn) btn.disabled = true;
+        try {
+            if (E.timer) {           // 上一场留下的孤儿 interval
+                clearInterval(E.timer);
+                E.timer = null;
+            }
+            // #seed 只在考试首页存在；drawExam 换掉 DOM 之后再调到这里会拿到 null
+            const seedEl = $("#seed");
+            const s = seedEl ? seedEl.value : "";
+            const r = await api("/api/exam/start", {seed: s ? Number(s) : null});
+            if (r.error) return;
+            E = {
+                id: r.exam_id, qs: r.questions, ans: {}, marks: new Set(), i: 0,
+                t0: Date.now(), timer: null, left: r.minutes * 60,
+                deadline: Date.now() + r.minutes * 60 * 1000
+            };
+            if (ST.settings.timer_enabled) E.timer = setInterval(tickExam, 1000);
+            drawExam();
+        } finally {
+            EXAM_STARTING = false;
+            if (btn) btn.disabled = false;
+        }
     }
 
     const fmt = s => `${String(Math.floor(s / 3600)).padStart(2, "0")}:${String(Math.floor(s % 3600 / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
@@ -840,24 +920,40 @@
     }
 
     async function submitExam() {
-        if (E.timer) clearInterval(E.timer);
+        // 先把 E.id 摘掉再发请求：交卷按钮和「时间到自动交卷」都可能同时触发，
+        // 交两次会在 data/exams/ 里落两份记录、错题本也重复写一遍。
+        if (!E.id) return;
+        const eid = E.id;
+        E.id = null;
+        if (E.timer) {
+            clearInterval(E.timer);
+            E.timer = null;
+        }
         const r = await api("/api/exam/submit", {
-            exam_id: E.id, answers: E.ans,
+            exam_id: eid, answers: E.ans,
             elapsed_sec: Math.round((Date.now() - E.t0) / 1000)
         });
-        if (r.error) return;
+        if (r.error) {
+            E.id = eid;   // 交卷失败，把考试还回去，别把答题结果丢了
+            return;
+        }
         const rec = r.record;
-        E.id = null;
         const doms = Object.entries(rec.by_domain).map(([k, v]) =>
             `<tr><td>${DOM_CN[k] || k}</td><td>${v.c}/${v.n}</td><td>${Math.round(100 * v.c / v.n)}%</td></tr>`).join("");
         const rev = r.review.map(x => {
             const q = x.question;
+            // 服务端返回的 picked_orig 是**原始字母**，回顾页展示的是本场乱序后的字母，
+            // 必须过一遍 letter_map 才能对上。原先这份数据压根没用，用户只看得到
+            // 「错误 / 正确答案 C」，看不到自己选了什么，没法复盘错在哪个干扰项。
+            const mine = (x.picked_orig || []).map(L => (q.letter_map || {})[L] || L).sort();
             return `<div class="card"><div class="row small muted">
       <span class="chip">#${x.id}</span>
       <span class="chip" style="color:${x.correct ? "var(--ok)" : "var(--bad)"}">${x.correct ? "正确" : "错误"}</span>
-      <span class="chip">正确答案 ${q.answer.join(" ")}</span></div>
+      <span class="chip">正确答案 ${q.answer.join(" ")}</span>
+      <span class="chip" style="color:${x.correct ? "var(--muted)" : "var(--bad)"}">你的作答 ${mine.join(" ") || "未作答"}</span></div>
       ${stemHTML(q)}
-      <div>${q.options.map(o => optHTML(o, q.answer.includes(o.letter) ? "ok" : "")).join("")}</div>
+      <div>${q.options.map(o => optHTML(o, q.answer.includes(o.letter) ? "ok"
+            : (mine.includes(o.letter) ? "no" : ""))).join("")}</div>
       ${explHTML(q.explanation_en, q.explanation_zh, q.explanation_quality)}</div>`;
         }).join("");
         $("#v-exam").innerHTML = `<div class="card">
@@ -1000,6 +1096,11 @@
     /* ---------- 键盘 ---------- */
     document.addEventListener("keydown", e => {
         if (/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)) return;
+        // 带修饰键的一律放行给浏览器。少了这一行，选好答案后按 Cmd+L（聚焦地址栏）
+        // 会命中下面的 k === "L" 分支，把这道题按「蒙的」提交出去 —— 服务端立刻标
+        // false_mastery 并落盘，界面上没有任何撤销入口。
+        // 同类：Cmd+T 切语言并写设置、考试页 Cmd+M 翻转标记、Cmd+1..9 改掉当前选项。
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
         const k = e.key.toUpperCase();
         if (k === "T") {
             const o = ["zh", "en", "both"];
