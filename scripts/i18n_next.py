@@ -30,7 +30,19 @@ F_BANK = os.path.join(DATA, "questions.json")
 
 
 def key(r):
-    return (int(r["id"]), r.get("letter") or "STEM")
+    """(题号, 字母) —— 字母统一大写，判据与 build_bank.py / app.py 保持一致。
+
+    两处必须对齐，否则同一份 i18n_zh.jsonl 在四个加载器里有四套解释：
+      · 不做 .upper()：`"letter": "a"` 的行译文其实已经生效（两边加载时都会
+        upper），--check 却把它报成孤儿、退出码 1，而且抵消不掉待译清单里的
+        (id, 'A')，进度分母把同一个选项数了两次。
+      · `r.get("letter") or "STEM"`：漏写 letter 的行被当成题干译文收下，
+        而 build_bank 判它是坏行丢弃 —— 译文静默丢失，校验却报合格。
+        现在让它抛 KeyError，由调用方计进坏行数。
+    """
+    if r.get("field") == "stem":
+        return (int(r["id"]), "STEM")
+    return (int(r["id"]), str(r["letter"]).upper())
 
 
 def load_done():
@@ -54,7 +66,20 @@ def load_done():
 def load_todo():
     if not os.path.exists(F_TODO):
         sys.exit("找不到 data/i18n_todo.jsonl，先跑 python3 scripts/build_bank.py --extract")
-    return [json.loads(l) for l in open(F_TODO, encoding="utf-8") if l.strip()]
+    out, bad = [], 0
+    for line in open(F_TODO, encoding="utf-8"):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            r = json.loads(line)
+            key(r)  # 算不出键的行跳过就好，别让整个脚本崩在一行脏数据上
+            out.append(r)
+        except Exception:
+            bad += 1
+    if bad:
+        print("  [警告] i18n_todo.jsonl 有 %d 行无法解析，已跳过" % bad)
+    return out
 
 
 def main():

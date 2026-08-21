@@ -45,20 +45,34 @@ PDF="AWS Certified Solutions Architect Associate SAA-C03.pdf"
 SOL="AWS SAA-03 Solution.txt"
 SOLZH="AWS SAA-03 Solution.zh-CN.txt"
 BANK="data/questions.json"
+BANK_EN="data/questions_en.json"
 
 need_build=0
 need_extract=0
 [ ! -f "$BANK" ] && need_build=1
+[ ! -f "$BANK_EN" ] && need_extract=1
 [ "$FORCE" = "1" ] && need_build=1 && need_extract=1
-# 任一数据源比题库新 → 重建。
-# manual_fixes.json 必须在列：改完手工修正不重建就完全不生效，而且一声不吭。
+
+# 阶段一（--extract）的输入是 PDF 和抽取逻辑，产物是 questions_en.json。
+# 判断必须拿它们和 **questions_en.json** 比，不能和 questions.json 比：
+#   · 按 reference.md 修了抽取逻辑后跑 start.sh，只会跑阶段二，而阶段二只读
+#     questions_en.json —— 抽取修复一个字都不生效，脚本却打印"重新构建题库"；
+#   · PDF 更新后手跑过一次不带 --extract 的 build，questions.json 就此新过 PDF，
+#     之后每次都判"题库是最新的"，PDF 改动永远进不来。
+for src in "$PDF" scripts/build_bank.py; do
+  [ -f "$src" ] && [ -f "$BANK_EN" ] && [ "$src" -nt "$BANK_EN" ] && need_extract=1
+done
+
+# 阶段二的输入：阶段一产物 + 两份解析文档 + 人工修正 + 构建脚本本身。
+# questions_en.json 必须在列，否则手跑过 --extract 之后阶段二不会跟着重跑。
+# manual_fixes.json 也必须在列：改完手工修正不重建就完全不生效，而且一声不吭。
 # i18n_zh.jsonl 故意不在列 —— app.py 会热加载译文，重建只是把它固化进 questions.json。
-for src in "$PDF" "$SOL" "$SOLZH" data/manual_fixes.json scripts/build_bank.py; do
+for src in "$BANK_EN" "$SOL" "$SOLZH" data/manual_fixes.json scripts/build_bank.py; do
   [ -f "$src" ] && [ -f "$BANK" ] && [ "$src" -nt "$BANK" ] && need_build=1
 done
-# PDF 变了必须重跑阶段一。阶段二只读 questions_en.json，光跑它对 PDF 改动是空转：
-# 会打印"重新构建题库"，但题干和选项一个字都不会变。
-{ [ -f "$PDF" ] && [ -f "$BANK" ] && [ "$PDF" -nt "$BANK" ]; } && need_extract=1
+
+# 要重跑阶段一，阶段二必然也要重跑（否则新抽取的结果没人合并）。
+[ "$need_extract" = "1" ] && need_build=1
 
 if [ "$need_build" = "1" ]; then
   echo "▸ 数据源有更新，重新构建题库…"
