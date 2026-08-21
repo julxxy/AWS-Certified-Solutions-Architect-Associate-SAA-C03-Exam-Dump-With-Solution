@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
-# 一键进入学习状态。
-#   ./start.sh            构建（按需）+ 启动 + 直接开到滚动学习并开始新会话
-#   ./start.sh exam       直接开到模拟考试
-#   ./start.sh home       只开首页
-#   ./start.sh --rebuild  强制重跑两阶段构建
-#   ./start.sh --stop     停掉后台服务
-#
-# 幂等：已在跑就不重复起，只把浏览器开过去。
+# 一键进入学习状态。完整用法见 ./start.sh --help（usage() 是唯一事实来源，
+# 别在这里再抄一份 —— 上一版头注释只写了 6 个入口里的 3 个，跟实际行为漂开了）。
 
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -15,6 +9,54 @@ PORT="${SAA_PORT:-8765}"
 URL="http://127.0.0.1:${PORT}"
 PIDFILE=".saa-app.pid"
 LOGFILE="data/app.log"
+
+usage() {
+  cat <<EOF
+用法：./start.sh [页面] [选项]
+
+一键进入学习状态：按需重建题库 → 启动本地服务 → 打开浏览器直达指定页面。
+不带参数时等价于 ./start.sh learn。
+
+页面（决定浏览器打开后停在哪儿，默认 learn）
+  learn      滚动学习，并直接开始一轮新会话
+  exam       模拟考试（65 题 / 130 分钟 / 720 分及格）
+  home       首页：断点续学摘要、今日到期、译文覆盖率
+  wrong      错题本
+  stats      学习统计：box 分布、7 天到期预测、假掌握清单、各领域正确率
+  browse     题库浏览（含被排除出题池的题）
+
+选项
+  --rebuild  强制重跑两阶段构建（阶段一抽 PDF + 阶段二合并），跳过时间戳判断
+  --stop     停掉后台服务后退出。只在第一个参数的位置生效
+  -h, --help 显示本帮助
+
+环境变量
+  SAA_PORT   监听端口，默认 ${PORT}
+
+行为说明
+  · 幂等：服务已在跑就不重复起，只把浏览器开过去
+  · 按需构建：PDF / 两份解析文档 / manual_fixes.json / build_bank.py 任一比产物
+    新就自动重建；改了抽取逻辑或 PDF 会连阶段一一起重跑
+  · data/i18n_zh.jsonl 不触发重建 —— 程序会热加载译文，重建只是把它固化进题库
+  · 服务在后台运行，日志写到 ${LOGFILE}，进程号记在 ${PIDFILE}
+  · 所有进度与设置都在 data/ 下：progress.json、wrong_book.json、settings.json、exams/
+
+示例
+  ./start.sh                 # 最常用：接着上次的进度继续刷
+  ./start.sh exam            # 直接进模拟考试
+  ./start.sh stats           # 只看统计，不开新会话
+  ./start.sh --rebuild home  # 改完题库数据后强制重建，然后开首页
+  SAA_PORT=9000 ./start.sh   # 换端口跑
+  ./start.sh --stop          # 收工
+EOF
+}
+
+# --help 放在任何位置都认，且优先于其它参数
+for a in "$@"; do
+  case "$a" in
+    -h|--help) usage; exit 0 ;;
+  esac
+done
 
 PY="$(command -v python3 || true)"
 [ -z "$PY" ] && { echo "✗ 找不到 python3"; exit 1; }
@@ -36,7 +78,12 @@ for a in "$@"; do
   case "$a" in
     --rebuild) FORCE=1 ;;
     learn|exam|home|wrong|stats|browse) GO="$a" ;;
-    *) ;;
+    # 认不出来的参数别默默吞掉：`./start.sh exm` 原先会一声不吭地开到滚动学习，
+    # 用户以为进的是考试。只提示、不中断，免得挡住正常启动。
+    # 变量必须写成 ${a}：本机 LC_CTYPE=C，bash 会把紧跟其后的全角「（」的首字节
+    # 当成变量名的一部分，$a（ 被解析成 ${a<0xEF>}，配合 set -u 直接报
+    # 「unbound variable」把脚本打挂。
+    *) echo "· 忽略无法识别的参数：${a}（可用参数见 ./start.sh --help）" ;;
   esac
 done
 

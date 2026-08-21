@@ -31,9 +31,12 @@ AWS Certified Solutions Architect – Associate (SAA-C03) 备考题库，含 684
 ./start.sh # 构建（按需）+ 启动 + 直接进入学习
 ./start.sh exam # 直接进模拟考试
 ./start.sh --stop
+./start.sh --help # 全部入口与选项
 ```
 
-浏览器会打开 `http://127.0.0.1:8765`。全程不联网，页面无任何外链资源。
+浏览器会打开 `http://127.0.0.1:8765`（改端口用 `SAA_PORT=9000 ./start.sh`）。全程不联网，页面无任何外链资源。
+
+除 `learn`（默认）和 `exam` 外，还可以直接开到 `home` / `wrong` / `stats` / `browse`。
 
 ## 功能
 
