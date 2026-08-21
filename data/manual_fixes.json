@@ -1,56 +1,140 @@
 {
-  "_comment": [
-    "构建最后一步覆盖，见 scripts/build_bank.py 的『人工修正最后覆盖』。",
-    "只放源文件本身有缺陷、靠解析逻辑救不回来的题；每条都写清为什么。"
+ "_comment": [
+  "构建最后一步覆盖，见 scripts/build_bank.py 的『人工修正最后覆盖』。",
+  "只放源文件本身有缺陷、靠解析逻辑救不回来的题；每条都写清为什么。"
+ ],
+ "125": {
+  "_why": [
+   "PDF 把第 5 个选项的标号也印成了 'D.'，抽取时整段并进了 D 的正文，题库只剩 4 个选项。",
+   "解析文档给的答案是 A + E；E 在题库里不存在，resolve_answer 退到 fuzzy_match，",
+   "按文本相似度把 E 匹到了 B（置信度 0.907），得出 answer=['A','B']。",
+   "但 B 是『把 ALB 部署在私有子网』，与题目『EC2/RDS 不暴露公网 + ALB 对外』直接矛盾，是错的。",
+   "这里把 D 拆回 D 和 E，并按解析文档改正答案。"
   ],
-
-  "125": {
-    "_why": [
-      "PDF 把第 5 个选项的标号也印成了 'D.'，抽取时整段并进了 D 的正文，题库只剩 4 个选项。",
-      "解析文档给的答案是 A + E；E 在题库里不存在，resolve_answer 退到 fuzzy_match，",
-      "按文本相似度把 E 匹到了 B（置信度 0.907），得出 answer=['A','B']。",
-      "但 B 是『把 ALB 部署在私有子网』，与题目『EC2/RDS 不暴露公网 + ALB 对外』直接矛盾，是错的。",
-      "这里把 D 拆回 D 和 E，并按解析文档改正答案。"
-    ],
-    "answer": ["A", "E"],
-    "answer_source": "manual",
-    "answer_confidence": 1.0,
-    "options": [
-      {
-        "letter": "A",
-        "text_en": "Use an Auto Scaling group to launch the EC2 instances in private subnets. Deploy an RDS Multi-AZ DB instance in private subnets.",
-        "text_zh": "使用 Auto Scaling 组在私有子网中启动 EC2 实例。在私有子网中部署一个 RDS 多可用区数据库实例。"
-      },
-      {
-        "letter": "B",
-        "text_en": "Configure a VPC with two private subnets and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the private subnets.",
-        "text_zh": "配置一个 VPC，跨两个可用区包含两个私有子网和两个 NAT 网关。在私有子网中部署一个 Application Load Balancer。"
-      },
-      {
-        "letter": "C",
-        "text_en": "Use an Auto Scaling group to launch the EC2 instances in public subnets across two Availability Zones. Deploy an RDS Multi-AZ DB instance in private subnets.",
-        "text_zh": "使用 Auto Scaling 组跨两个可用区在公有子网中启动 EC2 实例。在私有子网中部署一个 RDS 多可用区数据库实例。"
-      },
-      {
-        "letter": "D",
-        "text_en": "Configure a VPC with one public subnet, one private subnet, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnet.",
-        "text_zh": "配置一个 VPC，跨两个可用区包含一个公有子网、一个私有子网和两个 NAT 网关。在该公有子网中部署一个 Application Load Balancer。"
-      },
-      {
-        "letter": "E",
-        "text_en": "Configure a VPC with two public subnets, two private subnets, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnets.",
-        "text_zh": "配置一个 VPC，跨两个可用区包含两个公有子网、两个私有子网和两个 NAT 网关。在这些公有子网中部署一个 Application Load Balancer。"
-      }
-    ]
-  },
-
-  "651": {
-    "_why": [
-      "解析文档在本题正确解析之后，又多粘了一份第 649 题的解析（gp3 / 15,000 IOPS）。",
-      "split_segment 的答案块边界修好后，正确解析已排在前面，这里只把多出来的尾巴截掉。",
-      "答案 C 本来就对（Standard-IA → Glacier Instant Retrieval → Deep Archive），不改。"
-    ],
-    "explanation_en": "S3 Standard-IA (instead of One Zone-IA) ensures high durability across multiple AZs for infrequent access.\nGlacier Instant Retrieval meets the \"instant availability\" requirement after 360 days, while Glacier Deep Archive is cost-effective for audits after 5 years.\n(Option A/B use less durable One Zone-IA, and Option D uses slower Glacier Flexible Retrieval, which violates the \"instant\" requirement.)",
-    "explanation_zh": "S3 Standard-IA（而非 One Zone-IA）可为不频繁访问的数据提供跨多个可用区的高持久性。\nGlacier Instant Retrieval 满足 360 天后「即时可用」的要求，而 Glacier Deep Archive 对 5 年后的审计场景具有成本效益。\n（选项 A/B 使用了持久性较低的 One Zone-IA，选项 D 使用了较慢的 Glacier Flexible Retrieval，违反了「即时」的要求。）"
-  }
+  "answer": [
+   "A",
+   "E"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
+  "options": [
+   {
+    "letter": "A",
+    "text_en": "Use an Auto Scaling group to launch the EC2 instances in private subnets. Deploy an RDS Multi-AZ DB instance in private subnets.",
+    "text_zh": "使用 Auto Scaling 组在私有子网中启动 EC2 实例。在私有子网中部署一个 RDS 多可用区数据库实例。"
+   },
+   {
+    "letter": "B",
+    "text_en": "Configure a VPC with two private subnets and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the private subnets.",
+    "text_zh": "配置一个 VPC，跨两个可用区包含两个私有子网和两个 NAT 网关。在私有子网中部署一个 Application Load Balancer。"
+   },
+   {
+    "letter": "C",
+    "text_en": "Use an Auto Scaling group to launch the EC2 instances in public subnets across two Availability Zones. Deploy an RDS Multi-AZ DB instance in private subnets.",
+    "text_zh": "使用 Auto Scaling 组跨两个可用区在公有子网中启动 EC2 实例。在私有子网中部署一个 RDS 多可用区数据库实例。"
+   },
+   {
+    "letter": "D",
+    "text_en": "Configure a VPC with one public subnet, one private subnet, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnet.",
+    "text_zh": "配置一个 VPC，跨两个可用区包含一个公有子网、一个私有子网和两个 NAT 网关。在该公有子网中部署一个 Application Load Balancer。"
+   },
+   {
+    "letter": "E",
+    "text_en": "Configure a VPC with two public subnets, two private subnets, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnets.",
+    "text_zh": "配置一个 VPC，跨两个可用区包含两个公有子网、两个私有子网和两个 NAT 网关。在这些公有子网中部署一个 Application Load Balancer。"
+   }
+  ]
+ },
+ "151": {
+  "_why": [
+   "源文件（中英两份）本段只重印了题干和全部选项，没有写答案；resolve_answer 的并列护栏据此判 unresolved。",
+   "A 的 Control Tower 数据驻留护栏与 C 的 SCP 都是「阻止」手段，同时满足「禁止连互联网」与「只许 ap-northeast-3」。",
+   "B 的 WAF 是应用层过滤，挡不住 VPC 出网；D 只在单个 VPC 的网络 ACL 上做、且 IAM 逐用户配，不是组织级约束；E 的 Config 只检测告警，不阻止。"
+  ],
+  "answer": [
+   "A",
+   "C"
+  ]
+ },
+ "158": {
+  "_why": [
+   "源文件（中英两份）本段只重印了题干和全部选项，没有写答案；resolve_answer 的并列护栏据此判 unresolved。",
+   "CloudFront 同时支持直播（real-time）与点播（on-demand）视频分发，是唯一一个两种场景都覆盖的服务。",
+   "Global Accelerator 走 TCP/UDP 加速、不做媒体缓存；Route 53 只是 DNS；S3 Transfer Acceleration 是上传加速。"
+  ],
+  "answer": [
+   "A"
+  ]
+ },
+ "159": {
+  "_why": [
+   "源文件（中英两份）本段只重印了题干和全部选项，没有写答案；resolve_answer 的并列护栏据此判 unresolved。",
+   "A 的 API Gateway 使用计划 + API key 把未授权调用挡在网关；C 的 WAF 规则直接过滤 botnet 恶意请求。",
+   "B 在 Lambda 内部判断意味着请求已经计费执行了，没挡住；D 改私有 API 会切断正常公网用户；E 逐用户建 IAM 角色不可行。"
+  ],
+  "answer": [
+   "A",
+   "C"
+  ]
+ },
+ "160": {
+  "_why": [
+   "源文件（中英两份）本段只重印了题干和全部选项，没有写答案；resolve_answer 的并列护栏据此判 unresolved。",
+   "题目要求「毫秒级可访问」且只保留 30 天。S3 Standard 满足毫秒级读取，300 MB/月的量级成本极低。",
+   "选项写的是 Amazon S3 Glacier（非 Instant Retrieval），取回是分钟到小时级，且最短存储期 90 天 > 30 天，反而更贵。"
+  ],
+  "answer": [
+   "C"
+  ]
+ },
+ "178": {
+  "_why": [
+   "源文件（中英两份）本段只重印了题干和全部选项，没有写答案；resolve_answer 的并列护栏据此判 unresolved。",
+   "AWS Backup 是唯一一个同时托管 EC2 与 RDS 备份、并原生支持跨 Region 复制的服务，运维开销最小。",
+   "Amazon DLM 只管 EBS 快照与 EBS 支持的 AMI，覆盖不到 RDS；C、D 都要自己拼多个步骤。"
+  ],
+  "answer": [
+   "A"
+  ]
+ },
+ "179": {
+  "_why": [
+   "源文件（中英两份）本段只重印了题干和全部选项，没有写答案；resolve_answer 的并列护栏据此判 unresolved。",
+   "EC2 取 Parameter Store 里的加密参数，靠的是**实例配置文件挂 IAM 角色**（读参数 + KMS Decrypt）。",
+   "B 的措辞是把 IAM policy「分配给 EC2 实例」—— IAM 策略不能直接挂到实例上，必须经由角色；C、D 的信任关系写法根本不成立。"
+  ],
+  "answer": [
+   "A"
+  ]
+ },
+ "184": {
+  "_why": [
+   "源文件（中英两份）本段只重印了题干和全部选项，没有写答案；resolve_answer 的并列护栏据此判 unresolved。",
+   "控制台创建的 Lambda 默认在 VPC 之外，走不到 VGW。把函数配置进 VPC（带合适的安全组）后，就能沿用既有的 Direct Connect 到本地数据中心。",
+   "题干已说明有一对 DX 连接且非 VPC 流量都路由到 VGW，B 再建 VPN 属多余；C 改路由表对 VPC 外的 Lambda 无效；D 的 Elastic IP 方案不成立。"
+  ],
+  "answer": [
+   "A"
+  ]
+ },
+ "232": {
+  "_why": [
+   "源文件（中英两份）本段只重印了题干和全部选项，没有写答案；resolve_answer 的并列护栏据此判 unresolved。",
+   "VPC 流日志投递到 CloudWatch Logs，用指标筛选器匹配到 3389/22 的已建立连接，再配 CloudWatch 告警发通知 —— 这是能覆盖「RDP 或 SSH 接入」的唯一完整链路。",
+   "D 的 EventBridge 监听的是实例状态变更（启停），不是登录行为；A、B 都不产生登录事件通知。",
+   "注：本段源文件里有一句「The correct option ... is: C」，但它写的是 correct option 而非 correct answer，答案行正则命中不到；靠相似度已无法与并列的 B 区分，故在此固定。"
+  ],
+  "answer": [
+   "C"
+  ]
+ },
+ "651": {
+  "_why": [
+   "解析文档在本题正确解析之后，又多粘了一份第 649 题的解析（gp3 / 15,000 IOPS）。",
+   "split_segment 的答案块边界修好后，正确解析已排在前面，这里只把多出来的尾巴截掉。",
+   "答案 C 本来就对（Standard-IA → Glacier Instant Retrieval → Deep Archive），不改。"
+  ],
+  "explanation_en": "S3 Standard-IA (instead of One Zone-IA) ensures high durability across multiple AZs for infrequent access.\nGlacier Instant Retrieval meets the \"instant availability\" requirement after 360 days, while Glacier Deep Archive is cost-effective for audits after 5 years.\n(Option A/B use less durable One Zone-IA, and Option D uses slower Glacier Flexible Retrieval, which violates the \"instant\" requirement.)",
+  "explanation_zh": "S3 Standard-IA（而非 One Zone-IA）可为不频繁访问的数据提供跨多个可用区的高持久性。\nGlacier Instant Retrieval 满足 360 天后「即时可用」的要求，而 Glacier Deep Archive 对 5 年后的审计场景具有成本效益。\n（选项 A/B 使用了持久性较低的 One Zone-IA，选项 D 使用了较慢的 Glacier Flexible Retrieval，违反了「即时」的要求。）"
+ }
 }

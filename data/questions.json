@@ -6724,10 +6724,10 @@
   ],
   "pdf_page": 53,
   "answer": [
-   "B",
+   "A",
    "C"
   ],
-  "answer_source": "fuzzy_match",
+  "answer_source": "manual",
   "answer_confidence": 1.0,
   "stem_mismatch": false,
   "explanation_en": null,
@@ -7047,7 +7047,7 @@
   "answer": [
    "A"
   ],
-  "answer_source": "fuzzy_match",
+  "answer_source": "manual",
   "answer_confidence": 1.0,
   "stem_mismatch": false,
   "explanation_en": null,
@@ -7094,10 +7094,10 @@
   ],
   "pdf_page": 56,
   "answer": [
-   "B",
+   "A",
    "C"
   ],
-  "answer_source": "fuzzy_match",
+  "answer_source": "manual",
   "answer_confidence": 1.0,
   "stem_mismatch": false,
   "explanation_en": null,
@@ -7139,9 +7139,9 @@
   ],
   "pdf_page": 56,
   "answer": [
-   "B"
+   "C"
   ],
-  "answer_source": "fuzzy_match",
+  "answer_source": "manual",
   "answer_confidence": 1.0,
   "stem_mismatch": false,
   "explanation_en": null,
@@ -7319,7 +7319,7 @@
   ],
   "answer_source": "regex_letter",
   "answer_confidence": 0.95,
-  "stem_mismatch": true,
+  "stem_mismatch": false,
   "explanation_en": null,
   "explanation_zh": null,
   "stem_zh": "某公司有两个应用程序：一个发送方应用程序，负责发送带有待处理负载的消息；一个处理方应用程序，用于接收这些带负载的消息。该公司希望采用一项 AWS 服务来处理这两个应用程序之间的消息。发送方应用程序每小时大约可发送 1,000 条消息。消息最多可能需要 2 天才能处理完。如果消息处理失败，必须予以保留，使其不影响其余消息的处理。哪个解决方案能满足这些要求且运营效率最高？",
@@ -7931,9 +7931,9 @@
   ],
   "pdf_page": 62,
   "answer": [
-   "B"
+   "A"
   ],
-  "answer_source": "fuzzy_match",
+  "answer_source": "manual",
   "answer_confidence": 1.0,
   "stem_mismatch": false,
   "explanation_en": null,
@@ -7975,9 +7975,9 @@
   ],
   "pdf_page": 63,
   "answer": [
-   "B"
+   "A"
   ],
-  "answer_source": "fuzzy_match",
+  "answer_source": "manual",
   "answer_confidence": 1.0,
   "stem_mismatch": false,
   "explanation_en": null,
@@ -8201,9 +8201,9 @@
   ],
   "pdf_page": 65,
   "answer": [
-   "B"
+   "A"
   ],
-  "answer_source": "fuzzy_match",
+  "answer_source": "manual",
   "answer_confidence": 1.0,
   "stem_mismatch": false,
   "explanation_en": null,
@@ -9362,7 +9362,7 @@
   "topic": "Topic 1",
   "type": "single",
   "select_count": 1,
-  "stem_en": "A company hosts multiple production applications. One of the applications consists of resources from Amazon EC2, AWS Lambda, Amazon RDS, Amazon Simple Notification Service (Amazon SNS), and Amazon Simple Queue Service (Amazon SQS) across multiple AWS Regions. All company resources are tagged with a tag name of ¼application½ and a value that corresponds to each application. A solutions architect must provide the quickest solution for identifying all of the tagged components. Which solution meets these requirements?",
+  "stem_en": "A company hosts multiple production applications. One of the applications consists of resources from Amazon EC2, AWS Lambda, Amazon RDS, Amazon Simple Notification Service (Amazon SNS), and Amazon Simple Queue Service (Amazon SQS) across multiple AWS Regions. All company resources are tagged with a tag name of “application” and a value that corresponds to each application. A solutions architect must provide the quickest solution for identifying all of the tagged components. Which solution meets these requirements?",
   "options": [
    {
     "letter": "A",
@@ -9869,7 +9869,7 @@
    },
    {
     "letter": "D",
-    "text_en": "Create a new identity provider by choosing ¼AWS account½ as the provider type in the IAM console. Supply the vendor’s AWS account ID and user name. Attach the appropriate IAM policies to the new provider for the permissions that the vendor requires.",
+    "text_en": "Create a new identity provider by choosing “AWS account” as the provider type in the IAM console. Supply the vendor’s AWS account ID and user name. Attach the appropriate IAM policies to the new provider for the permissions that the vendor requires.",
     "text_zh": "在 IAM 控制台中选择「AWS account」作为提供方类型，新建一个身份提供方。填入该供应商的 AWS 账户 ID 和用户名。为这个新提供方附加相应的 IAM 策略，赋予供应商所需的权限。"
    }
   ],
@@ -10332,8 +10332,8 @@
   "answer": [
    "C"
   ],
-  "answer_source": "fuzzy_match",
-  "answer_confidence": 0.992,
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
   "explanation_en": "The correct option for notifying the operations team when RDP or SSH access to an environment has been established is:\n\nC. Publish VPC flow logs to Amazon CloudWatch Logs. Create required metric filters. Create an Amazon CloudWatch metric alarm with a notification action for when the alarm is in the ALARM state.\n\nHere's why:\n\nVPC Flow Logs:** VPC flow logs capture information about the IP traffic going to and from network interfaces in your VPC. This includes information about accepted and rejected connections. To monitor RDP or SSH access, you can analyze these logs.\n\nCloudWatch Logs:** By publishing VPC flow logs to CloudWatch Logs, you can analyze the logs using metric filters to extract relevant information.\n\nMetric Filters:** Create metric filters to match the patterns corresponding to RDP or SSH access in the CloudWatch Logs. For example, you can create metric filters that look for specific keywords or patterns related to RDP or SSH connections.\nCloudWatch Metric Alarm:** Set up CloudWatch metric alarms based on the metric filters. When the alarm is triggered (indicating that RDP or SSH access has been detected), it can take a notification action, such as sending a notification to the operations team via Amazon SNS.",
   "explanation_zh": "在有人建立到某个环境的 RDP 或 SSH 访问时通知运维团队的正确选项是：\n\nC. 将 VPC 流日志发布到 Amazon CloudWatch Logs。创建所需的指标筛选条件。创建一个 Amazon CloudWatch 指标告警，并设置在告警处于 ALARM 状态时执行通知操作。\n\n原因如下：\n\nVPC 流日志：** VPC 流日志会捕获进出你 VPC 中网络接口的 IP 流量信息，其中包括已接受和已拒绝连接的信息。要监控 RDP 或 SSH 访问，你可以分析这些日志。\n\nCloudWatch Logs：** 通过将 VPC 流日志发布到 CloudWatch Logs，你可以使用指标筛选条件分析日志以提取相关信息。\n\n指标筛选条件：** 创建指标筛选条件，以匹配 CloudWatch Logs 中对应 RDP 或 SSH 访问的模式。例如，你可以创建查找与 RDP 或 SSH 连接相关的特定关键字或模式的指标筛选条件。\nCloudWatch 指标告警：** 基于这些指标筛选条件设置 CloudWatch 指标告警。当告警被触发时（表明检测到 RDP 或 SSH 访问），它可以执行通知操作，例如通过 Amazon SNS 向运维团队发送通知。",
@@ -12044,7 +12044,7 @@
   "topic": "Topic 1",
   "type": "single",
   "select_count": 1,
-  "stem_en": "A solutions architect observes that a nightly batch processing job is automatically scaled up for 1 hour before the desired Amazon EC2 capacity is reached. The peak capacity is the ¹same every night and the batch jobs always start at 1 AM. The solutions architect needs to find a cost-effective solution that will allow for the desired EC2 capacity to be reached quickly and allow the Auto Scaling group to scale down after the batch jobs are complete. What should the solutions architect do to meet these requirements?",
+  "stem_en": "A solutions architect observes that a nightly batch processing job is automatically scaled up for 1 hour before the desired Amazon EC2 capacity is reached. The peak capacity is the ‘same every night and the batch jobs always start at 1 AM. The solutions architect needs to find a cost-effective solution that will allow for the desired EC2 capacity to be reached quickly and allow the Auto Scaling group to scale down after the batch jobs are complete. What should the solutions architect do to meet these requirements?",
   "options": [
    {
     "letter": "A",
@@ -13413,7 +13413,7 @@
   ],
   "answer_source": "regex_letter",
   "answer_confidence": 0.95,
-  "stem_mismatch": true,
+  "stem_mismatch": false,
   "explanation_en": "AWS DataSync is a fully managed data transfer service that can be used to simplify, automate, and accelerate copying large amounts of data between on-premises storage systems and Amazon S3, Amazon EFS, or Amazon FSx for Windows File Server.\nWith AWS DataSync, you can control the bandwidth to minimize the impact on other departments by configuring the maximum bandwidth that the data transfer service is allowed to use.\nAWS DataSync is designed for high-speed data transfers, and it can take advantage of the available network bandwidth to maximize performance.\nAWS DataSync can be quickly set up and configured for the migration, allowing the laboratory to meet the 5-day migration timeline.",
   "explanation_zh": "AWS DataSync 是一项全托管的数据传输服务，可用于简化、自动化和加速在本地存储系统与 Amazon S3、Amazon EFS 或 Amazon FSx for Windows File Server 之间复制大量数据。\n使用 AWS DataSync，你可以通过配置该数据传输服务允许使用的最大带宽来控制带宽，从而尽量减少对其他部门的影响。\nAWS DataSync 专为高速数据传输而设计，能够充分利用可用网络带宽以最大化性能。\nAWS DataSync 可以快速设置和配置以进行迁移，使实验室能够满足 5 天的迁移时限。",
   "stem_zh": "某大学研究实验室需要把 30 TB 数据从本地的 Windows 文件服务器迁移到 Amazon FSx for Windows File Server。该实验室有一条 1 Gbps 的网络链路，校内许多其他院系也共用这条链路。实验室希望采用一种能最大化传输性能的数据迁移服务，但同时需要能控制该服务占用的带宽，以尽量减少对其他院系的影响。这次数据迁移必须在未来 5 天内完成。哪个 AWS 方案能满足这些需求？",
@@ -23015,7 +23015,7 @@
   "topic": "Topic 1",
   "type": "single",
   "select_count": 1,
-  "stem_en": "A company provides an API interface to customers so the customers can retrieve their financial information.  he company expects a larger number of requests during peak usage times of the year. The company requires the API to respond consistently with low latency to ensure customer satisfaction. The company needs to provide a compute host for the API. Which solution will meet these requirements with the LEAST operational overhead?",
+  "stem_en": "A company provides an API interface to customers so the customers can retrieve their financial information. Е he company expects a larger number of requests during peak usage times of the year. The company requires the API to respond consistently with low latency to ensure customer satisfaction. The company needs to provide a compute host for the API. Which solution will meet these requirements with the LEAST operational overhead?",
   "options": [
    {
     "letter": "A",
@@ -29161,7 +29161,7 @@
   ],
   "answer_source": "regex_letter",
   "answer_confidence": 1.0,
-  "stem_mismatch": true,
+  "stem_mismatch": false,
   "explanation_en": "EventBridge + Lambda automates real-time tagging without manual intervention.\nSCPs (Option A) cannot dynamically tag resources, and scheduled rules (Option C) are not event-driven.",
   "explanation_zh": "EventBridge + Lambda 可在无需人工干预的情况下实现实时自动打标签。\nSCP（选项 A）无法动态为资源打标签，而定时规则（选项 C）不是事件驱动的。",
   "stem_zh": "某公司维护着一个把用户映射到成本中心的 Amazon RDS 数据库。该公司在 AWS Organizations 的一个组织中拥有多个账户。该公司需要一个方案，对该组织中某个特定 AWS 账户内创建的所有资源自动打标签，标签内容为创建该资源的用户所属的成本中心 ID。哪个方案能满足这些需求？",
@@ -29255,7 +29255,7 @@
   ],
   "answer_source": "regex_letter",
   "answer_confidence": 1.0,
-  "stem_mismatch": true,
+  "stem_mismatch": false,
   "explanation_en": "ALB supports sticky sessions (unlike NLB/GWLB). WAF provides security.\nElastic IPs (Option D) are not scalable.",
   "explanation_zh": "ALB 支持粘性会话（NLB/GWLB 不支持）。WAF 提供安全防护。\n弹性 IP（选项 D）不具备可扩展性。",
   "stem_zh": "某公司在一个带目标组的 Auto Scaling 组内的 Amazon EC2 实例上运行一个 Web 应用。为了获得更好的用户体验，该公司把应用设计为配合会话亲和性（粘性会话）工作。该应用必须作为一个端点在互联网上公开可用，并且必须在该端点上应用 WAF 以增强安全性，同时端点上必须配置会话亲和性（粘性会话）。以下哪几步组合能满足这些需求？（选择两项。）",
@@ -29343,7 +29343,7 @@
   ],
   "answer_source": "regex_letter",
   "answer_confidence": 1.0,
-  "stem_mismatch": true,
+  "stem_mismatch": false,
   "explanation_en": "Prefix lists centralize CIDR management. AWS RAM enables cross-account sharing.\nFirewall Manager (Option D) is overkill for CIDR updates.",
   "explanation_zh": "前缀列表可集中管理 CIDR。AWS RAM 支持跨账户共享。\nFirewall Manager（选项 D）对于 CIDR 更新来说过于重型。",
   "stem_zh": "某公司在 AWS Organizations 的一个组织中拥有多个 AWS 账户，供不同业务部门使用。该公司在全球有多个办公地点。该公司需要在整个组织范围内更新安全组规则，以放通新办公地点的 CIDR 范围或移除旧的 CIDR 范围。该公司希望集中管理安全组规则，以尽量减少更新 CIDR 范围带来的管理开销。哪个方案能以最高性价比满足这些需求？",
@@ -29393,7 +29393,7 @@
   ],
   "answer_source": "regex_letter",
   "answer_confidence": 1.0,
-  "stem_mismatch": true,
+  "stem_mismatch": false,
   "explanation_en": "Cluster placement minimizes latency. FSx for ONTAP supports multi-protocol (NFS/SMB) access.\nLustre (Option C) lacks SMB support.",
   "explanation_zh": "集群置放可最大限度降低延迟。FSx for ONTAP 支持多协议（NFS/SMB）访问。\nLustre（选项 C）不支持 SMB。",
   "stem_zh": "某公司用本地的网络附加存储 (NAS) 系统为其高性能计算 (HPC) 工作负载提供文件共享。该公司想把这些对延迟敏感的 HPC 工作负载及其存储迁移到 AWS 云。该文件系统必须能同时提供 NFS 和 SMB 多协议访问。以下哪几项组合能以最低延迟满足这些需求？（选择两项。）",
@@ -29839,7 +29839,7 @@
   ],
   "answer_source": "regex_letter",
   "answer_confidence": 1.0,
-  "stem_mismatch": true,
+  "stem_mismatch": false,
   "explanation_en": "Tag policies enforce standardized tagging across accounts.\nIAM policies (Option A) cannot validate tag values.",
   "explanation_zh": "标签策略可在各账户之间强制实施标准化打标签规范。\nIAM 策略（选项 A）无法校验标签值。",
   "stem_zh": "某公司在 AWS Organizations 中新建了一个组织，其中为公司的开发团队设立了多个账户。开发团队成员使用 AWS IAM Identity Center (AWS Single Sign-On) 访问这些账户。对该公司的每个应用，开发团队都必须用预先定义好的应用名称给创建的资源打标签。解决方案架构师需要设计一个方案，让开发团队只有在应用名称标签取值属于已批准范围时才能创建资源。哪个方案能满足这些需求？",
@@ -29971,7 +29971,7 @@
   ],
   "answer_source": "regex_letter",
   "answer_confidence": 1.0,
-  "stem_mismatch": true,
+  "stem_mismatch": false,
   "explanation_en": "Automatically detects and alerts on unusual spending.\nCloudWatch (Option D) lacks built-in anomaly detection.",
   "explanation_zh": "自动检测异常支出并发出告警。\nCloudWatch（选项 D）不具备内置的异常检测能力。",
   "stem_zh": "某公司在 Amazon EC2 实例上运行其应用。该公司会定期对 AWS 成本做财务评估，最近发现了异常支出。该公司需要一个能防范异常支出的方案：该方案必须监控成本，并在出现异常支出时通知相关负责人。哪个方案能满足这些需求？",
@@ -30109,7 +30109,7 @@
   ],
   "answer_source": "regex_letter",
   "answer_confidence": 1.0,
-  "stem_mismatch": true,
+  "stem_mismatch": false,
   "explanation_en": "Read replicas offload read traffic. ElastiCache reduces DB load.\nMulti-AZ (Option C) doesn’t scale reads; auto scaling (Option A) isn’t for RDS.",
   "explanation_zh": "只读副本可分流读流量。ElastiCache 可减轻数据库负载。\n多可用区（选项 C）无法扩展读能力；自动伸缩（选项 A）不适用于 RDS。",
   "stem_zh": "某公司在一个 Auto Scaling 组中的 Amazon EC2 实例上运行一个 Web 应用。该应用使用运行在 Amazon RDS for PostgreSQL 数据库实例上的数据库。流量增加时该应用变慢，高流量时段数据库承受着很重的读取负载。解决方案架构师应该采取哪几项措施来解决这些性能问题？（选择两项。）",
@@ -30197,7 +30197,7 @@
   ],
   "answer_source": "regex_letter",
   "answer_confidence": 1.0,
-  "stem_mismatch": true,
+  "stem_mismatch": false,
   "explanation_en": "Flow Logs capture traffic; Firehose streams to OpenSearch.\nCloudTrail (Options C/D) logs API calls, not network traffic.",
   "explanation_zh": "流日志捕获流量；Firehose 将数据流式传输到 OpenSearch。\nCloudTrail（选项 C/D）记录的是 API 调用，而非网络流量。",
   "stem_zh": "某公司的应用使用部署在一个 Amazon VPC 中的 Network Load Balancer、Auto Scaling 组、Amazon EC2 实例和数据库。该公司希望准实时地捕获其 Amazon VPC 中进出各网络接口的流量信息，并把这些信息发送到 Amazon OpenSearch Service 做分析。哪个方案能满足这些需求？",
@@ -30385,7 +30385,7 @@
   ],
   "answer_source": "regex_letter",
   "answer_confidence": 1.0,
-  "stem_mismatch": true,
+  "stem_mismatch": false,
   "explanation_en": "Continuously syncs only modified files to S3/EFS.\nLambda (Option B) requires custom code; full syncs (Option C) are inefficient.",
   "explanation_zh": "持续地只同步被修改过的文件到 S3/EFS。\nLambda（选项 B）需要自定义代码；全量同步（选项 C）效率低下。",
   "stem_zh": "解决方案架构师需要把文件从一个 Amazon S3 存储桶复制到一个 Amazon Elastic File System (Amazon EFS) 文件系统以及另一个 S3 存储桶。这些文件必须持续复制。原始 S3 存储桶中会不断新增文件。只有当源文件发生变化时，才应覆盖已复制的文件。哪个方案能以最小的运维开销满足这些需求？",

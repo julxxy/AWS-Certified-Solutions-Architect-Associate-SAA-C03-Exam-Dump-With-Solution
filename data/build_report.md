@@ -16,11 +16,11 @@
 | 题干（中） | 684 | 684 | 100.0% |
 | **选项（中）** | **2828** | **2828** | **100.0%** |
 | 解析（英） | 475 | 684 | 69.4% |
-| 解析（中） | 470 | 684 | 68.7% |
+| 解析（中） | 470 | 475 | 98.9% |
 
 ## 分布统计
 
-- `answer_source`：regex_letter 626，unresolved 42，fuzzy_match 15，manual 1
+- `answer_source`：regex_letter 626，unresolved 42，manual 9，fuzzy_match 7
 - `stem_zh_source`：solution_paraphrase 638，pdf_translation 46
 - 题型：single 598，multi 86
 - 选项数：ABCD 598，ABCDE 76，ABCDEF 10
@@ -60,6 +60,4 @@
 
 ## 未译选项清单
 
-共 4 条待译，详见 `data/i18n_todo.jsonl`。按题号聚合：
-
-`477:ABCD`
+全部选项均已翻译。

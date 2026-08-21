@@ -74,11 +74,19 @@ def flat(s):
 
 
 def stem_similarity(stem_en, seg):
-    """PDF 题干 vs 解析文档开头的相似度。<0.9 视为「转述失真」，需按 PDF 补译。"""
+    """PDF 题干 vs 解析文档开头的相似度。<0.9 视为「转述失真」，需按 PDF 补译。
+
+    autojunk 必须关掉。difflib 默认对长度 ≥200 的序列启用启发式：出现频率超过 1%
+    的元素被当「垃圾」踢出索引。逐字符比对时空格、e、t 这些全中招，匹配块无法成锚，
+    分数直接崩掉。实测 680 题只差 6 处 fi 连字，autojunk=True 算出 0.145，
+    关掉后是 0.970。开着的时候 <0.9 的题从 31 虚增到 42，多出来的 11 题
+    （164/301/653/655/657/658/668/671/674/676/680）全是假警报。
+    """
     if not seg:
         return 0.0
     head = flat(seg)[: len(stem_en)]
-    return difflib.SequenceMatcher(None, flat(stem_en).lower(), head.lower()).ratio()
+    return difflib.SequenceMatcher(
+        None, flat(stem_en).lower(), head.lower(), autojunk=False).ratio()
 
 
 # --------------------------------------------------------------------------
@@ -94,6 +102,14 @@ LIGATURES = {
     "Ë": "ffl",  # 0xAF
     "º": "’",  # 0x9E  右单引号
     "¿": "•",  # 0xA3  项目符号
+    # 下面 4 个是后来补的：出现次数少（全库 6 处 / 4 道题），一开始没被发现，
+    # 于是 211 的题干读作 `¼application½`、271 读作 `the ¹same`、
+    # 516 少了一个字母。逐个拿 Solution.txt 里的同一句话对照确认过。
+    "¼": "“",  # 0xA0  左双引号
+    "½": "”",  # 0xA1  右双引号
+    "¹": "‘",  # 0x9D  左单引号
+    "\x87": "Е",  # 0x6B  西里尔大写 IE（U+0415）—— 源文档本身就是同形字 typo，
+    #                     txt 里写的就是它，抽取只负责如实还原，不做"纠正"
 }
 
 _RE_STREAM = re.compile(rb"stream\r?\n(.*?)endstream", re.S)
@@ -203,9 +219,15 @@ _RE_TOPIC_LINE = re.compile(r"(?m)^Topic \d+\s*$\n?")
 # --------------------------------------------------------------------------
 
 # §2.2 实测：这条正则命中 658/684，不要"优化"（加前缀兼容会掉到 509）
-_RE_SEG_EN = re.compile(r"(?m)^\s*(\d{1,3})\s*[\].)]\s*")
+
+# 题号位数跟着 TOTAL_Q 走。写死 \d{1,3} 的话，题库一旦超过 999 题，主通道对
+# 1000 以后的题号全线失效 —— 而 `^` 禁止中途重试，修复通道 A/B 也救不回连片缺失，
+# 脚本还不报错。当前 TOTAL_Q=684，算出来仍是 {1,3}，行为与原先完全一致。
+_NUM = r"\d{1,%d}" % len(str(TOTAL_Q))
+
+_RE_SEG_EN = re.compile(r"(?m)^\s*(" + _NUM + r")\s*[\].)]\s*")
 # 中文译文里题号后统一带空格，且重点标记已归一为「重点>>>」
-_RE_SEG_ZH = re.compile(r"(?m)^[^\S\n]*(?:重点\s*>*)?\s*(\d{1,3})\s*[\].]\s")
+_RE_SEG_ZH = re.compile(r"(?m)^[^\S\n]*(?:重点\s*>*)?\s*(" + _NUM + r")\s*[\].]\s")
 
 
 def split_solution(text, regex):
@@ -245,6 +267,14 @@ def split_solution(text, regex):
         taken = {v[0] for v in anchors.values()}
         cands = [m for m in regex.finditer(text)
                  if lo[0] < m.start() < hi[0] and m.start() not in taken]
+        if len(cands) > 1 and n == TYPO_RENUMBER["real"]:
+            # 候选不唯一时，用已知的误编号收窄。TYPO_RENUMBER 以前是个纯注释常量
+            # （全仓零引用），315 全靠"恰好只有一个候选"这个零余量的巧合救回来 ——
+            # 只要 314 与 316 之间的解析正文里多一行编号列表（源文件里到处都是），
+            # 315 就会被静默丢弃。现在把那条已知事实真正用上。
+            narrowed = [m for m in cands if int(m.group(1)) == TYPO_RENUMBER["dup_of"]]
+            if narrowed:
+                cands = narrowed
         if len(cands) == 1:
             anchors[n] = (cands[0].start(), cands[0].end())
 
@@ -278,7 +308,11 @@ def _answer_text_candidates(seg):
     for m in re.finditer(r"(?im)^\s*(?:Correct answer|Answers?)\s*[:\-]?\s*(.+)$", seg):
         cands.append(m.group(1))
     for m in _RE_LINE_LETTER.finditer(seg):
-        line_end = seg.find("\n", m.start())
+        # 行尾必须从正文起点找，不能从 m.start() 找：_RE_LINE_LETTER 的 `^\s*` 会
+        # 跨空行，选项前有空行时（源文件绝大多数是这种排版）m.start() 落在上一个
+        # 换行符上，seg.find("\n", m.start()) 返回的是**匹配内部**那个换行符，
+        # 切出来是空串，再被下面的 len>12 静默滤掉。实测 721 处匹配里 539 处这样丢了。
+        line_end = seg.find("\n", m.end())
         cands.append(seg[m.end() - 1: line_end if line_end > 0 else len(seg)])
     # 兜底：段首若干行
     head = [l for l in seg.strip().split("\n") if l.strip()][:6]
@@ -328,7 +362,18 @@ def resolve_answer(seg, options, select_count):
     ranked = sorted(best.items(), key=lambda kv: kv[1], reverse=True)
     picked = [L for L, r in ranked[:select_count] if r >= 0.65]
     if len(picked) == select_count:
-        return sorted(picked), "fuzzy_match", round(ranked[select_count - 1][1], 3)
+        # 并列不采纳。源文件里有整段只重印题干 + 全部选项、压根没写答案的题
+        # （151/158/159/160/178/179/184/232 实测如此）。这种段落里每个选项与
+        # 自己的相似度都是 1.0，ranked 里一堆并列，ranked[:select_count] 取到
+        # 的纯粹是排序稳定性的产物 —— 却会带着 confidence 1.0、needs_review
+        # false 进出题池，用户选对反被判错。
+        #
+        # 判据：与被取中的最低分并列的选项数超过 select_count，就说明相似度
+        # 区分不出来，判未确定。真有答案的题区分度很干净（6 题 0.993 vs 次高
+        # 0.302，232 题 0.992 vs 0.989），不会被这条误伤。
+        cutoff = ranked[select_count - 1][1]
+        if sum(1 for _, r in ranked if r >= cutoff - 1e-9) <= select_count:
+            return sorted(picked), "fuzzy_match", round(cutoff, 3)
 
     # d. 显式字母数量不符也先留着（标低置信），否则未确定
     if explicit and select_count == 1:
@@ -617,8 +662,8 @@ def stage_build():
         q["answer_confidence"] = conf
 
         # 题面与解析段开头对不上。多数只是解析文档改写/省略了题干（答案照样是对的），
-        # 所以**不能**据此判 needs_review —— 31 题里有 21 题答案没问题，一刀切会
-        # 把可出题数从 642 砍到 621，为抓 1 道错题赔掉 20 道好题。
+        # 所以**不能**据此判 needs_review —— 31 题里有 10 题答案没问题，一刀切会
+        # 把可出题数从 642 砍到 632，为抓 1 道错题赔掉 9 道好题。
         # 这里只做标记：verify 会把它和答案状态一起列出来，人工复核时有据可查。
         q["stem_mismatch"] = qid in distorted
 
@@ -626,20 +671,19 @@ def stage_build():
         _, q["explanation_en"] = split_segment(seg_en, q["stem_en"], zh=False)
         zh_stem_part, q["explanation_zh"] = split_segment(seg_zh, None, zh=True)
 
-        # 题干中文
+        # 题干中文。
+        # i18n_zh.jsonl 里的 field:"stem" 是**人工显式补的**，优先级最高，必须排在
+        # 相似度分支之前。原先它排在「head_ratio>=0.9 就用路 A 题干」之后，于是对
+        # 638 道路 A 题干可用的题，jsonl 里的修订会被静默忽略 —— 而 app.py 的
+        # _overlay_i18n 是无条件覆盖的：浏览器显示修订稿、questions.json 存的是旧稿，
+        # 重跑 build 也固化不进去，两边永远对不上。
         head_ratio = stem_similarity(q["stem_en"], seg_en)
-        if head_ratio < 0.9 and qid in zh_stems:
+        if qid in zh_stems:
             q["stem_zh"] = zh_stems[qid]
             q["stem_zh_source"] = "pdf_translation"
         elif head_ratio >= 0.9 and zh_stem_part:
             q["stem_zh"] = zh_stem_part
             q["stem_zh_source"] = "solution_paraphrase"
-        elif qid in zh_stems:
-            # 题面与解析开头一致，但中文解析里切不出题干段（zh 源文件缺这一段）。
-            # 这类题不会进 i18n_todo，只能人工往 i18n_zh.jsonl 补 field:"stem"；
-            # 少了这条兜底，补进去的译文会被静默丢弃。
-            q["stem_zh"] = zh_stems[qid]
-            q["stem_zh_source"] = "pdf_translation"
         else:
             q["stem_zh"] = None
             q["stem_zh_source"] = None
@@ -704,6 +748,14 @@ def stage_build():
         except Exception as e:
             log("  [警告] manual_fixes.json 解析失败，已跳过：%s" % e)
 
+    # explanation_quality 必须在人工修正之后重算。原先它在上面的循环里就定好了，
+    # 于是手工补了两百多字解析的题仍然挂着 quality="none"，继续留在报告的
+    # 「无解析题号」作业清单里 —— 而同一份报告的「解析（英）」计数是修正后重算的，
+    # 两边对不上，照清单去补解析会反复补同一题。
+    for q in out:
+        n = len(q.get("explanation_en") or "")
+        q["explanation_quality"] = "none" if n < 40 else "thin" if n < 120 else "ok"
+
     atomic_write(QUESTIONS, json.dumps(out, ensure_ascii=False, indent=1))
     log("  → %s（%d 题）" % (os.path.relpath(QUESTIONS, ROOT), len(out)))
 
@@ -754,8 +806,13 @@ def write_report(qs, bad_i18n_lines):
     A("| 题干（中） | %d | %d | %.1f%% |" % (n_stem_zh, total, 100.0 * n_stem_zh / total))
     A("| **选项（中）** | **%d** | **%d** | **%.1f%%** |" % (
         n_opts_zh, n_opts_tr, 100.0 * n_opts_zh / n_opts_tr if n_opts_tr else 0))
+    # 「解析（英）」问的是「684 题里有多少题有解析」，分母就是总题数。
+    # 「解析（中）」问的是「有解析的题里译了多少」——SPEC §3.3 写明是
+    # 「已译题数 / **有解析的题数**」。原先这一行也拿 total 当分母，把 470/475=98.9%
+    # 报成了 470/684=68.7%，看报告的人会一直去追一个不存在的 30 个百分点缺口。
     A("| 解析（英） | %d | %d | %.1f%% |" % (n_expl, total, 100.0 * n_expl / total))
-    A("| 解析（中） | %d | %d | %.1f%% |" % (n_expl_zh, total, 100.0 * n_expl_zh / total))
+    A("| 解析（中） | %d | %d | %.1f%% |" % (
+        n_expl_zh, n_expl, 100.0 * n_expl_zh / n_expl if n_expl else 0.0))
     A("")
     if bad_i18n_lines:
         A("> ⚠️ `i18n_zh.jsonl` 中有 %d 行无法解析，已跳过。\n" % bad_i18n_lines)
@@ -788,7 +845,12 @@ def write_report(qs, bad_i18n_lines):
         A("`" + ", ".join(str(i) for i in ids) + "`\n")
 
     A("## 未译选项清单\n")
-    missing = [(q["id"], o["letter"]) for q in qs for o in q["options"] if not o["text_zh"]]
+    # 只算**可译**的选项，和 write_i18n_todo 用同一条判据。原先没排除图片型选项
+    # （477 那 4 个 PDF 里就是截图、没有英文原文），于是报告永远写着「共 4 条待译，
+    # 详见 data/i18n_todo.jsonl」而那个文件是 0 字节，上一节又刚写完「100%」——
+    # 这 4 条成了永远清不掉的假待办，「全部选项均已翻译」那句从来走不到。
+    missing = [(q["id"], o["letter"]) for q in qs for o in q["options"]
+               if o["text_en"] and not o["text_zh"]]
     if not missing:
         A("全部选项均已翻译。\n")
     else:
