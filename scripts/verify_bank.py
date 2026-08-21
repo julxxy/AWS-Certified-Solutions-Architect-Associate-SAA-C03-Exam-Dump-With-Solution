@@ -19,6 +19,11 @@ import re
 import sys
 from collections import Counter
 
+# 复用 build_bank 的常量与切分逻辑：题号上限、315 误编号的还原通道，都得对着
+# 同一份实现验，否则「验证脚本自己抄了一份会漂」的问题迟早出现。
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import build_bank  # noqa: E402
+
 # 脚本在 scripts/ 下，仓库根目录要再往上退一层。
 # 别"简化"成 dirname(__file__) —— 那样 data/ 会解析到 scripts/data/，
 # 题库读不到、进度写错地方，而且不报错。
@@ -28,6 +33,7 @@ F_BANK = os.path.join(DATA, "questions.json")
 F_EN = os.path.join(DATA, "questions_en.json")
 F_TODO = os.path.join(DATA, "i18n_todo.jsonl")
 F_I18N = os.path.join(DATA, "i18n_zh.jsonl")
+F_REPORT = os.path.join(DATA, "build_report.md")
 F_BASE = os.path.join(DATA, "verify_baseline.json")
 
 OK, BAD, INFO = "✅", "❌", "·"
@@ -56,12 +62,47 @@ def main():
 
     bank = {q["id"]: q for q in json.load(open(F_BANK, encoding="utf-8"))}
     ids = sorted(bank)
+    base = json.load(open(F_BASE, encoding="utf-8")) if os.path.exists(F_BASE) else {}
+
+    def vs_base(key, cur, label, tol=0):
+        """单向基线：只防「掉下去」。用于会随补译/修数据单调变好的指标。"""
+        old = base.get(key)
+        if old is None:
+            info(label, "%s（首次记录，将写入基线）" % cur)
+            return True
+        return check(cur >= old - tol, label,
+                     "当前 %d / 基线 %d%s" % (cur, old, "（↓ 掉了）" if cur < old - tol else ""))
+
+    def vs_base_exact(key, cur, label):
+        """双向基线：变大变小都是回归。
+
+        题数、选项总数、选项数分布这类结构性指标不该「变好」——多切出一个选项
+        和少切一个同样是抽取逻辑坏了。原先它们只走 info()，reference.md
+        §PDF 抽取「变了就要查」的那组基准数字实际上没有任何人在守。
+        """
+        old = base.get(key)
+        if old is None:
+            info(label, "%s（首次记录，将写入基线）" % cur)
+            return True
+        return check(cur == old, label,
+                     "当前 %s / 基线 %s%s" % (cur, old, "（≠ 变了）" if cur != old else ""))
     total = len(bank)
 
     print("\n【硬性】结构完整性")
     check(total > 0, "题库非空", "%d 题" % total)
-    check(ids == list(range(ids[0], ids[-1] + 1)), "题号连续无缺口",
-          "%d–%d" % (ids[0], ids[-1]))
+    # 对 range(1, TOTAL_Q+1) 比，不能拿实际首尾比 —— 后者在题库只剩 1–600 时照样 ✅。
+    check(ids == list(range(1, build_bank.TOTAL_Q + 1)),
+          "题号 1–%d 连续无缺口" % build_bank.TOTAL_Q,
+          "实际 %d–%d 共 %d 题" % (ids[0], ids[-1], total))
+    # §6 第一项：阶段一产物也要在。verify 只看 questions.json 的话，
+    # questions_en.json 被删/被截断都发现不了，而阶段二只读它。
+    if os.path.exists(F_EN):
+        en_list = json.load(open(F_EN, encoding="utf-8"))
+        check(len(en_list) == build_bank.TOTAL_Q, "questions_en.json 含 %d 条" % build_bank.TOTAL_Q,
+              "%d 条" % len(en_list))
+    else:
+        check(False, "questions_en.json 存在", "缺失 —— 阶段二只读它，先跑 --extract")
+    check(os.path.exists(F_REPORT), "build_report.md 已生成")
     check(all(q.get("stem_en") for q in bank.values()), "每题都有英文题干")
     check(all(q.get("options") for q in bank.values()), "每题都有选项")
     letters_ok = all([o["letter"] for o in q["options"]] ==
@@ -79,6 +120,13 @@ def main():
                     for q in bank.values())
     lig = [c for c in "ÈÊÉË" if c in blob]
     check(not lig, "无未还原的连字字形", "残留 %s" % lig if lig else "")
+    # 只查这 4 个字形是不够的：偏移后落在 0x80–0xFF 的码位还有一批，出现次数少
+    # （¼ ½ ¹ 和一个 U+0087 一共才 6 处 / 4 道题），当年就是这么漏过去的。
+    # 改成「白名单之外的非 ASCII 一律报」，LIGATURES 再漏码位就会当场暴露。
+    ALLOWED = set("’‘“”•–—…×°Е")  # 正常会出现的排印字符 + 源文档自带的同形字 typo
+    stray = sorted({c for c in blob if ord(c) > 127 and c not in ALLOWED})
+    check(not stray, "无白名单之外的非 ASCII 残留",
+          "残留 %s" % [(c, "U+%04X" % ord(c)) for c in stray[:6]] if stray else "")
     broken = re.findall(r"\b(?:les|ow|ows|traÊc|conÈg\w*)\b", blob)
     check(len(broken) < 5, "无明显断字", "疑似 %d 处" % len(broken))
     check("traffic" in blob and "configure" in blob.lower() and "files" in blob,
@@ -87,8 +135,10 @@ def main():
     print("\n【硬性】题型与分布")
     n_opts = sum(len(q["options"]) for q in bank.values())
     dist = Counter("".join(o["letter"] for o in q["options"]) for q in bank.values())
-    info("选项总数", str(n_opts))
-    info("选项数分布", "，".join("%s %d" % kv for kv in dist.most_common()))
+    dist_str = "，".join("%s %d" % kv for kv in sorted(dist.items()))
+    vs_base_exact("total", total, "总题数与基线一致")
+    vs_base_exact("n_opts", n_opts, "选项总数与基线一致")
+    vs_base_exact("opt_dist", dist_str, "选项数分布与基线一致")
     multi = [q for q in bank.values() if q["type"] == "multi"]
     check(all(q["select_count"] in (2, 3) for q in multi),
           "多选题 select_count 只能是 2 或 3", "%d 道多选" % len(multi))
@@ -104,15 +154,6 @@ def main():
     usable = sum(1 for q in bank.values() if not q["needs_review"] and q["answer"])
     src = Counter(q["answer_source"] for q in bank.values())
     eq = Counter(q.get("explanation_quality") for q in bank.values())
-    base = json.load(open(F_BASE, encoding="utf-8")) if os.path.exists(F_BASE) else {}
-
-    def vs_base(key, cur, label, tol=0):
-        old = base.get(key)
-        if old is None:
-            info(label, "%d（首次记录，将写入基线）" % cur)
-            return True
-        return check(cur >= old - tol, label,
-                     "当前 %d / 基线 %d%s" % (cur, old, "（↓ 掉了）" if cur < old - tol else ""))
 
     vs_base("usable", usable, "可出题数不低于基线")
     vs_base("regex_letter", src.get("regex_letter", 0), "regex 直接命中答案数不低于基线")
@@ -123,22 +164,42 @@ def main():
          % (eq.get("ok", 0), eq.get("thin", 0), eq.get("none", 0)))
 
     print("\n【硬性】已知脏数据仍被正确标记")
-    known = {
-        315: "误编号为 215]，需从错号处取到",
-        477: "选项为图片，PDF 无文字",
-    }
-    for qid, why in known.items():
-        if qid in bank:
-            q = bank[qid]
-            check(q["needs_review"] or q.get("explanation_quality") != "ok",
-                  "#%d 已标记（%s）" % (qid, why), q.get("review_reason") or "")
-    gap = [i for i in range(191, 201) if i in bank]
-    if gap:
-        check(all(bank[i]["needs_review"] and bank[i]["options"] for i in gap),
-              "191–200 保留题干选项但排除出题池")
-    if 215 in bank:
-        check(bool(bank[215]["answer"]), "真正的 215 未被误编号覆盖",
-              "answer=%s" % bank[215]["answer"])
+    check(477 in bank and bank[477]["needs_review"],
+          "#477 已标记（选项为图片，PDF 无文字）",
+          bank[477].get("review_reason") or "" if 477 in bank else "题号不存在")
+    check(all(i in bank for i in range(191, 201)) and
+          all(bank[i]["needs_review"] and bank[i]["options"] for i in range(191, 201)),
+          "191–200 保留题干选项但排除出题池")
+
+    segs = None
+    # §6 要求验的是「315 从误编号的 215] 正确取到，且真正的 215 没被覆盖」。
+    # 光看 questions.json 验不了这件事：题干来自 PDF，段落来自 txt，成品里看不出
+    # 段落是从哪儿切的。原先那句 `needs_review or explanation_quality != "ok"` 是
+    # 恒真式 —— 315 那段源文件本就只有题干没答案，两个条件必成立，位置推断修复通道
+    # （build_bank 的修复通道 B）整个坏掉也照样 ✅。所以这里重跑一次切分，直接对着
+    # 切出来的段落验。
+    if os.path.exists(build_bank.SOL_EN):
+        text = open(build_bank.SOL_EN, encoding="utf-8", errors="replace").read()
+        segs = build_bank.split_solution(text, build_bank._RE_SEG_EN)
+        vs_base_exact("sol_segs", len(segs), "解析文档切出段数与基线一致")
+
+        def seg_matches(qid, n=60):
+            """切出来的这一段，开头是不是这道题的题干。"""
+            seg = segs.get(qid)
+            if not seg or qid not in bank:
+                return False
+            head = re.sub(r"\s+", " ", seg).strip().lower()
+            stem = re.sub(r"\s+", " ", bank[qid]["stem_en"]).strip().lower()
+            return head.startswith(stem[:n])
+
+        check(seg_matches(315), "#315 已从误编号的 215] 正确取到（修复通道 B 生效）",
+              "切出 %d 字符" % len(segs.get(315) or ""))
+        check(seg_matches(215), "真正的 215 未被误编号覆盖",
+              "answer=%s" % (bank[215]["answer"] if 215 in bank else "?"))
+        check(not any(i in segs for i in range(191, 201)),
+              "191–200 在 txt 里确实不存在（没有被别的段落顶替）")
+    else:
+        info("跳过切分复验", "找不到 %s" % os.path.basename(build_bank.SOL_EN))
 
     # 题面与解析段开头对不上的题。多数只是解析文档改写了题干，答案照样对，
     # 所以不判失败、也不踢出出题池 —— 但要点名，人工抽查时从这份名单开始。
@@ -157,31 +218,27 @@ def main():
     info("选项中文", "%d / %d 可译（%.1f%%）" % (zh_o, trans_o, pct))
     info("题干中文", "%d / %d" % (zh_s, total))
     vs_base("zh_options", zh_o, "选项译文数不低于基线（不能倒退）")
-    if pct >= 95:
-        check(True, "选项中文覆盖率 ≥ 95%%（§6 门槛）", "%.1f%%" % pct)
-    else:
-        info("选项中文覆盖率未达 95% 门槛", "%.1f%%，缺译处显示英文 + 角标" % pct)
+    # 这里原先写的是 `if pct >= 95: check(True, ...) else: info(...)` —— 分支一拆，
+    # 这项检查就结构上永远不可能失败：覆盖率跌到 3% 也照打「全部通过」、退出码 0、
+    # --strict 不报错、基线照写。§6 明确把它列成门槛，就得是真断言。
+    check(pct >= 95, "选项中文覆盖率 ≥ 95%（§6 门槛）",
+          "%.1f%%%s" % (pct, "" if pct >= 95 else "，缺译处显示英文 + 角标"))
 
     if os.path.exists(F_TODO):
         n_todo = sum(1 for _ in open(F_TODO, encoding="utf-8"))
         info("待译清单", "%d 条（data/i18n_todo.jsonl）" % n_todo)
     if os.path.exists(F_I18N):
-        bad = 0
-        seen = set()
-        for line in open(F_I18N, encoding="utf-8"):
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                r = json.loads(line)
-                k = (int(r["id"]), r.get("letter") or "stem")
-                if not r.get("zh"):
-                    raise ValueError
-                seen.add(k)
-            except Exception:
-                bad += 1
-        check(bad == 0, "i18n_zh.jsonl 无坏行", "%d 行无法解析" % bad if bad else "")
-        info("译文条目（去重后）", str(len(seen)))
+        # 直接复用 build_bank 的加载器，不再自己抄一份判据。原先这里的内联解析
+        # 与 build_bank / app.py 有两处不一致，方向还相反：
+        #   · `//` 注释行不跳 → 一行合法注释就让本项失败、基线从此不再更新；
+        #   · `r.get("letter") or "stem"` 把漏写 letter 的行当题干条目收下 ——
+        #     而 build_bank 判它是坏行直接丢弃，app.py 取 rec["letter"] 会 KeyError
+        #     也算坏行。于是同一份文件：译文静默丢失，验证却全绿。
+        zh_opts, zh_stems, bad = build_bank.load_i18n_jsonl(F_I18N)
+        check(bad == 0, "i18n_zh.jsonl 无坏行（判据与 build_bank/app 一致）",
+              "%d 行无法解析" % bad if bad else "")
+        info("译文条目（去重后）", "%d（选项 %d + 题干 %d）"
+             % (len(zh_opts) + len(zh_stems), len(zh_opts), len(zh_stems)))
 
     print("\n【提示】领域分布（影响考试分层抽样）")
     dom = Counter(q.get("domain") or "null" for q in bank.values())
@@ -191,7 +248,10 @@ def main():
 
     # 写基线
     newbase = {"usable": usable, "regex_letter": src.get("regex_letter", 0),
-               "expl_ok": eq.get("ok", 0), "zh_options": zh_o, "total": total}
+               "expl_ok": eq.get("ok", 0), "zh_options": zh_o, "total": total,
+               "n_opts": n_opts, "opt_dist": dist_str}
+    if segs is not None:
+        newbase["sol_segs"] = len(segs)
     if not _fail:
         tmp = F_BASE + ".tmp"
         with open(tmp, "w", encoding="utf-8") as f:

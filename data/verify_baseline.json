@@ -3,5 +3,8 @@
  "regex_letter": 626,
  "expl_ok": 457,
  "zh_options": 2828,
- "total": 684
+ "total": 684,
+ "n_opts": 2832,
+ "opt_dist": "ABCD 598，ABCDE 76，ABCDEF 10",
+ "sol_segs": 674
 }
