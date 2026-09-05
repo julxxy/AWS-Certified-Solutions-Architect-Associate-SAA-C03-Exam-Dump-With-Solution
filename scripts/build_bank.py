@@ -699,12 +699,13 @@ def stage_build():
         # needs_review —— 语义是「这题的答案不可信，别拿它考我」，会被排除出
         #   考试池与滚动学习出题池。只有答案层面的问题才置位。
         # explanation_quality —— 非阻塞的解析质量标记。源文件里 51–99 等整段
-        #   区间本来就只有题目和答案、没有解析（实测 244 题），这些题答案可信、
-        #   照常可考，只是答完没有解析可看，不该把它们踢出题库。
+        #   区间本来就只有题目和答案、没有解析（数量见 build_report.md 的
+        #   「无解析」清单，人工补过解析之后会变），这些题答案可信、照常可考，
+        #   只是答完没有解析可看，不该把它们踢出题库。
         expl_len = len(q["explanation_en"] or "")
         reasons = []
         if qid in MISSING_IN_TXT:
-            reasons.append("txt 中不存在该题（源文件 190→201 跳号），永无答案与解析")
+            reasons.append("txt 中不存在该题（源文件 190→201 跳号），源文件未提供答案与解析")
         elif seg_en is None:
             reasons.append("txt 缺该题")
         if not letters:
@@ -741,8 +742,11 @@ def stage_build():
                 if "answer" in patch:
                     q["answer_source"] = "manual"
                     q["answer_confidence"] = 1.0
-                q["needs_review"] = False
-                q["review_reason"] = None
+                # 补了解析也可能仍无唯一答案，允许人工修正显式保留待核对。
+                q["needs_review"] = bool(patch.get("needs_review", False))
+                q["review_reason"] = (
+                    patch.get("review_reason") or "人工修正要求继续核对"
+                    if q["needs_review"] else None)
                 fixed += 1
             log("  人工修正：应用 %d 题" % fixed)
         except Exception as e:
@@ -779,9 +783,8 @@ def write_report(qs, bad_i18n_lines):
     dom_dist = Counter(q["domain"] or "null" for q in qs)
 
     n_opts = sum(len(q["options"]) for q in qs)
-    # 覆盖率的分母只能算「可译」的选项。477 题的选项在 PDF 里是图片、没有英文原文，
-    # 算进去覆盖率永远到不了 100%，而 verify_bank.py 用的是可译分母 —— 两边报的数
-    # 对不上，会让人一直以为还有 4 条没译。
+    # 可译分母排除尚未转录的图片空选项；477 人工补回文字后自动计入。
+    # 这里与 app.py、verify_bank.py 使用相同判据。
     n_opts_tr = sum(1 for q in qs for o in q["options"] if o["text_en"])
     n_opts_zh = sum(1 for q in qs for o in q["options"] if o["text_zh"])
     n_stem_zh = sum(1 for q in qs if q["stem_zh"])

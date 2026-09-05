@@ -163,13 +163,56 @@ def main():
     info("解析质量", "完整 %d / 偏短 %d / 无 %d"
          % (eq.get("ok", 0), eq.get("thin", 0), eq.get("none", 0)))
 
-    print("\n【硬性】已知脏数据仍被正确标记")
-    check(477 in bank and bank[477]["needs_review"],
-          "#477 已标记（选项为图片，PDF 无文字）",
-          bank[477].get("review_reason") or "" if 477 in bank else "题号不存在")
-    check(all(i in bank for i in range(191, 201)) and
-          all(bank[i]["needs_review"] and bank[i]["options"] for i in range(191, 201)),
-          "191–200 保留题干选项但排除出题池")
+    print("\n【硬性】已知脏数据已修复或仍被正确标记")
+    # 477 的图片已按原 PDF 人工转录。必须同时保留题干策略、四个选项
+    # 与 C/D 的通配符差异；不能只补答案并清除待核对标记。
+    q477 = bank.get(477, {})
+    restored477 = False
+    try:
+        expected = {
+            "A": ("s3:*Object", "arn:aws:s3:::bucket-name/*"),
+            "B": ("s3:*", "arn:aws:s3:::bucket-name/*"),
+            "C": ("s3:DeleteObject", "arn:aws:s3:::bucket-name*"),
+            "D": ("s3:DeleteObject", "arn:aws:s3:::bucket-name/*"),
+        }
+        policies = {}
+        for lang in ("stem_en", "stem_zh"):
+            stem = q477[lang]
+            policies[lang], _ = json.JSONDecoder().raw_decode(stem[stem.index("{"):])
+        original = {"Version": "2012-10-17", "Statement": [{
+            "Action": ["s3:ListBucket", "s3:DeleteObject"],
+            "Resource": ["arn:aws:s3:::bucket-name"], "Effect": "Allow"}]}
+        restored477 = (
+            all(p == original for p in policies.values())
+            and [o["letter"] for o in q477["options"]] == list(expected)
+            and all(json.loads(o["text_en"]) == {
+                "Action": [expected[o["letter"]][0]],
+                "Resource": [expected[o["letter"]][1]], "Effect": "Allow"}
+                and all(value in o["text_zh"] for value in expected[o["letter"]])
+                for o in q477["options"])
+            and q477["answer"] == ["D"] and q477["answer_source"] == "manual"
+            and not q477["needs_review"] and not q477.get("review_reason")
+            and bool(q477.get("explanation_en")) and bool(q477.get("explanation_zh")))
+    except (KeyError, ValueError, TypeError):
+        pass
+    check(restored477, "#477 图片已转录，保留 C/D 的斜杠差异，答案 D 可正常出题")
+    # 源 txt 仍缺这十题；参考答案与解析由人工修正补齐。
+    missing_questions = [bank.get(i, {}) for i in range(191, 201)]
+    check(all(
+        q.get("stem_en") and q.get("stem_zh")
+        and q.get("options")
+        and all(o.get("text_en") and o.get("text_zh") for o in q["options"])
+        and q.get("explanation_en") and q.get("explanation_zh")
+        for q in missing_questions), "191–200 保留完整双语题面并补齐双语解析")
+    verified_missing = {
+        191: ["A"], 192: ["B", "E"], 193: ["B"], 194: ["A"], 195: ["C"],
+        196: ["D"], 197: ["B", "E"], 198: ["D"], 199: ["B"], 200: ["D"],
+    }
+    check(all(
+        bank.get(i, {}).get("answer") == answer
+        and bank[i].get("answer_source") == "manual"
+        and not bank[i].get("needs_review") and not bank[i].get("review_reason")
+        for i, answer in verified_missing.items()), "191–200 的参考答案和出题状态正确（193 按节点型缓存取 B）")
 
     segs = None
     # §6 要求验的是「315 从误编号的 215] 正确取到，且真正的 215 没被覆盖」。

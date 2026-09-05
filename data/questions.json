@@ -776,7 +776,7 @@
    },
    {
     "letter": "E",
-    "text_en": "Configure an Amazon EventBridge (Amazon CloudWatch Events) event to monitor the S3 bucket. When an image is uploaded, send an alert to an Amazon Sample Notification Service (Amazon SNS) topic with the application owner's email address for further processing.",
+    "text_en": "Configure an Amazon EventBridge (Amazon CloudWatch Events) event to monitor the S3 bucket. When an image is uploaded, send an alert to an Amazon ample Notification Service (Amazon SNS) topic with the application owner's email address for further processing.",
     "text_zh": "配置一个 Amazon EventBridge（Amazon CloudWatch Events）事件来监控该 S3 存储桶。当有图片上传时，向一个带有应用程序负责人邮箱地址的 Amazon Simple Notification Service（Amazon SNS）主题发送告警以便后续处理。"
    }
   ],
@@ -2032,8 +2032,8 @@
   "answer_source": "regex_letter",
   "answer_confidence": 0.95,
   "stem_mismatch": false,
-  "explanation_en": "Some quotas can be increased, while others cannot. To request an increase to a quota, use the Service Quotas console. To learn how to request an increase, see Requesting a quota increase in the Service Quotas User Guide. If a quota isn't available on the Service Quotas console, use the service limit increase form on the AWS Support Center Console to request an increase to the quota.",
-  "explanation_zh": "有些配额可以提高，有些则不能。要申请提高配额，请使用 Service Quotas 控制台。要了解如何申请提高，请参阅《Service Quotas 用户指南》中的\"申请提高配额\"。如果 Service Quotas 控制台中没有某项配额，请在 AWS Support Center 控制台使用服务限额提升表单来申请提高该配额。",
+  "explanation_en": "Answer: B is the source key, but the option does not fully cover the stated requirements.\n\nThe key requirement is to detect personally identifiable information (PII) in files stored in Amazon S3 with the least development effort. Amazon Macie provides managed sensitive data discovery, avoiding the need to develop a custom PII scanner. Amazon SNS can notify administrators of the findings. This is why Option B is the intended service choice in the source question.\n\nOption A uses Amazon Inspector, which scans workloads for software vulnerabilities and unintended network exposure; it is not the service for discovering PII in S3 objects. Option C and Option D require custom scanning algorithms in Lambda, adding development and maintenance effort.\n\nTwo requirements are missing from the proposed solution:\n1. Automated remediation: Option B only notifies administrators to remove the objects. A complete workflow could route Macie findings through EventBridge to SNS for notification and to a Lambda function for an approved automated action, such as restricting access to the affected object. These remediation steps are not stated in the option.\n2. Large files: As checked on 2026-09-05, Macie can analyze an individual non-binary text file of at most 20 GB, and this limit is not adjustable. The files exceeding 200 GB in the question need preprocessing, such as splitting them into supported sizes and formats, before analysis. Option B omits that step; requesting a quota increase does not solve this per-file limit.\n\nTreat B as the source reference answer for choosing the managed detection service. The question and its options do not specify a complete solution for both large-file processing and automated remediation.",
+  "explanation_zh": "参考答案：B，但该选项没有完整覆盖题干的全部要求。\n\n本题的核心是：以最少的开发工作量，识别存放在 Amazon S3 中的文件是否包含个人可识别信息（PII）。Amazon Macie 提供托管的敏感数据发现能力，无需自行开发 PII 扫描算法；Amazon SNS 可用于向管理员发送发现结果通知。因此，选项 B 是源题预期的服务选择。\n\n选项 A 使用的 Amazon Inspector 负责扫描工作负载的软件漏洞和意外网络暴露，不是识别 S3 对象中 PII 的服务。选项 C 和选项 D 都要求在 Lambda 中自行实现扫描算法，增加了开发与维护工作量。\n\n不过，题目与选项存在两处缺漏：\n1. 自动修复：选项 B 只写了通知管理员移除对象，仍需人工处理。完整流程可以把 Macie 的发现通过 EventBridge 分别发送给 SNS 和 Lambda，由 SNS 通知管理员，由 Lambda 执行预先批准的自动修复操作，例如限制问题对象的访问权限。选项没有写出这部分步骤。\n2. 大文件：截至 2026-09-05 核验，Macie 可分析的单个非二进制文本文件最大为 20 GB，且此上限不可提高。题干中的超过 200 GB 文件需要先做预处理，例如拆成符合支持格式和大小限制的文件，再进行扫描。选项 B 没有交代这一步，申请提高配额也不能解决这个单文件限制。\n\n学习时可将 B 理解为源题在托管检测服务选择上的参考答案，同时注意：现有选项没有给出满足大文件处理和自动修复要求的完整方案。",
   "stem_zh": "某公司有一个为门店提供营销服务的应用程序。这些服务基于门店客户过往的购买记录。门店通过 SFTP 将交易数据上传给该公司，数据经过处理和分析后生成新的营销优惠。有些文件的大小可能超过 200 GB。\n最近，公司发现有些门店上传的文件中包含了本不应包含的个人可识别信息（PII）。公司希望在再次共享 PII 时能提醒管理员。公司还希望实现自动修复。\n解决方案架构师应该怎么做，才能以最少的开发工作量满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": null,
@@ -8520,18 +8520,20 @@
    }
   ],
   "pdf_page": 67,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: A.\nMove reporting reads to an RDS for MySQL read replica so that long reports compete less with order processing on the primary database. Order writes remain on the primary, and employees can continue querying during business hours.\nOption B does not explicitly isolate the reporting workload and cannot send normal order writes to a read-only replica. Option C requires a database and application redesign. Option D restricts when employees can run reports.\nRead replicas use asynchronous replication, so reports must tolerate some replication lag.",
+  "explanation_zh": "正确答案：A。\n将报表查询迁移到 RDS for MySQL 只读副本，让耗时的报表读取减少对主库订单处理的资源争用。订单写入继续使用主库，员工仍可在营业时间查询。\n选项 B 没有明确隔离报表负载，也不能把普通订单写入分摊到只读副本；选项 C 需要更换数据库并改造应用；选项 D 限制了员工查询的时间。\n只读副本采用异步复制，报表需要容忍一定的复制延迟。",
   "stem_zh": "某公司有一个订单应用，把客户信息存放在 Amazon RDS for MySQL 中。在正常营业时间内，员工会运行一次性查询来做报表。由于报表查询运行时间很长，订单处理过程中出现了超时。该公司需要在不妨碍员工执行查询的前提下消除超时。解决方案架构师应该怎么做才能满足这些需求？",
   "stem_zh_source": "pdf_translation",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "txt 中不存在该题（源文件 190→201 跳号），永无答案与解析；答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 192,
@@ -8567,18 +8569,21 @@
    }
   ],
   "pdf_page": 68,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "B",
+   "E"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answers: B and E.\nUse a document-upload event to invoke Lambda and orchestrate extraction. Textract converts scanned documents into text, and Comprehend Medical extracts medical entities from that text. Store the extracted information in S3 in a queryable format such as JSON or Parquet, define the table schema, and use Athena for SQL analysis. Athena queries the extracted data, not the scanned image itself.\nOptions A and C require operating EC2 databases or custom extraction software, which adds maintenance compared with the managed services. Option D assigns the wrong job to Transcribe Medical: it transcribes medical audio, rather than extracting medical entities from existing text.\nFor large multipage documents, use the asynchronous Textract workflow rather than keeping one Lambda invocation waiting for the entire document.",
+  "explanation_zh": "正确答案：B、E。\n上传文档后由事件触发 Lambda，编排提取流程：Textract 将扫描件转换为文字，Comprehend Medical 从文字中提取医疗实体。把提取结果以 JSON、Parquet 等可查询格式保存到 S3，定义表结构后使用 Athena 执行 SQL。Athena 查询的是提取后的数据，并不直接识别扫描图片。\n选项 A、C 需要维护 EC2 数据库或自研文档提取程序，运维负担更大；选项 D 中 Transcribe Medical 的用途是医疗语音转文字，不是从已有文本中提取医疗实体。\n对于较大的多页文档，应采用 Textract 异步处理流程，避免让一次 Lambda 调用持续等待整个文档处理完成。",
   "stem_zh": "某医院想为其大量的历史手写档案制作数字副本。该医院今后每天还会新增数百份文档。医院的数据团队会扫描这些文档并把它们上传到 AWS 云。解决方案架构师必须实现一套方案来分析这些文档、提取医疗信息，并把文档存储起来，使某个应用能对这些数据运行 SQL 查询。该方案必须最大化可扩展性和运维效率。解决方案架构师应该采取以下哪几步组合来满足这些需求？（选择两项。）",
   "stem_zh_source": "pdf_translation",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "txt 中不存在该题（源文件 190→201 跳号），永无答案与解析；答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 193,
@@ -8609,18 +8614,20 @@
    }
   ],
   "pdf_page": 68,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "B"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Answer: B (using the node-based cache interpretation).\nCache frequently read database results in ElastiCache for Redis OSS. Cache hits return data without querying RDS, reducing the number of database reads. Configure replicas across Availability Zones and enable Multi-AZ automatic failover to make the cache highly available.\nOption A distributes reads across RDS replicas and relieves the primary database, but the requests still execute against databases. Option C caches DNS responses rather than query results. Option D, when interpreted as node-based Memcached, lacks Redis OSS replication and automatic failover.\nCluster mode provides sharding for scale; it is not a prerequisite for high availability. Redis OSS can also use replicas and Multi-AZ with cluster mode disabled.\nDeployment note: Memcached Serverless also supports replicated Multi-AZ availability. This question does not explicitly distinguish deployment types. The grading reference here uses Option B under the node-based comparison; do not generalize this to mean that all Memcached deployments lack high availability.",
+  "explanation_zh": "参考答案：B（按节点型缓存的比较口径）。\n在应用与 RDS 之间使用 ElastiCache for Redis OSS 缓存频繁读取的数据。缓存命中时直接返回结果，减少真正进入 RDS 的读取请求；配置跨可用区副本并启用 Multi-AZ 自动故障转移，为缓存提供高可用性。\n选项 A 把读取分摊到 RDS 只读副本，能够减轻主库压力，但请求仍由数据库执行；选项 C 缓存 DNS 解析结果，不是数据库查询结果；选项 D 若指节点型 Memcached，则不具备 Redis OSS 的复制与自动故障转移能力。\n集群模式主要用于分片扩展，不是实现高可用的必要条件；关闭集群模式的 Redis OSS 也可以配置副本和 Multi-AZ。\n部署类型备注：Memcached Serverless 同样支持跨可用区复制与高可用。原题没有明确区分部署类型，本题按节点型缓存的比较口径以 B 作为判分参考，不应将其记成“所有 Memcached 部署都不支持高可用”。",
   "stem_zh": "某公司在 Amazon EC2 实例上运行一个批处理应用。该应用的后端由多个 Amazon RDS 数据库组成。该应用对数据库产生了大量读取。解决方案架构师必须在保证高可用的同时减少数据库读取次数。解决方案架构师应该怎么做才能满足这一需求？",
   "stem_zh_source": "pdf_translation",
   "domain": "performant",
-  "needs_review": true,
-  "review_reason": "txt 中不存在该题（源文件 190→201 跳号），永无答案与解析；答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 194,
@@ -8651,18 +8658,20 @@
    }
   ],
   "pdf_page": 68,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: A.\nPlace the database nodes in different Availability Zones within one Region, replicate database data, and configure a database failover cluster. The cluster must detect failures, promote the surviving node, and direct clients to it automatically. Merely installing a database on two instances does not enable automatic failover.\nOption B restores a single instance from a backup instead of maintaining a ready standby. Option C describes cross-Region replication and failover but does not configure an automatic failover cluster; replication alone is insufficient. Option D recovers an individual EC2 instance after supported infrastructure failures, rather than providing a second database node for database-level failover.\nThe specific clustering, quorum, and replication settings depend on the chosen database engine.",
+  "explanation_zh": "正确答案：A。\n在同一区域的不同可用区部署数据库节点，复制数据库数据，并配置数据库故障转移集群。集群需要具备故障检测、备用节点提升和客户端连接切换能力。仅在两台 EC2 上安装数据库，并不会自动获得故障转移能力。\n选项 B 是从备份恢复单实例，没有随时可接管的备用数据库；选项 C 描述了跨区域复制与切换，却没有配置自动故障转移集群，复制本身不保证自动切换；选项 D 针对单台 EC2 的受支持基础设施故障恢复，不能代替数据库层面的双节点故障转移。\n具体的集群、仲裁与复制设置需要根据数据库引擎配置。",
   "stem_zh": "某公司需要在 AWS 上运行一个关键应用。该公司需要使用 Amazon EC2 来承载该应用的数据库。该数据库必须高可用，并且在发生中断性事件时必须自动故障转移。哪个方案能满足这些需求？",
   "stem_zh_source": "pdf_translation",
   "domain": "resilient",
-  "needs_review": true,
-  "review_reason": "txt 中不存在该题（源文件 190→201 跳号），永无答案与解析；答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 195,
@@ -8693,18 +8702,20 @@
    }
   ],
   "pdf_page": 69,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "C"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: C.\nPersist each accepted order request in SQS before processing it. EC2 workers in the Auto Scaling group consume the messages, write completed orders to RDS, and delete messages only after successful processing. If a worker fails before deletion, the visibility timeout expires and another worker can retry the order. The queue separates request acceptance from worker availability.\nOptions A and B can replace instances or distribute traffic, but do not durably queue unfinished orders for retry. Option D adds an SNS, Lambda, and Run Command chain without the worker-consumed queue and acknowledgement flow described in Option C.\nSQS standard queues can deliver a message more than once. Use an order identifier and idempotent processing to prevent duplicate orders when a worker fails after the database write but before deleting the message. Size retention and visibility timeout for the workload.",
+  "explanation_zh": "正确答案：C。\n先把已接收的订单请求持久保存到 SQS，再由 Auto Scaling 组中的 EC2 工作节点消费。工作节点处理订单并写入 RDS，成功后才删除消息。如果节点在删除消息前故障，可见性超时到期后，其他节点可以重新取得消息并重试，订单接收过程不再依赖某台工作节点始终在线。\n选项 A、B 能替换实例或分配流量，却没有为未完成订单提供持久队列与重试机制；选项 D 增加了 SNS、Lambda 和 Run Command 调用链，没有选项 C 所述的消费与确认流程。\nSQS 标准队列可能重复投递。应使用订单唯一标识实现幂等处理，避免“数据库已写入、消息尚未删除”时的故障导致重复订单，并按业务设置消息保留期和可见性超时。",
   "stem_zh": "某公司的订单系统把客户端的请求发送到 Amazon EC2 实例。这些 EC2 实例处理订单，然后把订单存入 Amazon RDS 上的数据库。用户反馈说，系统出故障时他们必须重新提交订单。该公司希望有一个有弹性的方案，能在系统中断时自动处理订单。解决方案架构师应该怎么做才能满足这些需求？",
   "stem_zh_source": "pdf_translation",
   "domain": "resilient",
-  "needs_review": true,
-  "review_reason": "txt 中不存在该题（源文件 190→201 跳号），永无答案与解析；答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 196,
@@ -8735,18 +8746,20 @@
    }
   ],
   "pdf_page": 69,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: D.\nAdd a numeric TTL attribute to each new item with its creation timestamp plus 30 days, expressed in Unix epoch seconds, and enable DynamoDB TTL on that attribute. DynamoDB removes expired items in the background without requiring a custom cleanup service or consuming write throughput for the initial TTL deletion.\nOption A periodically replaces the entire stack rather than maintaining a rolling retention window. Option B requires an EC2 service and deletion scripts. Option C runs cleanup code on stream events and needs additional logic to find and delete older records.\nTTL is asynchronous: physical deletion normally happens within a few days after expiration, not exactly at day 30. If the application must return only unexpired data, exclude expired items on reads. Existing items also need a suitable TTL value before TTL can remove them.",
+  "explanation_zh": "正确答案：D。\n为每个新项目写入数值型 TTL 属性，值为创建时间加 30 天，单位是 Unix 时间戳的秒，并在表上启用该 TTL 属性。DynamoDB 会在后台删除过期项目，无需自建清理服务，初始 TTL 删除也不消耗写入吞吐量。\n选项 A 定期重建整套资源，不能正确维护滚动的 30 天数据窗口；选项 B 需要维护 EC2 和删除脚本；选项 C 仍需编写查找及删除旧数据的逻辑，而且流事件不是定时清理任务。\nTTL 不会在第 30 天到点立即物理删除，通常会延迟几天。若应用只能返回未过期数据，需要在读取时排除过期项目；历史项目也要补上有效的 TTL 属性才能被清理。",
   "stem_zh": "某公司在一大批 Amazon EC2 实例上运行一个应用。该应用会读写一张 Amazon DynamoDB 表中的条目。这张 DynamoDB 表的体积在持续增长，但应用只需要最近 30 天的数据。该公司需要一个能把成本和开发工作量降到最低的方案。哪个方案能满足这些需求？",
   "stem_zh_source": "pdf_translation",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "txt 中不存在该题（源文件 190→201 跳号），永无答案与解析；答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 197,
@@ -8782,18 +8795,21 @@
    }
   ],
   "pdf_page": 70,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "B",
+   "E"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answers: B and E.\nUse Elastic Beanstalk's .NET on Windows Server platform and distribute application instances across multiple Availability Zones. This retains the Windows/.NET application platform while Beanstalk manages deployment and the application environment.\nUse DMS to migrate the Oracle data to Amazon RDS for Oracle, configured as a Multi-AZ DB instance deployment. Keeping Oracle avoids changing the application's database model and query interface; RDS maintains a synchronous standby in another Availability Zone and supports automatic failover. Application-tier and database-tier availability both need configuration.\nOption A refactors the application into Lambda functions. Option C replaces Windows with Amazon Linux, which is not a drop-in environment for Windows-dependent .NET applications. Option D changes Oracle to DynamoDB and requires changes to data modelling and access patterns. These conflict with minimizing development changes.",
+  "explanation_zh": "正确答案：B、E。\n应用层选择 Elastic Beanstalk 的 .NET on Windows Server 平台，并把实例分布到多个可用区。这样可以保留 Windows/.NET 应用平台，由 Beanstalk 管理部署和运行环境，减少迁移开发工作。\n数据库层使用 DMS 将 Oracle 数据迁移到 RDS for Oracle，并配置 Multi-AZ 数据库实例部署。继续使用 Oracle 可减少数据模型和查询接口的改动；RDS 在另一可用区维护同步备用实例，并支持自动故障转移。应用层和数据库层都需要配置高可用。\n选项 A 要重构为 Lambda 函数；选项 C 改用 Amazon Linux，不能直接替代依赖 Windows 的 .NET 运行环境；选项 D 将 Oracle 改为 DynamoDB，需要调整数据模型和访问方式，都不符合尽量少改代码的目标。",
   "stem_zh": "某公司有一个 Microsoft .NET 应用，运行在本地的一台 Windows Server 上。该应用使用一台 Oracle Database Standard Edition 服务器来存储数据。该公司正在规划迁移到 AWS，并希望在搬迁应用时把开发改动降到最低。AWS 上的应用环境应当是高可用的。该公司应该采取以下哪几项组合来满足这些需求？（选择两项。）",
   "stem_zh_source": "pdf_translation",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "txt 中不存在该题（源文件 190→201 跳号），永无答案与解析；答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 198,
@@ -8824,18 +8840,20 @@
    }
   ],
   "pdf_page": 70,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: D, assuming the workload uses supported Fargate and DocumentDB features.\nEKS preserves Kubernetes as the orchestration and deployment model. Fargate runs the Kubernetes Pods without requiring the company to manage EC2 worker nodes. DocumentDB supplies a managed database with MongoDB API compatibility, reducing database operations work while retaining compatible application data access.\nOptions A and B switch Kubernetes to ECS, requiring deployment-method changes. Options B and C also replace MongoDB with DynamoDB, which uses a different API and data model.\nMongoDB compatibility is not complete interchangeability. Before migration, validate the application's queries, drivers, connection configuration, and required features against DocumentDB's documented differences, and confirm that the Pods meet EKS Fargate constraints. The question implicitly assumes compatibility; it does not prove that every MongoDB application can migrate without changes.",
+  "explanation_zh": "正确答案：D，前提是工作负载使用 Fargate 和 DocumentDB 支持的功能。\nEKS 保留 Kubernetes 编排与部署方式，Fargate 负责运行 Pod，减少自行管理 EC2 工作节点的负担。DocumentDB 提供具有 MongoDB API 兼容性的托管数据库，在兼容的前提下保留应用的数据访问方式并减少数据库运维。\n选项 A、B 将 Kubernetes 换成 ECS，需要改变部署方式；选项 B、C 还将 MongoDB 换成 DynamoDB，数据库 API 和数据模型不同，需要应用改造。\n“MongoDB 兼容”不代表完全等同。迁移前应核验查询、驱动、连接配置和所需功能是否符合 DocumentDB 的兼容范围，同时确认 Pod 符合 EKS Fargate 的限制。本题隐含了兼容性前提，不能据此认为任意 MongoDB 应用都能零改动迁移。",
   "stem_zh": "某公司在本地数据中心的一个 Kubernetes 集群上运行一个容器化应用。该公司使用 MongoDB 数据库存储数据。该公司希望把其中一部分环境迁移到 AWS，但目前无法做任何代码改动或部署方式改动。该公司需要一个运维开销最小的方案。哪个方案能满足这些需求？",
   "stem_zh_source": "pdf_translation",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "txt 中不存在该题（源文件 190→201 跳号），永无答案与解析；答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 199,
@@ -8866,18 +8884,20 @@
    }
   ],
   "pdf_page": 70,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "B"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: B.\nAmazon Transcribe converts call audio into transcripts and can label different speakers through speaker diarization. Save the transcript JSON in a company-owned S3 bucket, define an Athena table over the output, and use SQL to analyse the data. Speaker labels separate speakers; they do not authenticate their real identities.\nThe seven-year retention requirement must be configured in storage. Keep the objects in the company's S3 bucket for at least seven years and avoid earlier expiration. The service-managed default output bucket is unsuitable for this requirement because Transcribe deletes those transcripts when the job expires after 90 days. Option B abbreviates this necessary storage configuration.\nOptions A and D use Rekognition for an audio-transcription task. Option C uses Translate for speaker recognition. These services do not replace Transcribe's speech-to-text and speaker-label workflow.",
+  "explanation_zh": "正确答案：B。\nAmazon Transcribe 将通话语音转成文字，并通过说话人分离为不同说话人的片段打标签。将转写 JSON 保存到公司自己的 S3 存储桶，定义 Athena 表后用 SQL 分析。说话人标签用于区分发言者，不等于验证其真实身份。\n七年保留要求必须在存储配置中落实：让自有 S3 桶中的转写文件至少保留七年，避免提前过期。不能依赖 Transcribe 默认的服务托管输出桶，因为其转写文件会随任务在 90 天后过期删除。选项 B 简写了这项必要的存储配置。\n选项 A、D 把 Rekognition 用于语音转写；选项 C 把 Translate 用于说话人识别，都不能代替 Transcribe 的语音转文字和说话人标注流程。",
   "stem_zh": "某电话营销公司正在 AWS 上设计其客户呼叫中心功能。该公司需要一个既能做多说话人识别、又能生成转写文件的方案。该公司希望能查询这些转写文件以分析业务规律。出于审计目的，转写文件必须保存 7 年。哪个方案能满足这些需求？",
   "stem_zh_source": "pdf_translation",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "txt 中不存在该题（源文件 190→201 跳号），永无答案与解析；答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 200,
@@ -8908,18 +8928,20 @@
    }
   ],
   "pdf_page": 71,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: D.\nConfigure an API Gateway Cognito user pool authorizer and enable it on the protected REST API methods. After Cognito sign-in, the client sends the required valid token, normally in the Authorization header. API Gateway's managed authorizer validates the token against the configured user pool, avoiding custom authentication code. Use access-token scopes when the methods require scope-based authorization.\nOption A can implement custom authorization but adds Lambda code and maintenance. Option B uses API keys, which AWS says should not be used for authentication or authorization, and adds custom validation. Option C trusts a caller-supplied email address without proof of identity and still needs custom validation.\nThe Cognito authorizer controls the client's access to the API. The backend separately needs permission to access DynamoDB.",
+  "explanation_zh": "正确答案：D。\n在 API Gateway 中配置 Cognito 用户池授权方，并在需要保护的 REST API 方法上启用。用户通过 Cognito 登录后，客户端通常在 Authorization 请求头中携带所需的有效令牌，由 API Gateway 的托管授权方根据用户池验证，减少自定义认证代码。需要按权限范围授权时，可配置访问令牌的 scopes。\n选项 A 可以实现自定义授权，但需要维护 Lambda 代码；选项 B 使用 API 密钥，AWS 明确不建议用它承担身份认证或访问授权，而且还增加自定义校验；选项 C 仅发送邮箱不能证明请求者身份，同样需要额外开发。\nCognito 授权方控制客户端对 API 的访问；后端访问 DynamoDB 的权限仍需单独配置。",
   "stem_zh": "某公司在 AWS 上托管其应用。该公司使用 Amazon Cognito 管理用户。用户登录应用后，应用会通过托管在 Amazon API Gateway 上的 REST API 从 Amazon DynamoDB 获取所需数据。该公司希望采用一个 AWS 托管方案来控制对该 REST API 的访问，以减少开发工作量。哪个方案能以最小的运维开销满足这些需求？",
   "stem_zh_source": "pdf_translation",
   "domain": "secure",
-  "needs_review": true,
-  "review_reason": "txt 中不存在该题（源文件 190→201 跳号），永无答案与解析；答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 201,
@@ -9214,18 +9236,20 @@
    }
   ],
   "pdf_page": 74,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: D.\nPlace SQS between request acceptance and the DynamoDB write. Acknowledge an asynchronous request after durable enqueueing, and let Lambda consume queued requests at a rate the table can sustain. Retry failed writes and remove a message only after successful processing. This absorbs bursts without rejecting existing users at the API boundary.\nOption A throttles callers. Option B uses DAX, a write-through cache that still sends writes to DynamoDB; it is not a queue for deferred writes. Option C adds an index, not a buffer, and can add write work.\nConfigure consumer concurrency, retention, retries, and idempotency. Buffering handles temporary overload; it cannot indefinitely compensate for an arrival rate above the processing rate.",
+  "explanation_zh": "正确答案：D。\n在接收请求和写入 DynamoDB 之间加入 SQS。异步请求成功进入持久队列后再确认接收，由 Lambda 按表能承受的速率消费；写入失败则重试，处理成功后才删除消息。这样能缓冲突发流量，避免在 API 入口直接拒绝现有用户。\n选项 A 会限制调用者；选项 B 的 DAX 是直写缓存，写操作仍发送到 DynamoDB，不能代替延迟写入队列；选项 C 的索引不能缓冲请求，还可能增加写入工作。\n需要配置消费并发、保留期、重试与幂等处理。队列解决的是暂时过载，不能无限弥补长期高于处理能力的请求速率。",
   "stem_zh": "某公司有一个异步 API，用于接收用户请求，并根据请求类型把请求分派给相应的微服务处理。该公司使用 Amazon API Gateway 部署 API 前端，并用一个 AWS Lambda 函数调用 Amazon DynamoDB，在把用户请求分派给处理微服务之前先把请求存起来。该公司已经在预算允许范围内尽可能多地预置了 DynamoDB 吞吐量，但仍然遇到可用性问题并且在丢失用户请求。解决方案架构师应该怎么做，才能在不影响现有用户的前提下解决这个问题？",
   "stem_zh_source": "pdf_translation",
   "domain": "secure",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 208,
@@ -9344,18 +9368,20 @@
    }
   ],
   "pdf_page": 75,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: D.\nGive order collection and fulfillment separate SQS queues and worker groups. Scale each group using backlog per instance: available queued messages divided by the number of in-service workers. Set the target from acceptable waiting time and processing time so the slower fulfillment stage can scale independently.\nOption A keeps peak capacity running even when idle. Option B creates additional Auto Scaling groups rather than scaling the existing workers. Option C does not define a usable scaling signal: SQS does not itself send the proposed scaling notifications.\nDelete messages only after successful processing. Configure visibility timeout, retries, and idempotent order handling; protect or gracefully drain workers during scale-in.",
+  "explanation_zh": "正确答案：D。\n订单收集与履行分别使用 SQS 队列和工作实例组。每组按“可取消息数 ÷ InService 实例数”得到单实例积压量，再结合可接受等待时间和每单处理时间设置伸缩目标。较慢的履行环节便能独立扩容，空闲时也能缩容。\n选项 A 按高峰设置最小容量，会长期保留闲置资源；选项 B 新建 Auto Scaling 组，未正确伸缩现有工作节点；选项 C 没有给出可用的伸缩指标，SQS 本身不会发送其描述的扩缩容通知。\n消息成功处理后才删除，并配置可见性超时、重试与订单幂等；缩容时保护或有序退出正在处理订单的实例。",
   "stem_zh": "某公司提供的送餐服务正在快速增长。由于业务增长，该公司的订单处理系统在流量高峰时段出现了扩展问题。当前架构包括：• 一组运行在 Amazon EC2 Auto Scaling 组中的 Amazon EC2 实例，负责从应用收集订单 • 另一组运行在 Amazon EC2 Auto Scaling 组中的 EC2 实例，负责履行订单。订单收集过程很快，但订单履行过程可能耗时较长。不能因为伸缩事件而丢失数据。解决方案架构师必须确保订单收集过程和订单履行过程在流量高峰时段都能正常伸缩。该方案必须优化公司 AWS 资源的利用率。哪个方案能满足这些需求？",
   "stem_zh_source": "pdf_translation",
   "domain": "resilient",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 211,
@@ -9744,18 +9770,20 @@
    }
   ],
   "pdf_page": 79,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: D.\nFor the described in-memory workload, use memory-optimized R5 instances and retain CloudFormation as the deployment source. Collect application latency as a custom metric through the CloudWatch agent, with application instrumentation such as StatsD, to support later capacity decisions. Installing the agent alone does not automatically measure application latency.\nOption A substitutes burstable T3 instances and makes out-of-template changes. Option B relies on manual scaling and does not address memory sizing. Option C incorrectly assumes that guest memory utilization is a built-in EC2 metric. The agent can collect guest memory metrics in addition to custom application metrics.\nValidate the memory bottleneck and instance size with measurements before a production rollout.",
+  "explanation_zh": "正确答案：D。\n题目强调内存计算，适合采用内存优化型 R5，并继续通过 CloudFormation 管理部署。应用通过 StatsD 等方式上报延迟，由 CloudWatch agent 收集自定义指标，支持后续容量规划；仅安装 agent 不会自动测出应用延迟。\n选项 A 换成突发性能型 T3，还在模板之外手工变更；选项 B 依赖人工伸缩，未针对内存容量处理；选项 C 错在把客户操作系统的内存使用率当作 EC2 内置指标。agent 可以补充内存等操作系统指标，并收集应用自定义指标。\n实际投产前仍要通过监控确认内存瓶颈及合适的实例规格。",
   "stem_zh": "某公司的应用程序存在性能问题。该应用程序是有状态的，需要在 Amazon EC2 实例上完成内存中的任务。公司使用 AWS CloudFormation 部署基础设施，并使用了 M5 EC2 实例系列。随着流量增加，应用程序性能下降。用户反映在尝试访问该应用程序时出现延迟。\n\n哪个方案能以运维上最高效的方式解决这些问题？",
   "stem_zh_source": "solution_paraphrase",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 220,
@@ -9973,18 +10001,21 @@
    }
   ],
   "pdf_page": 80,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "C",
+   "E"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Answers: C and E, as the reference combination for this question.\nOption C matches roughly random distribution through DNS. Create a multivalue answer record and health check for each instance. Route 53 returns up to eight healthy records; with four healthy instances, it returns all four addresses. Client address selection and DNS caching affect actual traffic distribution, so this does not guarantee an even split on every request. If all records are unhealthy, Route 53 can still return unhealthy records.\nOption E places two instances in each of two Availability Zones. Losing either zone leaves two running instances. Option D also spans two zones, but losing the zone containing two instances leaves only one. The balanced deployment offers more remaining capacity in the worst case and is the stronger reference choice for fault tolerance.\nOption A uses failover routing for active/passive operation rather than distributing traffic across all active instances. Option B controls DNS selection proportions using weights; equal weights can also distribute selections equally in probability. Multivalue answer routing is the more direct match for returning multiple healthy instance addresses in this question.\nCapacity boundary: the stem does not specify a minimum surviving instance count or workload size. A 2+1 deployment can also provide high availability if its surviving capacity is sufficient. The reference choice prefers the redundancy of 2+2; it does not prove that every 2+1 design fails. Verify that the remaining two instances can handle the required workload after an Availability Zone failure.",
+  "explanation_zh": "参考答案：C、E，按本题的出题意图判断。\n选项 C 用多值应答实现基于 DNS 的近似随机分流。为每台实例建立一条多值应答记录并关联健康检查。Route 53 最多返回八条健康记录；本题四台实例均健康时，会返回全部四个地址。实际流量分布还受客户端地址选择和 DNS 缓存影响，不保证每次请求都严格均匀。若所有记录都不健康，Route 53 仍可能返回不健康记录。\n选项 E 在两个可用区各部署两台实例，任一区故障后仍有两台运行。选项 D 也跨两个可用区，但如果包含两台实例的可用区故障，就只剩一台。2+2 部署在最坏情况下保留更多容量，因此作为强调容错能力的参考选择更合适。\n选项 A 的故障转移路由主要用于主备切换，不用于向所有活动实例分流。选项 B 按权重控制 DNS 选择比例，设置相同权重也能获得相同的选择概率；本题强调返回多个健康实例地址进行分流，多值应答更直接对应这一出题意图。\n容量边界：题干没有明确故障后最低实例数或实际负载。若剩余容量足够，2+1 也可以实现高可用，不能说它必然不符合要求。参考答案选择 2+2，是看重其冗余和故障后容量；实际部署仍需验证剩下的两台实例能否承担所需负载。",
   "stem_zh": "某公司最近把其 Web 应用迁移到了 AWS，做法是把应用平迁到单个 AWS 区域内的 Amazon EC2 实例上。该公司希望重新设计应用架构，使其高可用且具备容错能力。流量必须随机到达所有正在运行的 EC2 实例。该公司应该采取以下哪几步组合来满足这些需求？（选择两项。）",
   "stem_zh_source": "pdf_translation",
   "domain": "resilient",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 225,
@@ -10467,18 +10498,20 @@
    }
   ],
   "pdf_page": 84,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "C"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Answer: C, as the best migration recommendation among the given options.\nOption C combines schema conversion, complete table coverage, and ongoing replication. AWS SCT supports Oracle-to-Aurora PostgreSQL conversion; review and manually resolve objects that cannot be converted automatically. Use DMS full load plus CDC to copy existing rows and then apply ongoing source changes to the target, selecting all tables required by the applications.\nHigh write transaction rates increase CDC buffering needs. A memory-optimized replication instance is a reasonable choice to reduce memory pressure and spill to disk. Size it using measured CPU, memory, storage, and replication latency; application read volume alone does not determine CDC memory needs.\nOptions A and B rely on DataSync for the initial migration. DataSync transfers files and objects; it does not provide the relational schema conversion and initial Oracle-to-PostgreSQL database migration described here. Option D selects only the largest tables, leaving other application data unsynchronized. Compute-optimized instances can be suitable for CPU-heavy heterogeneous migrations, so the instance family alone does not disqualify this option.\nImplementation boundary: one full-load-plus-CDC task replicates in one direction. The reference answer assumes a coordinated write and cutover plan. If both databases accept writes during the phased migration, add reverse CDC with loopback prevention and segregate ownership of data elements. DMS bidirectional replication does not resolve concurrent-write conflicts. Selecting all tables does not by itself supply this missing design.",
+  "explanation_zh": "参考答案：C，是给定选项中最合适的迁移建议。\n选项 C 同时涵盖架构转换、全部表的迁移和持续复制。AWS SCT 支持 Oracle 到 Aurora PostgreSQL 的转换；无法自动转换的对象仍需人工处理。DMS 的全量加载加 CDC 先复制现有数据，再把源库的后续变化应用到目标库，表映射应覆盖应用所需的全部表。\n高写入事务量会增加 CDC 的缓冲需求，内存优化型复制实例有助于缓解内存压力和落盘。实际规格应结合 CPU、内存、存储及复制延迟来选择，不能仅凭应用读取量就断定 CDC 需要多少内存。\n选项 A、B 用 DataSync 做初始迁移，但它用于文件和对象传输，不能完成这里要求的关系型架构转换及 Oracle 到 PostgreSQL 的初始数据库迁移。选项 D 只选择最大表，其他应用数据无法同步，这是明确缺陷；计算优化型实例本身也可适用于 CPU 密集的异构迁移，不能一概排除。\n实施边界：单个全量加载加 CDC 任务只沿一个方向复制。参考答案以协调好写入归属和切换顺序为前提。若分批迁移期间两个数据库都接受写入，还需反向 CDC、防回环及数据项写入隔离；DMS 双向复制不负责解决并发写冲突。选择全部表本身不会自动补齐这些设计。",
   "stem_zh": "某公司正在把其本地的 Oracle 数据库迁移到 Amazon Aurora PostgreSQL。该数据库有多个应用会写入同一批表。这些应用需要逐个迁移，每两次迁移之间间隔一个月。管理层担心该数据库的读写量很高。在整个迁移过程中，两个数据库的数据必须保持同步。解决方案架构师应该推荐什么？",
   "stem_zh_source": "pdf_translation",
   "domain": "resilient",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 236,
@@ -10998,18 +11031,21 @@
    }
   ],
   "pdf_page": 88,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "C",
+   "E"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answers: C and E.\nEnable automated backups on the source RDS DB instance by setting backup retention above zero. AWS also recommends waiting for long-running transactions to finish before creating a read replica, because they can delay its creation. RDS creates a snapshot and configures replication as part of the managed operation.\nOption A is not a separate required manual step for this RDS read-replica workflow; enabling the appropriate automated backups enables the necessary binary logging. Option B describes failover priority rather than a MySQL read-replica prerequisite. Option D describes DynamoDB global tables, not RDS MySQL replication.\nWaiting for long transactions is a creation-time recommendation, while nonzero backup retention is a prerequisite.",
+  "explanation_zh": "正确答案：C、E。\n源 RDS 数据库实例必须启用自动备份，即备份保留期大于 0。AWS 还建议先让长事务完成，以免拖慢只读副本创建。RDS 会在托管创建流程中生成快照并配置复制。\n选项 A 不是这一流程额外要求的手工步骤：正确启用自动备份会启用所需的二进制日志；选项 B 的故障转移优先级不是创建 MySQL 只读副本的前提；选项 D 描述的是 DynamoDB 全局表。\n注意区分：等待长事务结束是创建前的建议，非零备份保留期则是必要条件。",
   "stem_zh": "某公司在 Amazon RDS for MySQL 中部署了一个数据库。由于事务量增加，数据库支持团队报告该数据库实例读取速度慢，并建议添加只读副本。\n\n在实施此更改之前，解决方案架构师应采取哪些操作组合？（选择两项。）",
   "stem_zh_source": "solution_paraphrase",
   "domain": "resilient",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 248,
@@ -11442,18 +11478,20 @@
    }
   ],
   "pdf_page": 92,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Answer: A, as the reference choice for collecting Auto Scaling status metrics.\nOption A uses a managed path: CloudWatch metric stream to Amazon Data Firehose, formerly Kinesis Data Firehose, to S3. Enable group metrics for the relevant Auto Scaling groups and include AWS/AutoScaling metrics in the stream. This requires no custom polling function, instance agent, or extra bootstrap work.\nMetrics such as GroupDesiredCapacity and GroupInServiceInstances describe group status. Auto Scaling publishes enabled group metrics every minute on a best-effort basis. Configure Firehose buffering and validate the dashboard's end-to-end delay. Metric streams support near-real-time monitoring, but metric publication, streaming, and buffering still add latency; delivery is not instantaneous.\nOption B explicitly launches an EMR cluster, adding cluster management instead of meeting the serverless requirement. Option D installs an agent during instance bootstrap, adding launch work and requiring extra logic to obtain Auto Scaling status; an instance log collector does not automatically capture group events.\nOption C is also serverless and can obtain periodic status through custom Lambda polling. Scheduled rules have minute-level precision, so polling may meet some near-real-time requirements. It is less direct than the managed metric-stream path and requires collection code; do not reject it solely because all polling must be too slow, or assume the metric stream is always faster.\nScope boundary: this reference answer interprets status data as numerical group metrics. Those measurements are not individual launch or termination event records. If the requirement is to capture event details, use an EventBridge event-pattern rule for Auto Scaling events. That is a different design from the scheduled rule stated in Option C.",
+  "explanation_zh": "参考答案：A，按收集 Auto Scaling 状态指标的出题意图判断。\n选项 A 使用托管链路：CloudWatch 指标流 → Amazon Data Firehose（原 Kinesis Data Firehose）→ S3。先为相关 Auto Scaling 组启用组指标，再让指标流包含 AWS/AutoScaling 命名空间中的指标。无需自写轮询函数、安装实例代理或增加引导脚本操作。\nGroupDesiredCapacity、GroupInServiceInstances 等指标反映组状态。Auto Scaling 对已启用的组指标每分钟尽力发布一次。应配置 Firehose 缓冲并验证仪表板的端到端延迟；该方案支持近实时监控，但指标发布、流式传输和缓冲都有延迟，不是即时送达。\n选项 B 明确要求启动 EMR 集群，增加集群管理，不符合这里的无服务器要求。选项 D 在实例引导时安装代理，增加启动阶段的工作；还需额外逻辑获取 Auto Scaling 状态，实例日志采集器不会自动收集组级伸缩事件。\n选项 C 同样无服务器，可以由 Lambda 自行轮询并保存状态。定时规则具有分钟级精度，因此轮询也可能满足某些近实时要求。它比托管指标流多出采集代码，方案不如选项 A 直接；不能仅凭“轮询”就断言它一定太慢，也不能保证指标流总是更快。\n范围边界：参考答案把 status data 理解为组级数值指标。这些测量值不等于逐条实例启动或终止事件。若要保存事件详情，应使用匹配 Auto Scaling 事件的 EventBridge 事件模式规则；这与选项 C 原文的定时规则是不同设计。",
   "stem_zh": "某公司正在构建一套方案，用来上报某个 AWS 账户中所有应用的 Amazon EC2 Auto Scaling 事件。该公司需要用无服务器方案把 EC2 Auto Scaling 状态数据存储到 Amazon S3。之后公司会用 Amazon S3 中的数据在仪表板上提供准实时更新。该方案不能影响 EC2 实例的启动速度。该公司应该如何把数据搬到 Amazon S3 才能满足这些需求？",
   "stem_zh_source": "pdf_translation",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 258,
@@ -12608,18 +12646,20 @@
    }
   ],
   "pdf_page": 101,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: D.\nRun the Linux simulation and Windows visualization applications on matching EC2 operating systems. FSx for NetApp ONTAP supports NFS and SMB access to the same volume, so both applications can use one dataset instead of synchronizing duplicate file systems. Configure the volume permissions and identity mapping for access through both protocols.\nOption A changes execution and storage interfaces to Lambda and S3. Option B does not supply the required shared NFS/SMB access through FSx File Gateway. Option C offers a message queue, not a shared file system. These alternatives cannot preserve the applications' existing file access methods as described.",
+  "explanation_zh": "正确答案：D。\nLinux 仿真程序和 Windows 可视化程序分别迁移到对应操作系统的 EC2。FSx for NetApp ONTAP 支持通过 NFS 和 SMB 访问同一卷，两个程序可共用一份数据，无需维护两套同步文件系统。部署时配置好双协议访问所需的卷权限与身份映射。\n选项 A 改成 Lambda 和 S3，会改变运行方式及文件访问接口；选项 B 的 FSx File Gateway 未提供题目要求的同一份数据的 NFS/SMB 共享；选项 C 的 SQS 是消息队列，不能替代共享文件系统。这些方案均不能按题目描述保留现有文件访问方式。",
   "stem_zh": "某研究公司运行的实验由一个仿真应用和一个可视化应用驱动。仿真应用运行在 Linux 上，每 5 分钟把中间数据输出到一个 NFS 共享。可视化应用是一个 Windows 桌面程序，用于展示仿真输出，需要 SMB 文件系统。该公司维护着两套相互同步的文件系统。这种做法造成了数据重复和资源使用低效。该公司需要在不改动任何一个应用代码的前提下把它们迁移到 AWS。哪个方案能满足这些需求？",
   "stem_zh_source": "pdf_translation",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 284,
@@ -13278,18 +13318,20 @@
    }
   ],
   "pdf_page": 107,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "C"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: C.\nCreate a subnet in each Availability Zone, configure the Auto Scaling group to use both, and enable an RDS Multi-AZ deployment. This adds availability at both the compute and database tiers. Ensure the ALB is enabled in the appropriate Availability Zones and has healthy targets there.\nOptions B and D assume a subnet can span Availability Zones, which VPC does not support. Option A adds database network connectivity but does not create a standby or automatic database failover. Networking alone cannot make the original Single-AZ database highly available.",
+  "explanation_zh": "正确答案：C。\n分别在两个可用区创建子网，让 Auto Scaling 组跨这两个子网部署实例，并把 RDS 配置为 Multi-AZ，使计算层与数据库层都具备跨可用区可用性。同时确保 ALB 在相应可用区启用并有健康目标。\n选项 B、D 认为一个子网可以跨多个可用区，但 VPC 子网只能属于一个可用区；选项 A 只增加数据库网络连接，未创建备用数据库及自动故障转移能力，不能解决原有单可用区数据库的故障风险。",
   "stem_zh": "某公司在 Application Load Balancer 之后的 Amazon EC2 实例上运行一个业务关键应用程序。这些 EC2 实例运行在一个 Auto Scaling 组中，并访问一个 Amazon RDS 数据库实例。\n\n由于这些 EC2 实例和数据库实例全部位于单个可用区，该设计未能通过运维评审。解决方案架构师必须更新设计以使用第二个可用区。\n\n哪个方案能使该应用程序具备高可用性？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "resilient",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 299,
@@ -13727,18 +13769,21 @@
    }
   ],
   "pdf_page": 110,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "B",
+   "C"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answers: B and C, using the legacy Trusted Advisor check named in the question.\nAWS's 2020 announcement places the RDS Reserved Instance Optimization check in the payer account. Use that account for the consolidated recommendation and review RDS reservation opportunities for the active On-Demand workload. This does not mean every individual RDS health check is automatically aggregated there.\nOption A does not match the access model of that legacy recommendation. Option D targets idle databases, whereas these instances are active. Option E targets Redshift.\nThe current RDS Reserved Instance purchase recommendations check supports payer and linked-account scopes. Do not generalize the legacy restriction to today's check. Also assess future usage before buying a long-term reservation; 90 days of use alone does not guarantee savings.",
+  "explanation_zh": "正确答案：B、C，按题目所用的旧版 Trusted Advisor 检查项名称判断。\nAWS 2020 年的发布说明指出，可从付款账户访问 RDS Reserved Instance Optimization 检查。应在该账户查看合并范围的预留实例建议，评估活跃按需数据库的折扣机会。这不代表所有 RDS 实例健康检查都会自动汇总到付款账户。\n选项 A 不符合该旧版建议的访问口径；选项 D 针对闲置数据库，而题中实例持续活跃；选项 E 针对 Redshift。\n当前新版 RDS Reserved Instance purchase recommendations 同时支持付款账户范围和成员账户范围，不能把旧版限制套用到新版。实际购买前还应评估未来用量，运行 90 天本身不保证长期预留一定划算。",
   "stem_zh": "某公司有多个使用合并账单的 AWS 账户。公司运行多个活跃的高性能 Amazon RDS for Oracle 按需数据库实例，为期 90 天。公司的财务团队可以在合并账单账户和所有其他 AWS 账户中访问 AWS Trusted Advisor。\n\n财务团队需要使用相应的 AWS 账户来访问 RDS 的 Trusted Advisor 检查建议。财务团队必须查看相应的 Trusted Advisor 检查项以降低 RDS 成本。\n\n财务团队应采取哪些步骤组合来满足这些要求？（选择两项。）",
   "stem_zh_source": "solution_paraphrase",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 309,
@@ -13857,18 +13902,20 @@
    }
   ],
   "pdf_page": 111,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "C"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: C.\nPublish quote requests to one SNS topic and attach a filter policy to each SQS subscription so that each quote type reaches its own worker queue. SQS durably buffers requests while workers are busy or unavailable, and workers delete them after successful handling. The managed routing and queues require little infrastructure maintenance.\nOption A requires stream-consumer and checkpoint management. Option B lacks the explicit durable worker queue; direct Lambda asynchronous retries are not a 24-hour work queue. Option D adds Firehose and OpenSearch for a queueing problem.\nSet retention beyond the response deadline, configure retries and dead-letter handling, and provision enough workers to meet 24 hours. A queue preserves work; it does not itself guarantee timely responses.",
+  "explanation_zh": "正确答案：C。\n用一个 SNS 主题接收报价请求，为各个 SQS 订阅配置过滤策略，按报价类型分发到独立工作队列。工作节点繁忙或短时不可用时，SQS 持久保留请求，成功处理后才删除，托管路由和队列也减少维护工作。\n选项 A 需要维护流消费及检查点；选项 B 缺少明确的持久工作队列，直接调用 Lambda 的异步重试不能等同于 24 小时任务队列；选项 D 为排队问题引入 Firehose 和 OpenSearch，过于复杂。\n应把消息保留期设得长于响应期限，配置重试、死信处理，并提供足够处理能力满足 24 小时要求。队列保存任务，本身不保证业务响应时限。",
   "stem_zh": "某公司正在使用 AWS 设计一个处理保险报价的 Web 应用程序。用户将向该应用程序请求报价。报价必须按报价类型分开，必须在 24 小时内得到响应，并且不得丢失。该方案必须最大化运维效率并最大限度减少维护工作。\n\n哪个方案能满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "resilient",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 312,
@@ -14031,18 +14078,20 @@
    }
   ],
   "pdf_page": 113,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: D.\nAmazon Inspector scans EC2 instances for vulnerabilities and produces findings that a Lambda workflow can collect and distribute as reports. It is the relevant vulnerability-management service among the choices.\nOption A uses Shield for DDoS protection. Option B uses Macie for sensitive-data discovery in S3. Option C uses GuardDuty for threat detection rather than the requested vulnerability scanning.\nThe option uses older Inspector-agent terminology. Current Inspector agent-based EC2 scans use Systems Manager Agent; supported instances can also use agentless scanning. Inspector identifies supported package vulnerabilities and network exposure; it does not prove that custom application business logic has no vulnerabilities.",
+  "explanation_zh": "正确答案：D。\nAmazon Inspector 可以扫描 EC2 漏洞并生成发现结果，再由 Lambda 工作流汇总和分发报告，是这些选项中对应漏洞管理需求的服务。\n选项 A 的 Shield 主要用于 DDoS 防护；选项 B 的 Macie 用于发现 S3 中的敏感数据；选项 C 的 GuardDuty 侧重威胁检测，不能代替题目要求的漏洞扫描。\n选项使用了较旧的 Inspector agent 表述。当前 Inspector 的 EC2 有代理扫描使用 Systems Manager Agent，符合条件的实例还可采用无代理扫描。它检查受支持的软件包漏洞和网络暴露，不能据此保证自定义应用的业务逻辑不存在漏洞。",
   "stem_zh": "某公司经历了一次安全入侵，影响了其本地数据中心的多个应用程序。攻击者利用了运行在服务器上的自定义应用程序中的漏洞。公司现在正将其应用程序迁移到 Amazon EC2 实例上运行。公司希望实施一个方案，主动扫描 EC2 实例上的漏洞并发送详细说明发现结果的报告。\n\n哪个方案能满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "secure",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 316,
@@ -14569,18 +14618,20 @@
    }
   ],
   "pdf_page": 117,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: A.\nRoute outbound traffic through AWS Network Firewall and use stateful domain-list allow rules for the approved software repository domains. Configure the firewall policy to block other outbound traffic and ensure both directions of the flow traverse the firewall.\nOption B uses WAF, which protects web applications from incoming requests rather than acting as the instances' outbound network firewall. Option C cannot specify repository URLs in security-group rules. Option D misuses an ALB as an outbound proxy.\nDomain-list rules match HTTP Host or TLS SNI values. This solution interprets the repository URLs as domain allowlisting; it is not full HTTPS URL-path inspection.",
+  "explanation_zh": "正确答案：A。\n将出站流量路由到 AWS Network Firewall，使用有状态域名列表规则放行获批软件仓库域名。防火墙策略还要阻止其他出站流量，并确保往返流量都经过防火墙。\n选项 B 的 WAF 保护 Web 应用接收的请求，不能直接充当实例的出站网络防火墙；选项 C 不能在安全组规则里填写仓库 URL；选项 D 把 ALB 错当成出站代理。\n域名列表匹配 HTTP Host 或 TLS SNI。本题按仓库域名白名单理解 URL，不能把这一能力说成能检查 HTTPS 完整 URL 路径。",
   "stem_zh": "一位解决方案架构师必须保护一个托管 Amazon EC2 实例的 VPC 网络。这些 EC2 实例包含高度敏感的数据，运行在私有子网中。根据公司政策，运行在该 VPC 中的 EC2 实例只能通过第三方 URL 访问互联网上经批准的第三方软件仓库以进行软件产品更新。其他互联网流量必须被阻止。\n\n哪个方案能满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "secure",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 328,
@@ -15183,18 +15234,20 @@
    }
   ],
   "pdf_page": 123,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: D.\nUse a Lake Formation database blueprint to ingest the Aurora MySQL data into the S3 lake. Grant the marketing users or groups access only to the permitted columns through Lake Formation, and use Athena to query and join the cataloged datasets for QuickSight. Configure the documented QuickSight–Lake Formation permission integration.\nOption A introduces a custom EMR ingestion path instead of using the existing lake governance. Option B incorrectly assigns column filtering to an IAM policy. Option C assigns it to an S3 bucket policy, which controls objects rather than columns inside them. Neither policy alone enforces the requested SQL column-level permissions.",
+  "explanation_zh": "正确答案：D。\n通过 Lake Formation 数据库蓝图把 Aurora MySQL 数据导入 S3 数据湖，用 Lake Formation 只向营销团队用户或组授予允许查看的列，再以 Athena 联接数据并作为 QuickSight 数据源。需要按文档配置 QuickSight 与 Lake Formation 的权限集成。\n选项 A 增加自定义 EMR 导入流程，未复用已有的数据湖治理；选项 B 把列级过滤交给 IAM 策略；选项 C 把列级过滤交给 S3 桶策略，而桶策略控制的是对象访问，不能直接限制对象内部的列。这两类策略本身无法实现要求的 SQL 列级权限。",
   "stem_zh": "某公司有一个由 AWS Lake Formation 治理的 Amazon S3 数据湖。公司希望在 Amazon QuickSight 中创建一个可视化视图，将数据湖中的数据与存储在 Amazon Aurora MySQL 数据库中的运营数据进行联接。公司希望强制实施列级授权，使公司的营销团队只能访问数据库中的部分列。\n\n哪个方案能以最少的运维开销满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 342,
@@ -16305,18 +16358,20 @@
    }
   ],
   "pdf_page": 132,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Answer: D, as the intended subscription-plan solution among the listed options.\nUse usage plans and API keys to make the premium API offering available to subscribers while retaining Cognito for identity authentication. Require an API key on the protected methods and associate subscribers' keys with the usage plan for the premium API/stage. Requests without a valid associated key are rejected. Issuing and withdrawing keys must follow subscription status.\nOption A adds caching and throttling, not subscription tiers. Option B does not give WAF a reliable subscription-entitlement source. Option C does not explain how end-user subscriptions translate into DynamoDB permissions when the business Lambda calls DynamoDB with its execution role.\nImplementation boundary: usage plans associate API stages, and methods can require keys and have throttling settings. Different plans on the same stage do not by themselves give basic and premium keys different method-level permissions. Isolate the premium offering in an appropriate API/stage, or enforce entitlements in an authorizer/backend. API keys are not Cognito identities; AWS advises against using them alone for authentication or authorization. If access must be bound to the current user's subscription even when a key is shared, validate that entitlement separately. These are the assumptions behind the reference answer, not additional capabilities provided automatically by a plan.",
+  "explanation_zh": "参考答案：D，按现有选项中订阅计划分级的出题意图判断。\n用 usage plans 和 API keys 向订阅者提供高级 API，同时继续使用 Cognito 进行身份认证。对受保护的方法启用 API key required，并将订阅者的密钥关联到高级 API/stage 对应的使用计划；缺少有效关联密钥的请求会被拒绝。密钥的发放和停用需要跟随订阅状态管理。\n选项 A 只有缓存和限流，没有订阅分级；选项 B 没给 WAF 提供可靠的订阅权限来源；选项 C 没说明业务 Lambda 使用自身执行角色调用 DynamoDB 时，如何将终端用户的订阅转换成相应权限。\n实现边界：使用计划关联 API 的 stage，方法可以要求密钥并设置限流；同一 stage 上的不同计划，本身不会让基础密钥与高级密钥具有不同的方法级访问权限。应将高级接口划分到适当的 API/stage，或在授权方/后端校验订阅权限。API key 不等于 Cognito 用户身份，AWS 不建议只靠它进行认证或授权。若必须在密钥被共享时仍按当前登录用户的订阅限制访问，就需单独验证该用户的权限。这些是采用参考答案的前提，不能理解成计划会自动提供上述授权能力。",
   "stem_zh": "某公司的 Web 应用由一个 Amazon API Gateway API、其后的一个 AWS Lambda 函数和一个 Amazon DynamoDB 数据库组成。该 Lambda 函数处理业务逻辑，DynamoDB 表承载数据。该应用使用 Amazon Cognito 用户池来识别应用的各个用户。解决方案架构师需要更新该应用，使只有已订阅的用户才能访问付费内容。哪个方案能以最小的运维开销满足这一需求？",
   "stem_zh_source": "pdf_translation",
   "domain": "secure",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 367,
@@ -17376,18 +17431,21 @@
    }
   ],
   "pdf_page": 141,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "B",
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Answers: B and D, as the reference combination for external session storage.\nOption B stores session information in DynamoDB, whose data is durably replicated across Availability Zones. All web instances can access the same session state when the Auto Scaling group replaces or removes an instance.\nOption D uses ElastiCache for Redis as a shared session store, a pattern documented by AWS. Configure replicas across Availability Zones with Multi-AZ failover for availability, and snapshots for recoverable backups in S3. This keeps session state separate from the lifetime of a web instance.\nOption A only routes a user's requests to the same target; it does not persist the application's session data. Option C manages identities and authentication rather than arbitrary business-session data. Option E is an operations management tool, not a customer session store.\nDurability boundary: snapshots preserve data at a backup point, and asynchronous replicas can lose recent writes during failure. ElastiCache for Redis does not support AOF starting with Redis OSS 2.8.22. Do not attribute open-source Redis AOF or newer Valkey durability features to this option. The reference combination fits the external-session-store interpretation; it does not mean an ordinary Redis cluster guarantees preservation of every acknowledged write. A zero-loss requirement would need a different durability assessment.",
+  "explanation_zh": "参考答案：B、D，按外置会话存储的出题意图判断。\n选项 B 使用 DynamoDB 保存会话信息，数据会跨可用区持久复制。Auto Scaling 替换或移除某台 Web 实例后，其他实例仍可访问同一份会话状态。\n选项 D 使用 ElastiCache for Redis 作为共享会话存储，AWS 官方示例也采用这种模式。应配置跨可用区副本及 Multi-AZ 故障转移来提高可用性，并用快照在 S3 中保留可恢复的备份，使会话状态不依赖某台 Web 实例的生命周期。\n选项 A 只让用户请求尽量进入同一目标，不负责持久保存应用会话数据；选项 C 管理身份和认证，不能代替任意业务会话数据的存储；选项 E 是运维管理工具，不是客户会话存储。\n持久性边界：快照保存的是备份时点的数据，异步副本在故障时可能丢失最近写入。ElastiCache for Redis 从 Redis OSS 2.8.22 起不再支持 AOF，不能把开源 Redis 的 AOF 或新版 Valkey 的持久化能力套用到该选项。参考组合适用于外置会话存储的理解，不代表普通 Redis 集群能保证每次已确认写入都不丢失；如果要求零丢失，应另行评估持久性方案。",
   "stem_zh": "某公司在一组 Amazon EC2 实例上托管一个三层电子商务应用程序。这些实例运行在一个 Application Load Balancer（ALB）之后的 Auto Scaling 组中。所有电商数据都存储在一个 Amazon RDS for MariaDB 多可用区数据库实例中。\n\n公司希望优化交易期间的客户会话管理。该应用程序必须持久地存储会话数据。\n\n哪些方案能满足这些要求？（选择两项。）",
   "stem_zh_source": "solution_paraphrase",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 391,
@@ -17902,18 +17960,20 @@
    }
   ],
   "pdf_page": 146,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: A.\nKinesis Data Streams retains records for 24 hours by default, but the application reads approximately every 48 hours. Older records can expire before the consumer reaches them. Increase retention beyond the consumption interval and allow extra time for processing and recovery.\nOption B changes the producer implementation. Option C changes throughput capacity, without evidence that throttling is the problem. Option D protects versions of objects already written to S3; it cannot recover expired stream records.\nIncreasing retention prevents future expiration under the configured window. It does not restore records that have already expired.",
+  "explanation_zh": "正确答案：A。\nKinesis Data Streams 默认只保留 24 小时数据，而应用隔天消费一次，间隔约 48 小时，部分记录在被读取前就已过期。应将保留期增加到超过消费间隔，并为处理和故障恢复留出余量。\n选项 B 改变生产者实现；选项 C 增加吞吐容量，但题目未表明出现吞吐限流；选项 D 只能保留已经写入 S3 的对象版本，无法恢复过期的流记录。\n延长保留期只能防止之后的数据在设定窗口内过期，不能找回已经过期的数据。",
   "stem_zh": "某公司需要摄取和处理其应用程序产生的大量流数据。该应用程序运行在 Amazon EC2 实例上，并将数据发送到使用默认设置配置的 Amazon Kinesis Data Streams。每隔一天，该应用程序会消费这些数据并将其写入一个 Amazon S3 存储桶以供商业智能（BI）处理。公司观察到 Amazon S3 并未收到应用程序发送到 Kinesis Data Streams 的全部数据。\n\n解决方案架构师应该怎么做来解决此问题？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "performant",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 403,
@@ -18440,18 +18500,20 @@
    }
   ],
   "pdf_page": 150,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "B"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: B.\nExpose an NFS or SMB share through S3 File Gateway and change the report destination to that share. The gateway caches local writes and asynchronously uploads the files as S3 objects, allowing cloud analysis without a separate transfer application.\nOption A waits until the end of the day and misses the near-real-time requirement. Option C can automate transfers but needs a custom orchestration application. Option D requires a polling and upload script plus an SFTP endpoint.\nUpload latency depends on network capacity and the outstanding cache backlog. Near-real-time delivery does not mean each local write is synchronously committed to S3.",
+  "explanation_zh": "正确答案：B。\n通过 S3 File Gateway 提供 NFS 或 SMB 共享，并把报表输出路径改为该共享。网关先缓存本地写入，再异步上传为 S3 对象，云端即可分析，无需另外维护传输应用。\n选项 A 等到每天结束才同步，不满足近实时；选项 C 虽能自动传输，但需要自定义编排应用；选项 D 要维护检查新文件和上传的脚本以及 SFTP 端点。\n实际上传延迟受网络带宽和缓存积压影响。“近实时”不代表每次本地写入都已同步持久化到 S3。",
   "stem_zh": "某公司有一个业务系统，每天生成数百份报告。该业务系统将报告以 CSV 格式保存到一个网络共享中。公司需要近实时地将这些数据存储到 AWS 云中以供分析。\n\n哪个方案能以最少的管理开销满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 415,
@@ -18576,18 +18638,20 @@
    }
   ],
   "pdf_page": 151,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "C"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: C.\nCompute Savings Plans cover eligible EC2 and Lambda compute usage, allowing the commitment to continue benefiting the application as Lambda usage grows. Optimize execution duration, memory, invocations, and data transfer as separate cost drivers. Connect the functions to the private subnet containing EC2, with security groups that permit the required traffic.\nOptions A and B choose EC2 Instance Savings Plans, which do not cover Lambda. Option D leaves the functions without the VPC attachment required for direct access to the private EC2 addresses.\nSavings Plans do not discount every application charge, such as all request or network-transfer fees. Size the commitment from expected eligible baseline usage.",
+  "explanation_zh": "正确答案：C。\nCompute Savings Plans 覆盖符合条件的 EC2 与 Lambda 计算用量，Lambda 用量增加后仍可利用承诺折扣。执行时长、内存、调用次数和数据传输则分别优化。将函数连接到 EC2 所在的私有子网，并配置允许所需通信的安全组。\n选项 A、B 使用 EC2 Instance Savings Plans，不能覆盖 Lambda；选项 D 没有连接客户 VPC，无法按题目要求直接访问私有 EC2 地址。\nSavings Plans 并不折扣所有应用费用，例如请求和网络传输费用仍需单独评估。应按预期符合折扣条件的稳定用量确定承诺金额。",
   "stem_zh": "某公司使用 Amazon EC2 实例和 AWS Lambda 函数运行其应用程序。公司在其 AWS 账户中有包含公有子网和私有子网的 VPC。这些 EC2 实例运行在其中一个 VPC 的私有子网中。为使应用程序正常工作，Lambda 函数需要直接通过网络访问这些 EC2 实例。\n\n该应用程序将至少运行 1 年。公司预计在此期间应用程序使用的 Lambda 函数数量会增加。公司希望在所有应用程序资源上实现最大化的成本节约，并保持服务之间的低网络延迟。\n\n哪个方案能满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "cost",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 418,
@@ -18820,7 +18884,7 @@
   "topic": "Topic 1",
   "type": "multi",
   "select_count": 2,
-  "stem_en": "A solutions architect wants to use the following JSON text as an identity-based policy to grant specific permissions: Which IAM principals can the solutions architect attach this policy to? (Choose two.)",
+  "stem_en": "A solutions architect wants to use the following JSON text as an identity-based policy to grant specific permissions:\n\n{\n  \"Statement\": [\n    {\n      \"Action\": [\n        \"ssm:ListDocuments\",\n        \"ssm:GetDocument\"\n      ],\n      \"Effect\": \"Allow\",\n      \"Resource\": \"*\",\n      \"Sid\": \"\"\n    }\n  ],\n  \"Version\": \"2012-10-17\"\n}\n\nWhich IAM principals can the solutions architect attach this policy to? (Choose two.)",
   "options": [
    {
     "letter": "A",
@@ -18849,18 +18913,21 @@
    }
   ],
   "pdf_page": 154,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A",
+   "B"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
-  "stem_zh": "解决方案架构师想把下面这段 JSON 文本用作基于身份的策略来授予特定权限：该架构师可以把这条策略附加到哪些 IAM 主体上？（选择两项。）",
+  "explanation_en": "Correct answers: A and B.\nIdentity-based permissions policies can be attached to IAM users, user groups, and roles. The listed choices therefore support Role and Group. Users in a group receive permissions from policies attached to that group.\nThe JSON allows ssm:ListDocuments and ssm:GetDocument, with Resource set to \"*\". These fields describe the allowed actions and their resource scope; they do not change which IAM identities can receive the policy.\nOption C is an AWS organization, and Options D and E are service resources. They are not IAM identities to which this identity-based policy can be directly attached.\nTerminology note: the question uses \"IAM principals\" loosely. An IAM group can receive an identity-based policy, but the group itself cannot be specified in a policy's Principal element. This distinction does not exclude Group from the answer.",
+  "explanation_zh": "正确答案：A、B。\n基于身份的权限策略可以附加到 IAM 用户、用户组和角色。题目列出的选项中，A 的 Role（角色）和 B 的 Group（用户组）符合要求；组内用户会获得附加到该组的策略所授予的权限。\n图片中的 JSON 允许 ssm:ListDocuments 和 ssm:GetDocument，Resource 为 \"*\"。这些字段描述允许执行的操作及资源范围，并不改变这类策略可以附加到哪些 IAM 身份。\n选项 C 是 AWS 组织，选项 D、E 是服务资源，都不是可以直接附加这份身份策略的 IAM 身份。\n术语说明：题干将这些对象称为“IAM principals”不够严谨。IAM 组可以附加身份策略，但组本身不能写进策略的 Principal 元素。不要因此把 Group 排除；本题实际考查的是身份策略的附加对象。",
+  "stem_zh": "解决方案架构师想把下面这段 JSON 文本用作基于身份的策略来授予特定权限：\n\n{\n  \"Statement\": [\n    {\n      \"Action\": [\n        \"ssm:ListDocuments\",\n        \"ssm:GetDocument\"\n      ],\n      \"Effect\": \"Allow\",\n      \"Resource\": \"*\",\n      \"Sid\": \"\"\n    }\n  ],\n  \"Version\": \"2012-10-17\"\n}\n\n该架构师可以把这条策略附加到哪些 IAM 主体上？（选择两项。）",
   "stem_zh_source": "pdf_translation",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 424,
@@ -19087,7 +19154,7 @@
   "topic": "Topic 1",
   "type": "single",
   "select_count": 1,
-  "stem_en": "The following IAM policy is attached to an IAM group. This is the only policy applied to the group. What are the effective IAM permissions of this policy for group members?",
+  "stem_en": "The following IAM policy is attached to an IAM group. This is the only policy applied to the group.\n\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"1\",\n      \"Effect\": \"Allow\",\n      \"Action\": \"ec2:*\",\n      \"Resource\": \"*\",\n      \"Condition\": {\n        \"StringEquals\": {\n          \"ec2:Region\": \"us-east-1\"\n        }\n      }\n    },\n    {\n      \"Sid\": \"2\",\n      \"Effect\": \"Deny\",\n      \"Action\": [\n        \"ec2:StopInstances\",\n        \"ec2:TerminateInstances\"\n      ],\n      \"Resource\": \"*\",\n      \"Condition\": {\n        \"BoolIfExists\": {\n          \"aws:MultiFactorAuthPresent\": false\n        }\n      }\n    }\n  ]\n}\n\nWhat are the effective IAM permissions of this policy for group members?",
   "options": [
    {
     "letter": "A",
@@ -19111,18 +19178,20 @@
    }
   ],
   "pdf_page": 157,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
-  "stem_zh": "下面这条 IAM 策略被附加到一个 IAM 组上，并且是该组唯一生效的策略。对组成员而言，这条策略的实际 IAM 权限是什么？",
+  "explanation_en": "Correct answer: D.\nStatement 1 allows ec2:* only when ec2:Region equals us-east-1. The policy therefore grants EC2 permissions only in that Region.\nStatement 2 explicitly denies ec2:StopInstances and ec2:TerminateInstances when aws:MultiFactorAuthPresent is false or absent. BoolIfExists makes a missing key satisfy this condition, so omitting MFA context does not bypass the deny. An applicable explicit deny overrides an allow, regardless of statement order.\nWhen aws:MultiFactorAuthPresent is true, Statement 2 does not apply. Stopping and terminating instances are then allowed by Statement 1 only in us-east-1. Other EC2 actions in us-east-1 do not require MFA under this policy. In other Regions, this policy provides no matching allow, even with MFA; considering this policy alone, those requests are denied.\nOption A incorrectly treats Allow as ending evaluation. Option B incorrectly applies the MFA requirement to every EC2 action. Option C ignores the regional condition on Allow. Option D matches both restrictions.",
+  "explanation_zh": "正确答案：D。\n第一条语句仅在 ec2:Region 等于 us-east-1 时允许 ec2:*，因此这份策略授予的 EC2 权限只限于 us-east-1。\n第二条语句仅针对 ec2:StopInstances（停止实例）和 ec2:TerminateInstances（终止实例）。当 aws:MultiFactorAuthPresent 为 false，或者请求上下文中根本没有这个字段时，BoolIfExists 条件都成立，触发显式 Deny。缺少 MFA 字段不能绕过限制；显式拒绝会覆盖允许，与两条语句的先后顺序无关。\n当 aws:MultiFactorAuthPresent 为 true 时，第二条拒绝语句不生效，停止和终止实例可由第一条语句授权，但仍只限于 us-east-1。该区域内的其他 EC2 操作不受这条 MFA 条件限制。其他区域没有匹配的 Allow，即使使用 MFA，单靠这份策略也无法获得权限。\n选项 A 错在认为遇到 Allow 后就不再处理后续语句；选项 B 错在把 MFA 要求扩大到所有 EC2 操作；选项 C 错在忽略 Allow 的区域限制。选项 D 同时满足区域和 MFA 两项限制。",
+  "stem_zh": "下面这条 IAM 策略被附加到一个 IAM 组上。这是唯一附加到该组的策略。\n\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"1\",\n      \"Effect\": \"Allow\",\n      \"Action\": \"ec2:*\",\n      \"Resource\": \"*\",\n      \"Condition\": {\n        \"StringEquals\": {\n          \"ec2:Region\": \"us-east-1\"\n        }\n      }\n    },\n    {\n      \"Sid\": \"2\",\n      \"Effect\": \"Deny\",\n      \"Action\": [\n        \"ec2:StopInstances\",\n        \"ec2:TerminateInstances\"\n      ],\n      \"Resource\": \"*\",\n      \"Condition\": {\n        \"BoolIfExists\": {\n          \"aws:MultiFactorAuthPresent\": false\n        }\n      }\n    }\n  ]\n}\n\n对组成员而言，这条策略的实际 IAM 权限是什么？",
   "stem_zh_source": "pdf_translation",
   "domain": "secure",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 430,
@@ -19335,18 +19404,20 @@
    }
   ],
   "pdf_page": 159,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: A.\nPrepare the recovery Region's Auto Scaling group and load balancer in advance, replicate DynamoDB through global tables, and preconfigure health-based DNS failover. Keep sufficient ready application capacity in the recovery Region to meet the recovery objective.\nOptions B and C add resource creation to the outage recovery path. Option D prepares infrastructure but still requires an alarm, Lambda execution, and a Route 53 configuration update during the incident. Preconfigured DNS failover avoids that extra control-plane dependency.\nFailover is not instantaneous: health detection, DNS caching, recovery capacity, and database replication behavior still affect recovery. Test the complete application failover.",
+  "explanation_zh": "正确答案：A。\n提前在灾备区域准备 Auto Scaling 组和负载均衡器，通过 DynamoDB 全局表复制数据，并预先配置基于健康状态的 DNS 故障转移。灾备区域还要保留满足恢复目标的就绪应用容量。\n选项 B、C 需要等故障后才创建部分资源，增加恢复时间；选项 D 虽预建资源，但切换仍依赖告警触发、Lambda 执行及 Route 53 配置更新。预配置 DNS 故障转移可以减少故障期间对控制面的额外依赖。\n切换不会瞬间完成，健康检测、DNS 缓存、灾备容量和数据复制行为都会影响恢复，应演练完整应用的切换。",
   "stem_zh": "某公司在 AWS 云中托管其应用程序。该应用程序运行在一个 Auto Scaling 组中、位于 Elastic Load Balancer 之后的 Amazon EC2 实例上，并使用一张 Amazon DynamoDB 表。公司希望确保该应用程序能够以最少的停机时间在另一个 AWS 区域中提供服务。\n\n解决方案架构师应该怎么做才能以最少的停机时间满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "resilient",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 435,
@@ -21249,42 +21320,44 @@
   "topic": "Topic 1",
   "type": "single",
   "select_count": 1,
-  "stem_en": "A group requires permissions to list an Amazon S3 bucket and delete objects from that bucket. An administrator has created the following IAM policy to provide access to the bucket and applied that policy to the group. The group is not able to delete objects in the bucket. The company follows least-privilege access rules. Which statement should a solutions architect add to the policy to correct bucket access?",
+  "stem_en": "A group requires permissions to list an Amazon S3 bucket and delete objects from that bucket. An administrator has created the following IAM policy to provide access to the bucket and applied that policy to the group:\n\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Action\": [\n        \"s3:ListBucket\",\n        \"s3:DeleteObject\"\n      ],\n      \"Resource\": [\n        \"arn:aws:s3:::bucket-name\"\n      ],\n      \"Effect\": \"Allow\"\n    }\n  ]\n}\n\nThe group is not able to delete objects in the bucket. The company follows least-privilege access rules.\n\nWhich statement should a solutions architect add to the policy to correct bucket access?",
   "options": [
    {
     "letter": "A",
-    "text_en": "",
-    "text_zh": null
+    "text_en": "{\n  \"Action\": [\n    \"s3:*Object\"\n  ],\n  \"Resource\": [\n    \"arn:aws:s3:::bucket-name/*\"\n  ],\n  \"Effect\": \"Allow\"\n}",
+    "text_zh": "操作（Action）：s3:*Object\n资源（Resource）：arn:aws:s3:::bucket-name/*\n效果（Effect）：Allow（允许）"
    },
    {
     "letter": "B",
-    "text_en": "",
-    "text_zh": null
+    "text_en": "{\n  \"Action\": [\n    \"s3:*\"\n  ],\n  \"Resource\": [\n    \"arn:aws:s3:::bucket-name/*\"\n  ],\n  \"Effect\": \"Allow\"\n}",
+    "text_zh": "操作（Action）：s3:*\n资源（Resource）：arn:aws:s3:::bucket-name/*\n效果（Effect）：Allow（允许）"
    },
    {
     "letter": "C",
-    "text_en": "",
-    "text_zh": null
+    "text_en": "{\n  \"Action\": [\n    \"s3:DeleteObject\"\n  ],\n  \"Resource\": [\n    \"arn:aws:s3:::bucket-name*\"\n  ],\n  \"Effect\": \"Allow\"\n}",
+    "text_zh": "操作（Action）：s3:DeleteObject\n资源（Resource）：arn:aws:s3:::bucket-name*\n效果（Effect）：Allow（允许）"
    },
    {
     "letter": "D",
-    "text_en": "",
-    "text_zh": null
+    "text_en": "{\n  \"Action\": [\n    \"s3:DeleteObject\"\n  ],\n  \"Resource\": [\n    \"arn:aws:s3:::bucket-name/*\"\n  ],\n  \"Effect\": \"Allow\"\n}",
+    "text_zh": "操作（Action）：s3:DeleteObject\n资源（Resource）：arn:aws:s3:::bucket-name/*\n效果（Effect）：Allow（允许）"
    }
   ],
   "pdf_page": 174,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
-  "stem_zh": "某个组需要有列出某个 Amazon S3 存储桶内容以及删除该存储桶中对象的权限。管理员创建了下面这条 IAM 策略来提供对该存储桶的访问，并把该策略应用到了这个组上。但该组无法删除存储桶中的对象。该公司遵循最小权限访问原则。解决方案架构师应该往这条策略中加入哪条语句来修正存储桶访问？",
+  "explanation_en": "Correct answer: D.\nThe existing statement names only the bucket ARN, arn:aws:s3:::bucket-name. That resource supports s3:ListBucket, but s3:DeleteObject requires an object ARN. Adding an Allow statement for s3:DeleteObject on arn:aws:s3:::bucket-name/* permits deletion only of objects in the specified bucket.\nOption A allows additional object actions through s3:*Object, and Option B allows additional actions through s3:*. Both grant more permissions than required.\nOption C uses bucket-name* without the slash. The wildcard can also match objects in other buckets whose names start with bucket-name, so the resource scope is broader than required. Option D retains the slash and limits access to objects inside bucket-name.",
+  "explanation_zh": "正确答案：D。\n原策略只指定了桶 ARN：arn:aws:s3:::bucket-name。它能匹配 s3:ListBucket 所需的桶资源，但 s3:DeleteObject 需要对象 ARN。新增一条 Allow 语句，只允许对 arn:aws:s3:::bucket-name/* 执行 s3:DeleteObject，即可授权删除指定桶内的对象。\n选项 A 的 s3:*Object 和选项 B 的 s3:* 都允许了删除对象之外的操作，超出题目要求。\n选项 C 使用 bucket-name*，星号前没有斜杠。该通配符还可能匹配其他以 bucket-name 开头的桶中的对象，资源范围过宽。选项 D 的 bucket-name/* 保留了斜杠，将资源限定为 bucket-name 桶内的对象，符合最小权限原则。",
+  "stem_zh": "某个组需要列出某个 Amazon S3 存储桶内容以及删除该存储桶中对象的权限。管理员创建了以下 IAM 策略来提供对该存储桶的访问，并将其应用到了该组：\n\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Action\": [\n        \"s3:ListBucket\",\n        \"s3:DeleteObject\"\n      ],\n      \"Resource\": [\n        \"arn:aws:s3:::bucket-name\"\n      ],\n      \"Effect\": \"Allow\"\n    }\n  ]\n}\n\n该组无法删除存储桶中的对象。公司遵循最小权限访问原则。\n\n解决方案架构师应该向该策略添加哪条语句，以修正对存储桶的访问权限？",
   "stem_zh_source": "pdf_translation",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "答案未确定；选项为图片，PDF 中无文字",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 478,
@@ -21893,18 +21966,20 @@
    }
   ],
   "pdf_page": 179,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: A.\nUse a standard SQS queue as the Lambda event source, enable SSE-KMS, and grant the function's execution role kms:Decrypt as well as the required SQS permissions. Standard queues meet the at-least-once requirement without paying for FIFO ordering that the question does not request.\nOption C adds FIFO unnecessarily. Options B and D refer to an encryption-key invocation permission rather than the required permission model; SSE-SQS in particular does not require a customer KMS decrypt permission.\nConfigure the KMS key policy consistently with the role permissions. Use TLS and restricted queue access, and implement idempotent validation because retries can process a request more than once.",
+  "explanation_zh": "正确答案：A。\n使用标准 SQS 队列作为 Lambda 事件源，启用 SSE-KMS，并向函数执行角色授予 kms:Decrypt 及所需 SQS 权限。标准队列满足至少处理一次，无需为题目未要求的 FIFO 顺序能力增加费用。\n选项 C 不必要地采用 FIFO；选项 B、D 所述的“加密密钥调用权限”不符合这里需要的权限配置，SSE-SQS 尤其不需要客户授予 KMS 解密权限。\nKMS 密钥策略也应允许该角色使用密钥；同时使用 TLS、限制队列访问，并实现幂等校验，因为重试可能重复处理请求。",
   "stem_zh": "一位解决方案架构师正在为某银行设计一个异步应用程序，用于处理信用卡数据验证请求。该应用程序必须安全，并且能够对每个请求至少处理一次。\n\n哪个方案能以最具成本效益的方式满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "secure",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 492,
@@ -23573,18 +23648,20 @@
    }
   ],
   "pdf_page": 193,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "D"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": true,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: D.\nUse a Transfer Family FTP endpoint backed by S3 Standard, then trigger Lambda with object-created notifications. Configure the function timeout above the measured processing time; 3–8 minutes fits within Lambda's 15-minute maximum. Delete the input object only after successful processing and make retries idempotent.\nOptions A and B still run nightly. Option C incorrectly uses EBS as Transfer Family storage and then expects S3 notifications from it.\nTransfer Family FTP requires an internal VPC endpoint and private client connectivity. Preserve FTP with suitable networking; do not assume an internet-facing plain-FTP endpoint. The event workflow removes the need to maintain a custom FTP server and batch scheduler.",
+  "explanation_zh": "正确答案：D。\n使用以 S3 Standard 为存储的 Transfer Family FTP 端点，再用对象创建事件触发 Lambda。把超时时间设得长于实际处理时长；每个文件 3–8 分钟在 Lambda 最长 15 分钟范围内。处理成功后才删除输入对象，并让重试具备幂等性。\n选项 A、B 仍然夜间批处理；选项 C 错把 EBS 当作 Transfer Family 存储，又要求由它产生 S3 事件。\nTransfer Family 的 FTP 需要内部 VPC 端点和客户端的私有网络连接，不能假定支持公网明文 FTP 端点。配置好网络后可保留 FTP 协议，减少维护自建 FTP 服务与批处理调度的工作。",
   "stem_zh": "某数据分析公司想把它的批处理系统迁移到 AWS。该公司白天会通过 FTP 定期收到数千个小数据文件。本地的一个批处理作业在夜间处理这些数据文件，但该作业要跑好几个小时才能结束。该公司希望 AWS 方案能尽快处理传入的数据文件，同时对发送文件的 FTP 客户端改动最小。该方案必须在文件被成功处理后删除传入的数据文件。每个文件的处理需要 3–8 分钟。哪个方案能以最高的运维效率满足这些需求？",
   "stem_zh_source": "pdf_translation",
   "domain": "cost",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 529,
@@ -24067,18 +24144,20 @@
    }
   ],
   "pdf_page": 197,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "C"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: C.\nAWS Elastic Disaster Recovery continuously replicates changed disk blocks to a staging area in AWS and launches recovery instances when needed. This supports a low-cost pilot-light approach while preserving the existing SQL Server workload. AWS documents recovery points measured in seconds and recovery times typically measured in minutes.\nOption A adds active infrastructure and SQL Server Enterprise licensing. Option B keeps a warm database running and requires a database migration/replication setup. Option D's nightly backups cannot meet a 30-second RPO.\nThe targets are not automatic guarantees: validate replication bandwidth, staging performance, crash-consistent database recovery, licensing, and application startup through recovery drills.",
+  "explanation_zh": "正确答案：C。\nAWS Elastic Disaster Recovery 持续把变化的磁盘块复制到 AWS 暂存区，需要恢复时才启动恢复实例，适合保留现有 SQL Server 工作负载并采用成本较低的 pilot light 灾备。AWS 文档说明其恢复点可达到秒级，恢复时间通常为分钟级。\n选项 A 增加持续运行的基础设施和 SQL Server Enterprise 许可；选项 B 需要长期运行温备数据库并配置数据库迁移复制；选项 D 的夜间备份无法满足 30 秒 RPO。\n这些恢复目标不是自动保证，应通过演练验证复制带宽、暂存性能、崩溃一致性数据库恢复、许可及应用启动时间。",
   "stem_zh": "某公司希望使用 AWS 云改进其本地的灾难恢复（DR）配置。公司核心生产业务应用程序使用运行在虚拟机（VM）上的 Microsoft SQL Server Standard。该应用程序的恢复点目标（RPO）为 30 秒或更短，恢复时间目标（RTO）为 60 分钟。该 DR 方案需要尽可能降低成本。\n\n哪个方案能满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "resilient",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 540,
@@ -24262,14 +24341,14 @@
   "answer_source": "unresolved",
   "answer_confidence": 0.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Confirmed ambiguity: the options do not establish a unique scoring combination.\nThe organization management account controls discount-sharing preferences. Both purchasing and benefit-receiving accounts must have sharing activated. Savings Plans cover eligible usage in the owning account first; unused benefits can then apply to eligible usage in linked accounts.\nOption E makes the purchasing account the management account. Options A and B therefore refer to the same administrator account, with Option B explicitly including all accounts. Both Options A and E and Options B and E can work when sharing covers the relevant accounts.\nOptions A and D also work: create a new management account, invite the purchasing account and the other accounts, and configure sharing there. Member-owned Savings Plans can provide shared discounts. AWS recommends keeping business workloads out of the management account; a separate payer is not inherently an incorrect design. The stem imposes no fewest-steps requirement.\nOption C incorrectly uses AWS RAM. Savings Plans discounts are shared through consolidated billing, not RAM resource sharing.\nSavings Plans sharing is enabled by default in AWS Organizations. Options A and B are best read as ensuring that sharing is enabled for the required accounts. Existing preferences and eligible usage still need checking; joining an organization does not make every charge eligible for a discount.\nOptions A and E are a tentative exam-taking preference from the supplied analysis, not an officially confirmed answer. Keep the question out of scoring until revised wording or options resolve the overlap.",
+  "explanation_zh": "已确认选项重叠：原题不能确定唯一判分组合。\n折扣共享偏好由组织管理账户控制，购买方和接收折扣的账户都需启用共享。Savings Plans 先抵扣持有账户的合格用量，再将剩余优惠用于其他关联账户的合格用量。\n选项 E 使购买账户成为管理账户，因此选项 A、B 指向同一个管理身份，选项 B 额外明确包含所有账户。确保相关账户参与共享时，选项 A、E 与选项 B、E 都能实施。\n选项 A、D 也能实施：新建管理账户，邀请购买账户及其他账户加入，再配置共享。成员账户持有的 Savings Plan 同样可以共享折扣。AWS 建议管理账户不承载业务负载，单独设立付款账户本身不是错误；原题也没有要求最少操作。\n选项 C 错把 Savings Plans 折扣交给 AWS RAM 共享；该折扣通过合并账单应用，不属于 RAM 资源共享。\nSavings Plans 在 AWS Organizations 内默认启用共享。选项 A、B 更适合理解为确认所需账户已启用共享；仍需检查实际偏好和合格用量，加入组织不代表每笔费用都能获得折扣。\n用户提供的分析倾向作答选项 A、E，但这只是作答倾向，不是已确认的官方答案。等待题面或选项修订消除重叠前，继续排除出判分题池。",
   "stem_zh": "某公司在多个单独计费的 AWS 账户中运行 Amazon EC2 实例。公司最近购买了一份 Savings Plan。由于公司业务需求的变化，公司已下线了大量 EC2 实例。公司希望将其 Savings Plan 折扣用于其他 AWS 账户。\n\n哪些步骤组合能满足这些要求？（选择两项。）",
   "stem_zh_source": "solution_paraphrase",
   "domain": "cost",
   "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "review_reason": "已确认选项重叠：A+E、B+E、A+D 均可行；A+E 仅作答倾向，等待题面或选项修订。",
+  "explanation_quality": "ok"
  },
  {
   "id": 544,
@@ -25418,18 +25497,20 @@
    }
   ],
   "pdf_page": 208,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: A.\nInspect CloudWatch metrics in AWS/Events for the rule. MatchedEvents shows matching events; Invocations or InvocationAttempts shows target invocation activity. FailedInvocations and retry-related metrics help identify delivery problems. Select the correct event bus, rule dimensions, time range, and statistics.\nOption B depends on a configured dead-letter queue and only covers certain failed deliveries. Option C requires suitable logging to have been enabled. Option D audits API activity rather than directly answering the rule-match and target-invocation questions.\nSome metrics appear only when nonzero, and delivery is best effort. Absence of a data point is not by itself conclusive proof that no event occurred.",
+  "explanation_zh": "正确答案：A。\n查看 CloudWatch 的 AWS/Events 命名空间。MatchedEvents 用于观察事件匹配，Invocations 或 InvocationAttempts 用于观察目标调用，FailedInvocations 及重试指标帮助定位投递问题。应选择正确的事件总线、规则维度、时间范围和统计方式。\n选项 B 依赖已配置死信队列，且只涵盖部分失败投递；选项 C 依赖事先启用合适日志；选项 D 主要审计 API 活动，不能直接回答规则是否匹配及目标是否被调用。\n部分指标只在非零时发布，且指标投递为尽力而为，因此没有数据点本身不能完全证明没有事件发生。",
   "stem_zh": "一条 Amazon EventBridge 规则以一个第三方 API 为目标。该第三方 API 未收到任何传入流量。解决方案架构师需要判断该规则的条件是否被满足，以及该规则的目标是否被调用。\n\n哪个方案能满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": null,
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 570,
@@ -25944,18 +26025,20 @@
    }
   ],
   "pdf_page": 212,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "B"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: B.\nKeep four On-Demand instances, with two in each of two Availability Zones. Losing either Availability Zone still leaves the required two running instances. The Auto Scaling minimum of four preserves the normal capacity floor; the cross-zone placement supplies immediate spare capacity.\nOption A leaves only one instance after an Availability Zone failure. Option C concentrates interruptible capacity in one Availability Zone. Option D can leave only interruptible Spot capacity after the On-Demand zone fails, so it is not the reliable production baseline requested.\nThe stateful application still needs appropriate state replication or external storage. An Auto Scaling group by itself does not preserve application state or guarantee survival of every simultaneous failure.",
+  "explanation_zh": "正确答案：B。\n保留四台按需实例，两个可用区各两台。任一可用区失效后，另一可用区仍有要求的两台运行实例。最小容量为四保证正常容量下限，跨区分布则提供故障发生时已有的备用容量。\n选项 A 在一个可用区失效后只剩一台；选项 C 将可中断的 Spot 容量集中在一个可用区；选项 D 在按需实例所在可用区失效后，可能仅剩可被中断的 Spot，不适合作为题目要求的稳定生产容量保障。\n有状态应用仍需状态复制或外部状态存储。Auto Scaling 本身不会保存应用状态，也不代表能承受任意同时发生的故障。",
   "stem_zh": "某公司在 Amazon EC2 实例上运行一个有状态的生产应用程序。该应用程序要求始终至少有两台 EC2 实例在运行。\n\n解决方案架构师需要为该应用程序设计一个高可用且容错的架构。解决方案架构师创建了一个 EC2 实例的 Auto Scaling 组。\n\n解决方案架构师应采取哪一组额外步骤来满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "resilient",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 582,
@@ -26756,18 +26839,22 @@
    }
   ],
   "pdf_page": 218,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A",
+   "C",
+   "F"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answers: A, C, and F.\nThe company supplies resilient site power and network connectivity, protects physical access to its data center, and plans sufficient spare workload capacity on Outposts. Spare capacity allows ECS workloads to continue or be rescheduled during host failures and maintenance.\nOptions B, D, and E concern the AWS-managed infrastructure inside the Outposts rack, including its hypervisor, hardware, and component maintenance. AWS manages that infrastructure; the customer remains responsible for its site dependencies and application capacity planning.\nDistinguish power delivered to the rack from the rack's internal power-supply hardware. Customers must also arrange site access for AWS maintenance personnel.",
+  "explanation_zh": "正确答案：A、C、F。\n公司负责机房向 Outposts 机架提供可靠供电和网络，负责机房物理安全与访问控制，并规划足够的额外工作负载容量。预留容量让 ECS 在主机故障或维护时有资源继续运行或重新调度任务。\n选项 B、D、E 指向 Outposts 机架内部由 AWS 管理的基础设施，包括虚拟化层、硬件及部件维护。客户负责场地依赖与应用容量规划，AWS 负责相应托管基础设施。\n要区分客户向机架供电与机架内部电源硬件；客户也需配合 AWS 维护人员进入场地。",
   "stem_zh": "某公司希望使用 Amazon Elastic Container Service（Amazon ECS）集群和 Amazon RDS 数据库实例来构建和运行一个支付处理应用程序。出于合规目的，公司将在其本地数据中心运行该应用程序。\n\n一位解决方案架构师希望将 AWS Outposts 作为方案的一部分。该解决方案架构师正与公司的运维团队一起构建该应用程序。\n\n哪些活动由公司的运维团队负责？（选择三项。）",
   "stem_zh_source": "solution_paraphrase",
   "domain": "secure",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 600,
@@ -27150,18 +27237,20 @@
    }
   ],
   "pdf_page": 221,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: A.\nAssociate a regional WAF web ACL with the ALB, allow requests whose source IP matches the registered-address sets, and block other requests by default. Maintain the IP sets as stores update their registered addresses.\nA WAF IP set supports up to 10,000 CIDR entries. More than 20,000 distinct non-aggregated addresses therefore need at least three sets, combined with allow rules or an OR statement; do not assume one unlimited set.\nOption B does not define the required WAF filtering policy. Option C assumes an ALB Lambda authorizer feature that the ALB does not provide. Option D cannot accommodate this per-address list within normal network ACL rule quotas.",
+  "explanation_zh": "正确答案：A。\n为 ALB 关联区域级 WAF Web ACL，放行来源 IP 命中门店登记地址集合的请求，默认阻止其他请求，并随门店地址变更维护 IP set。\n一个 WAF IP set 最多包含 10,000 条 CIDR 记录。超过 20,000 个独立且不能合并的地址至少需要三个集合，通过多条放行规则或 OR 条件组合，不能理解成单个无限容量集合。\n选项 B 未定义所需 WAF 过滤策略；选项 C 假定 ALB 提供 Lambda authorizer，但 ALB 没有该授权功能；选项 D 无法在常规网络 ACL 规则配额内逐条容纳如此多的地址。",
   "stem_zh": "某公司有一个应用程序，为部署在全球 20,000 多个零售门店的客户端提供服务。该应用程序由通过 HTTPS 在 443 端口对外暴露的后端 Web 服务组成。该应用程序托管在一个 Application Load Balancer（ALB）之后的 Amazon EC2 实例上。各零售门店通过公共互联网与该 Web 应用程序通信。公司允许每个零售门店注册其本地 ISP 分配给该门店的 IP 地址。\n\n公司的安全团队建议通过将访问限制为仅这些零售门店注册的 IP 地址来提升应用程序端点的安全性。\n\n解决方案架构师应该怎么做才能满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "secure",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 609,
@@ -28486,18 +28575,20 @@
    }
   ],
   "pdf_page": 231,
-  "answer": [],
-  "answer_source": "unresolved",
-  "answer_confidence": 0.0,
+  "answer": [
+   "A"
+  ],
+  "answer_source": "manual",
+  "answer_confidence": 1.0,
   "stem_mismatch": false,
-  "explanation_en": null,
-  "explanation_zh": null,
+  "explanation_en": "Correct answer: A.\nUse Lambda to generate short-lived S3 presigned URLs for specific uploads or downloads, using an execution role with the necessary object permissions. Distribute them to authorized employees through an authenticated application or secure channel. Employees can transfer data without individual AWS credentials, and the objects remain available for cloud processing.\nOption B requires managing IAM users and policies for every employee. Option C adds gateway infrastructure and client mounts. Option D adds SFTP infrastructure and a custom identity-provider workflow that the question does not require.\nPresigned URLs are bearer credentials: anyone possessing a valid URL can use it within its scope. Protect distribution, limit expiry, and authorize the employee before issuing the URL.",
+  "explanation_zh": "正确答案：A。\n由 Lambda 使用具有所需对象权限的执行角色，生成针对特定上传或下载操作的短期 S3 预签名 URL，经已认证的应用或安全渠道发给有权访问的员工。员工无需个人 AWS 凭证即可传输数据，数据也可继续在云中处理。\n选项 B 要为每名员工维护 IAM 用户和策略；选项 C 增加网关基础设施及客户端挂载；选项 D 增加 SFTP 服务和自定义身份提供方流程，题目没有这类协议要求。\n预签名 URL 是持有者凭证：拿到有效链接的人就可能在其权限范围内使用。因此应保护分发渠道、缩短有效期，并在签发前验证员工身份及访问权限。",
   "stem_zh": "某公司收集研究数据并与其遍布全球的员工共享。公司希望将数据收集并存储在一个 Amazon S3 存储桶中，并在 AWS 云中处理这些数据。公司将把数据共享给员工。公司需要一个在 AWS 云中安全且运维开销最小的方案。\n\n哪个方案能满足这些要求？",
   "stem_zh_source": "solution_paraphrase",
   "domain": "secure",
-  "needs_review": true,
-  "review_reason": "答案未确定",
-  "explanation_quality": "none"
+  "needs_review": false,
+  "review_reason": null,
+  "explanation_quality": "ok"
  },
  {
   "id": 639,

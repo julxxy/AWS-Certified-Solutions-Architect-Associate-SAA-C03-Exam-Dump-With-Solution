@@ -203,9 +203,8 @@ class Bank:
                 if not q["needs_review"] and q.get("answer")]
 
     def coverage(self):
-        # 分母只算「可译」的选项。477 题的选项在 PDF 里是图片、没有英文原文，
-        # 永远补不出译文；把它们算进分母，覆盖率就会永久卡在 99.9% 下不来，
-        # 而 verify_bank.py 用的是可译分母、报 100%，两边对不上会让人以为漏译了。
+        # 分母只算有英文文字的选项。图片内容尚未转录时不计入；
+        # 像 477 这样人工补回文字和译文后，自动计入，保持与构建报告和自检一致。
         tot_o = sum(1 for q in self.questions.values()
                     for o in q["options"] if o.get("text_en"))
         zh_o = sum(1 for q in self.questions.values()
