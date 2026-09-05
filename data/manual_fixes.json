@@ -868,5 +868,43 @@
   "review_reason": "已确认选项重叠：A+E、B+E、A+D 均可行；A+E 仅作答倾向，等待题面或选项修订。",
   "explanation_en": "Confirmed ambiguity: the options do not establish a unique scoring combination.\nThe organization management account controls discount-sharing preferences. Both purchasing and benefit-receiving accounts must have sharing activated. Savings Plans cover eligible usage in the owning account first; unused benefits can then apply to eligible usage in linked accounts.\nOption E makes the purchasing account the management account. Options A and B therefore refer to the same administrator account, with Option B explicitly including all accounts. Both Options A and E and Options B and E can work when sharing covers the relevant accounts.\nOptions A and D also work: create a new management account, invite the purchasing account and the other accounts, and configure sharing there. Member-owned Savings Plans can provide shared discounts. AWS recommends keeping business workloads out of the management account; a separate payer is not inherently an incorrect design. The stem imposes no fewest-steps requirement.\nOption C incorrectly uses AWS RAM. Savings Plans discounts are shared through consolidated billing, not RAM resource sharing.\nSavings Plans sharing is enabled by default in AWS Organizations. Options A and B are best read as ensuring that sharing is enabled for the required accounts. Existing preferences and eligible usage still need checking; joining an organization does not make every charge eligible for a discount.\nOptions A and E are a tentative exam-taking preference from the supplied analysis, not an officially confirmed answer. Keep the question out of scoring until revised wording or options resolve the overlap.",
   "explanation_zh": "已确认选项重叠：原题不能确定唯一判分组合。\n折扣共享偏好由组织管理账户控制，购买方和接收折扣的账户都需启用共享。Savings Plans 先抵扣持有账户的合格用量，再将剩余优惠用于其他关联账户的合格用量。\n选项 E 使购买账户成为管理账户，因此选项 A、B 指向同一个管理身份，选项 B 额外明确包含所有账户。确保相关账户参与共享时，选项 A、E 与选项 B、E 都能实施。\n选项 A、D 也能实施：新建管理账户，邀请购买账户及其他账户加入，再配置共享。成员账户持有的 Savings Plan 同样可以共享折扣。AWS 建议管理账户不承载业务负载，单独设立付款账户本身不是错误；原题也没有要求最少操作。\n选项 C 错把 Savings Plans 折扣交给 AWS RAM 共享；该折扣通过合并账单应用，不属于 RAM 资源共享。\nSavings Plans 在 AWS Organizations 内默认启用共享。选项 A、B 更适合理解为确认所需账户已启用共享；仍需检查实际偏好和合格用量，加入组织不代表每笔费用都能获得折扣。\n用户提供的分析倾向作答选项 A、E，但这只是作答倾向，不是已确认的官方答案。等待题面或选项修订消除重叠前，继续排除出判分题池。"
+ },
+ "18": {
+  "_why": [
+   "PDF 原文把 E 选项里的 'Simple' 印成了 'ample'（全库 52 处 Simple，仅此 1 处），",
+   "抽取忠实照搬，页面上就显示 'Amazon ample Notification Service'。",
+   "此前有人直接改生成物 data/questions_en.json 修这个字，重建即失效（实测被 --extract 冲掉），",
+   "改走人工修正。只订正 E 的英文文字：选项顺序、字母与答案 A+B 不变，中文译文原样保留。"
+  ],
+  "_sources": [
+   "https://docs.aws.amazon.com/sns/latest/dg/welcome.html"
+  ],
+  "options": [
+   {
+    "letter": "A",
+    "text_en": "Create an Amazon Simple Queue Service (Amazon SQS) queue. Configure the S3 bucket to send a notification to the SQS queue when an image is uploaded to the S3 bucket.",
+    "text_zh": "创建一个 Amazon Simple Queue Service（Amazon SQS）队列。配置该 S3 存储桶在有图片上传时向该 SQS 队列发送通知。"
+   },
+   {
+    "letter": "B",
+    "text_en": "Configure the Lambda function to use the Amazon Simple Queue Service (Amazon SQS) queue as the invocation source. When the SQS message is successfully processed, delete the message in the queue.",
+    "text_zh": "配置该 Lambda 函数使用该 Amazon Simple Queue Service（Amazon SQS）队列作为调用源。当 SQS 消息被成功处理后，删除队列中的该消息。"
+   },
+   {
+    "letter": "C",
+    "text_en": "Configure the Lambda function to monitor the S3 bucket for new uploads. When an uploaded image is detected, write the file name to a text file in memory and use the text file to keep track of the images that were processed.",
+    "text_zh": "配置该 Lambda 函数监控该 S3 存储桶的新上传。检测到上传的图片时，把文件名写入内存中的一个文本文件，并用该文本文件跟踪已处理的图片。"
+   },
+   {
+    "letter": "D",
+    "text_en": "Launch an Amazon EC2 instance to monitor an Amazon Simple Queue Service (Amazon SQS) queue. When items are added to the queue, log the file name in a text file on the EC2 instance and invoke the Lambda function.",
+    "text_zh": "启动一台 Amazon EC2 实例来监控一个 Amazon Simple Queue Service（Amazon SQS）队列。当有条目入队时，把文件名记录到该 EC2 实例上的一个文本文件中，并调用该 Lambda 函数。"
+   },
+   {
+    "letter": "E",
+    "text_en": "Configure an Amazon EventBridge (Amazon CloudWatch Events) event to monitor the S3 bucket. When an image is uploaded, send an alert to an Amazon Simple Notification Service (Amazon SNS) topic with the application owner's email address for further processing.",
+    "text_zh": "配置一个 Amazon EventBridge（Amazon CloudWatch Events）事件来监控该 S3 存储桶。当有图片上传时，向一个带有应用程序负责人邮箱地址的 Amazon Simple Notification Service（Amazon SNS）主题发送告警以便后续处理。"
+   }
+  ]
  }
 }
