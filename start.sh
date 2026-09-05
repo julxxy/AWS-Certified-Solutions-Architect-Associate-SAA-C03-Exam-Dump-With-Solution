@@ -23,6 +23,7 @@ usage() {
 
 选项
   --rebuild       强制重跑两阶段构建，跳过时间戳判断
+  --no-open       不开浏览器（服务器 / deploy.sh 用）
   stop, --stop    停掉后台服务；两种写法、放在任意位置都认
   -h, --help      显示本帮助
   SAA_PORT=端口   环境变量，默认 ${PORT}
@@ -78,10 +79,12 @@ PY="$(command -v python3 || true)"
 }
 
 FORCE=0
+NO_OPEN=0
 GO="learn"
 for a in "$@"; do
   case "$a" in
   --rebuild) FORCE=1 ;;
+  --no-open) NO_OPEN=1 ;;
   learn | exam | home | wrong | stats | browse) GO="$a" ;;
   # 认不出来的参数别默默吞掉：`./start.sh exm` 原先会一声不吭地开到滚动学习，
   # 用户以为进的是考试。只提示、不中断，免得挡住正常启动。
@@ -159,11 +162,17 @@ fi
 
 # ---------- 打开浏览器并进入指定状态 ----------
 TARGET="${URL}/?go=${GO}"
-case "$(uname -s)" in
-Darwin) open "$TARGET" ;;
-Linux) command -v xdg-open >/dev/null && xdg-open "$TARGET" >/dev/null 2>&1 || echo "请手动打开 $TARGET" ;;
-*) echo "请手动打开 $TARGET" ;;
-esac
+if [ "$NO_OPEN" = "1" ]; then
+  # 必须写 ${TARGET}：本机 LC_CTYPE=C，紧跟其后的全角「（」首字节会被当成变量名的
+  # 一部分（同文件上面那条 ${a} 的坑），$TARGET（ 会炸成 unbound variable。
+  echo "▸ 入口 ${TARGET}（--no-open，不自动打开）"
+else
+  case "$(uname -s)" in
+  Darwin) open "$TARGET" ;;
+  Linux) command -v xdg-open >/dev/null && xdg-open "$TARGET" >/dev/null 2>&1 || echo "请手动打开 $TARGET" ;;
+  *) echo "请手动打开 $TARGET" ;;
+  esac
+fi
 
 # ---------- 顺带报一下译文进度 ----------
 "$PY" - <<'PYEOF'

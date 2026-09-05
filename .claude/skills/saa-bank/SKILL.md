@@ -19,6 +19,7 @@ description: 维护本仓库的 AWS SAA-C03 刷题系统。当 PDF、Solution.tx
 ├── SPEC-刷题程序.md                产品规格与验收基准
 ├── TODO-待核对题目.md              人工核对工作台（存疑题目的原题与结论）
 ├── start.sh                        一键入口（留在根目录）
+├── deploy.sh                       服务器一键更新（git 侧 + 重启决策，构建仍走 start.sh）
 ├── scripts/                        所有 Python 脚本都在这里
 │   ├── build_bank.py               题库构建（两阶段）
 │   ├── app.py                      本地 web 刷题程序（只有后端）
@@ -189,16 +190,29 @@ python3 scripts/i18n_next.py --check # 校验有没有坏行/重复/漏项
 python3 scripts/build_bank.py && python3 scripts/verify_bank.py
 ```
 
-### 5. 启动
+### 5. 启动与部署
 
 ```bash
 ./start.sh # 构建（按需）+ 启动 + 直接进入滚动学习
 ./start.sh exam # 直接进模拟考试；另有 home / wrong / stats / browse
 ./start.sh --rebuild # 强制重跑两阶段，可与页面连用：./start.sh --rebuild home
+./start.sh --no-open # 不开浏览器（服务器 / deploy.sh 用）
 ./start.sh stop # 停服务；stop 与 --stop 等价，放在任意位置都认
 ./start.sh --help # 用法的唯一事实来源（usage()），别在别处再抄一份
 SAA_PORT=9000 ./start.sh # 换端口，默认 8765
 ```
+
+服务器上更新用 `./deploy.sh`：拉代码 → `./start.sh --no-open`（按需重建 + 幂等启动）→
+`verify_bank.py --strict` 当放行闸门。三件事值得知道：
+
+- **构建和启动的逻辑不在 deploy.sh 里**，全在 `start.sh`。deploy 只管 git 那一侧、重启决策
+  和自检 —— 别把两阶段判断再抄一份进去。
+- **只有 `scripts/app.py` 变了才重启**。数据、译文、`web/index.html` 都按 mtime 热加载，
+  重启只会打断正在做的题。
+- **只自动丢弃 5 个构建产物**（`questions.json` / `questions_en.json` / `build_report.md` /
+  `i18n_todo.jsonl` / `verify_baseline.json`）的本地改动 —— 服务器跑过构建就会重写它们，
+  每次 pull 都撞冲突。名单之外的脏文件（`manual_fixes.json`、`i18n_zh.jsonl`、脚本、前端）
+  一律中止并报出来，那些是人写的，不能替人丢。
 
 ## 出问题时先查什么
 

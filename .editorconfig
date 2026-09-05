@@ -13,6 +13,11 @@
 
 root = true
 
+# 实测：JetBrains 的 markdown 格式化会把「多个连续空格」压成一个，连 ``` 代码块里的
+# 对齐注释也压 —— SKILL.md 里对齐好的 ./start.sh 用法块就是这么被压平的（无害但恼人）。
+[*.md]
+ij_markdown_force_one_space_between_words = false
+
 [data/*.{json,jsonl,md}]
 ij_formatter_enabled = false      # JetBrains：整份文件不参与格式化
 ij_markdown_format_tables = false # 兜底：至少别再对齐 build_report 的表格
