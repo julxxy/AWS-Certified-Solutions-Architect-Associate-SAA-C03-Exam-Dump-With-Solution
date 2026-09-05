@@ -22,3 +22,6 @@ data/exams/
 # start.sh 的运行时产物
 data/app.log
 .saa-app.pid
+
+# macOS
+.DS_Store

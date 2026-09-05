@@ -1,0 +1,20 @@
+# EditorConfig <https://editorconfig.org>
+#
+# 只为一件事存在：别让编辑器动 data/ 下的生成物。
+#
+# data/ 里的 questions*.json、build_report.md、i18n_todo.jsonl 都由
+# scripts/build_bank.py 整份重写，格式是 json.dumps(indent=1) 和手拼的 markdown，
+# 末尾不带换行。编辑器保存时格式化一遍，下次重建又原样冲回去 —— 这些文件于是反复
+# 出现在 git status 里，diff 全是排版噪声。
+#
+# 实测踩过更糟的：有人直接在 data/questions_en.json 里改了一个词，保存时编辑器顺手
+# 补了末尾换行，重建把这两处一起抹掉，改动无声消失（见 18 题 E 的服务名）。
+# 要改题库内容走 data/manual_fixes.json，那份才是人写的、能扛住重建。
+
+root = true
+
+[data/*.{json,jsonl,md}]
+ij_formatter_enabled = false      # JetBrains：整份文件不参与格式化
+ij_markdown_format_tables = false # 兜底：至少别再对齐 build_report 的表格
+insert_final_newline = false      # build_bank 的 atomic_write 不写末尾换行
+trim_trailing_whitespace = false
