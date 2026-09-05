@@ -538,7 +538,7 @@
    },
    {
     "letter": "E",
-    "text_en": "Configure an Amazon EventBridge (Amazon CloudWatch Events) event to monitor the S3 bucket. When an image is uploaded, send an alert to an Amazon ample Notification Service (Amazon SNS) topic with the application owner's email address for further processing.",
+    "text_en": "Configure an Amazon EventBridge (Amazon CloudWatch Events) event to monitor the S3 bucket. When an image is uploaded, send an alert to an Amazon Sample Notification Service (Amazon SNS) topic with the application owner's email address for further processing.",
     "text_zh": null
    }
   ],
