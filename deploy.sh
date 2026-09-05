@@ -11,6 +11,11 @@ cd "$(dirname "$0")"
 PORT="${SAA_PORT:-8765}"
 URL="http://127.0.0.1:${PORT}"
 
+# 服务器上服务由 systemd 托管（单元早就存在且 enabled，重启后会自己回来）。
+# 本地 Mac 上没有这个单元，就还走 start.sh 那套 nohup + pidfile。
+UNIT="aws-saa-c03.service"
+have_unit() { systemctl cat "$UNIT" >/dev/null 2>&1; }
+
 # data/ 下这几个是 build_bank.py / verify_bank.py 的产物。服务器上跑过一次构建就会
 # 被整份重写（哪怕内容一模一样，也可能只差一个末尾换行），于是每次 git pull 都撞
 # 「Your local changes would be overwritten by merge」。它们的内容完全由三个源文件 +
@@ -35,9 +40,10 @@ usage() {
 流程
   1. 丢弃 data/ 下构建产物的本地改动（只丢白名单里那 5 个），其它文件脏了就中止
   2. git pull --ff-only
-  3. ./start.sh --no-open：按需两阶段重建 + 幂等启动（服务没在跑就拉起来）
+  3. ./start.sh 按需两阶段重建（服务器上有 systemd 单元时只构建，不自己起服务）
   4. scripts/verify_bank.py --strict：不过就非零退出
   5. app.py 有变更时重启服务；只有数据或前端变化则靠热加载，不打断正在做的题
+     有 ${UNIT} 就走 systemctl，没有才退回 start.sh 的 nohup 那套
 
 选项
   --restart       无论 app.py 有没有变都重启服务
@@ -133,12 +139,35 @@ if echo "$CHANGED" | grep -qx "scripts/app.py"; then
   NEED_RESTART=1
 fi
 
-# ---------- 3. 构建 + 启动（逻辑都在 start.sh 里） ----------
-if [ "$NEED_RESTART" = "1" ]; then
-  echo "▸ app.py 有变更，先停掉旧进程"
-  ./start.sh stop || true
+# ---------- 3. 构建 + 让服务用上新代码 ----------
+# 构建逻辑只有 start.sh 一个出处，这里不重复它的两阶段判断。
+./start.sh --build-only ${REBUILD:+$REBUILD}
+
+if have_unit; then
+  # start.sh 起的 nohup 进程占着 8765 时，systemd 一起就 EADDRINUSE，而且
+  # systemctl 显示 inactive、看不出是谁在占 —— 实测出现过（有人用 ./start.sh
+  # 起服务，systemd 那份被晾着）。有游离进程就先停掉，把服务交回 systemd。
+  if [ -f .saa-app.pid ] && kill -0 "$(cat .saa-app.pid)" 2>/dev/null; then
+    echo "▸ 发现 start.sh 起的游离进程，停掉并交回 systemd"
+    ./start.sh stop || true
+    NEED_RESTART=1
+  fi
+  if [ "$NEED_RESTART" = "1" ] || ! systemctl is-active --quiet "$UNIT"; then
+    echo "▸ systemctl restart ${UNIT}"
+    systemctl restart "$UNIT" || {
+      echo "✗ 启动失败，看 journalctl -u ${UNIT} -n 30"
+      exit 1
+    }
+  else
+    echo "▸ ${UNIT} 在跑，数据与前端走热加载，不重启（不打断正在做的题）"
+  fi
+else
+  if [ "$NEED_RESTART" = "1" ]; then
+    echo "▸ app.py 有变更，先停掉旧进程"
+    ./start.sh stop || true
+  fi
+  ./start.sh --no-open ${REBUILD:+$REBUILD}
 fi
-./start.sh --no-open ${REBUILD:+$REBUILD}
 
 # ---------- 4. 自检当放行闸门 ----------
 echo "▸ 自检"

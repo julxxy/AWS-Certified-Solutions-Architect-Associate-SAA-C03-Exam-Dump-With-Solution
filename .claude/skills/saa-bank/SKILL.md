@@ -209,6 +209,10 @@ SAA_PORT=9000 ./start.sh # 换端口，默认 8765
   和自检 —— 别把两阶段判断再抄一份进去。
 - **只有 `scripts/app.py` 变了才重启**。数据、译文、`web/index.html` 都按 mtime 热加载，
   重启只会打断正在做的题。
+- **服务器上服务归 systemd 管**（`aws-saa-c03.service`，enabled，重启后自动回来）。deploy
+  检测到这个单元就走 `systemctl restart`，并且只让 `start.sh --build-only` 构建 —— 不能让
+  start.sh 用 nohup 再起一个，那会跟 systemd 抢 8765 端口，而且 systemctl 还显示 inactive，
+  排查时看不出是谁占着。本地 Mac 没有单元，照旧走 start.sh。
 - **只自动丢弃 5 个构建产物**（`questions.json` / `questions_en.json` / `build_report.md` /
   `i18n_todo.jsonl` / `verify_baseline.json`）的本地改动 —— 服务器跑过构建就会重写它们，
   每次 pull 都撞冲突。名单之外的脏文件（`manual_fixes.json`、`i18n_zh.jsonl`、脚本、前端）

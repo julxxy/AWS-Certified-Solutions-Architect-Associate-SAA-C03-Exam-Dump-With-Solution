@@ -24,6 +24,7 @@ usage() {
 选项
   --rebuild       强制重跑两阶段构建，跳过时间戳判断
   --no-open       不开浏览器（服务器 / deploy.sh 用）
+  --build-only    只按需构建题库，不起服务、不开浏览器（deploy.sh 在 systemd 机器上用）
   stop, --stop    停掉后台服务；两种写法、放在任意位置都认
   -h, --help      显示本帮助
   SAA_PORT=端口   环境变量，默认 ${PORT}
@@ -80,11 +81,13 @@ PY="$(command -v python3 || true)"
 
 FORCE=0
 NO_OPEN=0
+BUILD_ONLY=0
 GO="learn"
 for a in "$@"; do
   case "$a" in
   --rebuild) FORCE=1 ;;
   --no-open) NO_OPEN=1 ;;
+  --build-only) BUILD_ONLY=1 ;;
   learn | exam | home | wrong | stats | browse) GO="$a" ;;
   # 认不出来的参数别默默吞掉：`./start.sh exm` 原先会一声不吭地开到滚动学习，
   # 用户以为进的是考试。只提示、不中断，免得挡住正常启动。
@@ -136,6 +139,13 @@ if [ "$need_build" = "1" ]; then
   echo
 else
   echo "▸ 题库是最新的，跳过构建（要强制重建用 --rebuild）"
+fi
+
+# 服务由别人托管（systemd）时，这里只负责把题库构建好就收工 —— 再往下走会用
+# nohup 起第二个实例，跟托管的那个抢 8765 端口。
+if [ "$BUILD_ONLY" = "1" ]; then
+  echo "▸ --build-only：构建完成，不启动服务"
+  exit 0
 fi
 
 # ---------- 启动（幂等） ----------
