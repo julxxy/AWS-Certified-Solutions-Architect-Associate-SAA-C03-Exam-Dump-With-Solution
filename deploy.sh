@@ -74,6 +74,11 @@ UPSTREAM="$(git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null |
   exit 1
 }
 
+# 先刷新索引里的 stat 缓存。构建会把产物整份重写，内容一样但 mtime 变了，
+# git diff-index 只看 stat 就会判「有改动」—— 不刷新的话，下面的守卫会把一次
+# 什么都没改的重建当成脏工作树，直接中止部署（实测第一次跑 deploy.sh 就误报了）。
+git update-index -q --refresh || true
+
 # ---------- 1. 清理构建产物 ----------
 # 不用数组攒：macOS 自带的 bash 3.2 在 set -u 下把空数组当未定义，
 # ${#ARR[@]} 会直接报 unbound variable 把脚本打挂。
@@ -155,6 +160,7 @@ zh = sum(1 for q in qs for o in q["options"] if o.get("text_zh"))
 tot = sum(1 for q in qs for o in q["options"] if o.get("text_en"))
 print("   题库：%d 题，可出题 %d，选项中文 %d/%d" % (len(qs), usable, zh, tot))
 PYEOF
+git update-index -q --refresh || true
 if ! git diff-index --quiet HEAD -- 2>/dev/null; then
   # 重建产物和仓库里那份不完全一致时说一声：不是错误（内容由源文件决定），
   # 下次 ./deploy.sh 第 1 步会自动丢掉，但闷着不说容易让人以为 pull 坏了。
